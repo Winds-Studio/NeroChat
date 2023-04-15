@@ -12,12 +12,12 @@ commands:
     description: Ignore a players chat messages permanently!
     permission: nerochat.ignore
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command> <player>"
+    usage: "§cUsage: /<command> <player>"
   whisper:
     description: Whisper to a player!
     permission: nerochat.whisper
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command> <player> <message>"
+    usage: "§cUsage: /<command> <player> <message>"
     aliases:
       - tell
       - w
@@ -27,26 +27,26 @@ commands:
     description: Reply to the last message someone sent to you!
     permission: nerochat.reply
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command> <message>"
+    usage: "§cUsage: /<command> <message>"
     aliases:
       - r
   last:
     description: Message the last person you messaged!
     permission: nerochat.reply
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command> <message>"
+    usage: "§cUsage: /<command> <message>"
     aliases:
       - l
   ignorelist:
     description: List all ignored players!
     permission: nerochat.ignorelist
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command>"
+    usage: "§cUsage: /<command>"
   togglewhispering:
     description: Prevent getting whispered to!
     permission: nerochat.togglewhispering
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command>"
+    usage: "§cUsage: /<command>"
     aliases:
       - toggleprivatemsgs
       - toggletells
@@ -54,12 +54,12 @@ commands:
     description: Prevent getting chat messages!
     permission: nerochat.togglechat
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command>"
+    usage: "§cUsage: /<command>"
   nerochat:
     description: Main command!
     permission: nerochat.command
     permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command> <help|reload>"
+    usage: "§cUsage: /<command> <help|reload>"
 permissions:
   nerochat.ignore:
     description: Permission for /ignore!
