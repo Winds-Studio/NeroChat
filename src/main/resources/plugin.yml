@@ -8,11 +8,6 @@ website: https://neromaster.net/
 softdepend: ["PlaceholderAPI"]
 
 commands:
-  ignore:
-    description: Ignore a players chat messages to the next server restart!
-    permission: nerochat.ignore
-    permission-message: You have no permission to do that!
-    usage: "§4Usage: /<command> <player>"
   ignorehard:
     description: Ignore a players chat messages permanently!
     permission: nerochat.ignorehard

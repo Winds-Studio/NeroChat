@@ -2,12 +2,10 @@ package me.softik.nerochat;
 
 import lombok.Getter;
 import me.softik.nerochat.utils.*;
-import net.md_5.bungee.api.ChatColor;
 import me.softik.nerochat.api.NeroChatAPI;
 import me.softik.nerochat.commands.MainCommand;
 import me.softik.nerochat.commands.ignore.HardIgnoreCommand;
 import me.softik.nerochat.commands.ignore.IgnoreListCommand;
-import me.softik.nerochat.commands.ignore.SoftIgnoreCommand;
 import me.softik.nerochat.commands.toggle.ToggleChatCommand;
 import me.softik.nerochat.commands.toggle.ToggleWhisperingCommand;
 import me.softik.nerochat.commands.whisper.LastCommand;
@@ -87,9 +85,6 @@ public final class NeroChat extends JavaPlugin {
 
         ignorehard.setExecutor(new HardIgnoreCommand(this));
         ignorehard.setTabCompleter(new HardIgnoreCommand(this));
-
-        ignore.setExecutor(new SoftIgnoreCommand(this));
-        ignore.setTabCompleter(new SoftIgnoreCommand(this));
 
         whisper.setExecutor(new WhisperCommand(this));
         whisper.setTabCompleter(new WhisperCommand(this));
