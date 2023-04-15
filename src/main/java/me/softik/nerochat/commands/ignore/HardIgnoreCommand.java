@@ -25,6 +25,11 @@ public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
             Player player = (Player) sender;
 
             if (args.length > 0) {
+                if (args[0].equalsIgnoreCase(player.getName())) {
+                    player.sendMessage(LanguageTool.getMessage("ignoreyourself"));
+                    return true;
+                }
+
                 Optional<Player> ignored = CommonTool.getPlayer(args[0]);
 
                 if (ignored.isPresent()) {
