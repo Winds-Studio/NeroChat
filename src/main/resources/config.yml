@@ -17,7 +17,6 @@ stripnamecolor: false
 
 consolename: "[console]"
 
-allowpmself: true
 allowpmignored: true
 
 ignorelistsize: 9

@@ -28,7 +28,7 @@ public class CommonTool {
     }
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
-        if (!NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("allowpmself") && sender == receiver) {
+        if (sender == receiver) {
             sender.sendMessage(LanguageTool.getMessage("pmself"));
             return;
         }
