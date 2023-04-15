@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class MainCommand implements CommandExecutor, TabExecutor {
     private final NeroChat plugin;
+    private FileConfiguration config;
 
     public MainCommand(NeroChat plugin) {
         this.plugin = plugin;
@@ -62,6 +64,11 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                     if (sender.hasPermission("nerochat.reload")) {
                         plugin.reloadConfig();
                         sender.sendMessage("Reloaded the config!");
+                        List<String> regexList = plugin.getConfig().getStringList("RegexFilter.Chat.Allowed-Regex");
+                        plugin.getLogger().info("Список доступных REGEX:");
+                        for (String regex : regexList) {
+                            plugin.getLogger().info("- " + regex);
+                        }
                     } else {
                         sender.sendMessage(command.getPermissionMessage());
                     }

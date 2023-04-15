@@ -38,3 +38,12 @@ prefixes:
   UNDERLINE: '/'
   BOLD: '/'
   STRIKETHROUGH: '/'
+
+RegexFilter:
+  Chat:
+    ConsoleNotify: true
+    PlayerNotify: true
+    SilentMode: false
+    CaseInsensitive: true
+    Allowed-Regex:
+      - '[^A-Za-zА-Яа-яЁё0-9 !%()?>+-_,/:]+'

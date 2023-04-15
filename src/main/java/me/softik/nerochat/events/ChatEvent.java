@@ -7,11 +7,16 @@ import me.softik.nerochat.api.NeroChatReceiveEvent;
 import me.softik.nerochat.utils.CommonTool;
 import me.softik.nerochat.utils.LanguageTool;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 public class ChatEvent implements Listener {
@@ -44,7 +49,36 @@ public class ChatEvent implements Listener {
 
                         message = perPlayerEvent.getMessage();
 
-                        CommonTool.sendChatMessage(chatter, message, receiver);
+                        List<String> regexList = plugin.getConfig().getStringList("RegexFilter.Chat.Allowed-Regex");
+                        try {
+                            boolean useCaseInsensitive = plugin.getConfig().getBoolean("RegexFilter.Chat.CaseInsensitive", true);
+                            for (String regex : regexList) {
+                                Pattern pattern;
+                                if (useCaseInsensitive) {
+                                    pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+                                } else {
+                                    pattern = Pattern.compile(regex);
+                                }
+                                Matcher matcher = pattern.matcher(message);
+                                if (matcher.find()) {
+                                    // The message contains an illegal pattern, so cancel the event
+                                    if (!plugin.getConfig().getBoolean("RegexFilter.Chat.SilentMode", true) && plugin.getConfig().getBoolean("RegexFilter.Chat.PlayerNotify", true)) {
+                                        chatter.sendMessage(LanguageTool.getMessage("PlayerNotify"));
+                                    }
+                                    if (plugin.getConfig().getBoolean("RegexFilter.Chat.ConsoleNotify", true)) {
+                                        plugin.getLogger().warning(chatter.getName() + " tried to send a message that didn't match the regex: " + message);
+                                    }
+                                    if (plugin.getConfig().getBoolean("RegexFilter.Chat.SilentMode", false)) {
+                                        CommonTool.sendChatMessage(chatter, message, chatter);
+                                    }
+                                    event.setCancelled(true);
+                                    return;
+                                }
+                            }
+                            CommonTool.sendChatMessage(chatter, message, receiver);
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             } else {
