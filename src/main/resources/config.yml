@@ -1,6 +1,8 @@
-# To use these prefixes you need additionally the pistonchat.<COLORCODE>
+# To use these prefixes you need additionally the nerochat.<COLORCODE>
 # / indicates disabled!
 # This config is configured to be what 2b2t.org has.
+bstats-metrics: true
+
 whisper:
   from: "&d%player%&d whispers: %message%"
   to: "&dYou whisper to %player%&d: %message%"

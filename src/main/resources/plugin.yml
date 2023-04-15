@@ -1,26 +1,26 @@
-name: PistonChat
+name: NeroChat
 version: ${project.version}
 api-version: 1.13
-main: net.pistonmaster.pistonchat.PistonChat
+main: me.softik.nerochat.NeroChat
 authors: [ AlexProgrammerDE ]
 description: An advanced chat plugin for survival/anarchy servers.
-website: https://pistonmaster.net/
+website: https://neromaster.net/
 softdepend: ["PlaceholderAPI"]
 
 commands:
   ignore:
     description: Ignore a players chat messages to the next server restart!
-    permission: pistonchat.ignore
+    permission: nerochat.ignore
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <player>"
   ignorehard:
     description: Ignore a players chat messages permanently!
-    permission: pistonchat.ignorehard
+    permission: nerochat.ignorehard
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <player>"
   whisper:
     description: Whisper to a player!
-    permission: pistonchat.whisper
+    permission: nerochat.whisper
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <player> <message>"
     aliases:
@@ -30,26 +30,26 @@ commands:
       - msg
   reply:
     description: Reply to the last message someone sent to you!
-    permission: pistonchat.reply
+    permission: nerochat.reply
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <message>"
     aliases:
       - r
   last:
     description: Message the last person you messaged!
-    permission: pistonchat.reply
+    permission: nerochat.reply
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <message>"
     aliases:
       - l
   ignorelist:
     description: List all ignored players!
-    permission: pistonchat.ignorelist
+    permission: nerochat.ignorelist
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command>"
   togglewhispering:
     description: Prevent getting whispered to!
-    permission: pistonchat.togglewhispering
+    permission: nerochat.togglewhispering
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command>"
     aliases:
@@ -57,108 +57,108 @@ commands:
       - toggletells
   togglechat:
     description: Prevent getting chat messages!
-    permission: pistonchat.togglechat
+    permission: nerochat.togglechat
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command>"
-  pistonchat:
+  nerochat:
     description: Main command!
-    permission: pistonchat.command
+    permission: nerochat.command
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <help|reload>"
 permissions:
-  pistonchat.ignorehard:
+  nerochat.ignorehard:
     description: Permission for /ignorehard!
     children:
-      pistonchat.ignorelist: true
-  pistonchat.last:
+      nerochat.ignorelist: true
+  nerochat.last:
     description: Permission for /last!
-  pistonchat.reply:
+  nerochat.reply:
     description: Permission for /reply!
-  pistonchat.whisper:
+  nerochat.whisper:
     description: Permission for /whisper!
     children:
-      pistonchat.playernamereply: true
-      pistonchat.togglewhispering: true
-  pistonchat.ignore:
+      nerochat.playernamereply: true
+      nerochat.togglewhispering: true
+  nerochat.ignore:
     description: Permission for /ignore!
     children:
-      pistonchat.ignorelist: true
-  pistonchat.playernamereply:
+      nerochat.ignorelist: true
+  nerochat.playernamereply:
     description: Make player names clickable!
-  pistonchat.ignorelist:
+  nerochat.ignorelist:
     description: Permission for /ignorelist!
-  pistonchat.togglewhispering:
+  nerochat.togglewhispering:
     description: Permission for /togglewhispering!
-  pistonchat.togglechat:
+  nerochat.togglechat:
     description: Permission for /togglechat!
-  pistonchat.command:
-    description: Permission for /pistonchat!
-  pistonchat.help:
-    description: Permission for /pistonchat help!
+  nerochat.command:
+    description: Permission for /nerochat!
+  nerochat.help:
+    description: Permission for /nerochat help!
     children:
-      pistonchat.command: true
-  pistonchat.reload:
-    description: Permission for /pistonchat reload!
+      nerochat.command: true
+  nerochat.reload:
+    description: Permission for /nerochat reload!
     children:
-      pistonchat.command: true
-  pistonchat.GREEN:
+      nerochat.command: true
+  nerochat.GREEN:
     description: Just another chat color!
-  pistonchat.BLUE:
+  nerochat.BLUE:
     description: Just another chat color!
-  pistonchat.RED:
+  nerochat.RED:
     description: Just another chat color!
-  pistonchat.AQUA:
+  nerochat.AQUA:
     description: Just another chat color!
-  pistonchat.GOLD:
+  nerochat.GOLD:
     description: Just another chat color!
-  pistonchat.YELLOW:
+  nerochat.YELLOW:
     description: Just another chat color!
-  pistonchat.GRAY:
+  nerochat.GRAY:
     description: Just another chat color!
-  pistonchat.BLACK:
+  nerochat.BLACK:
     description: Just another chat color!
-  pistonchat.DARK_GREEN:
+  nerochat.DARK_GREEN:
     description: Just another chat color!
-  pistonchat.DARK_RED:
+  nerochat.DARK_RED:
     description: Just another chat color!
-  pistonchat.DARK_GRAY:
+  nerochat.DARK_GRAY:
     description: Just another chat color!
-  pistonchat.DARK_BLUE:
+  nerochat.DARK_BLUE:
     description: Just another chat color!
-  pistonchat.DARK_AQUA:
+  nerochat.DARK_AQUA:
     description: Just another chat color!
-  pistonchat.DARK_PURPLE:
+  nerochat.DARK_PURPLE:
     description: Just another chat color!
-  pistonchat.LIGHT_PURPLE:
+  nerochat.LIGHT_PURPLE:
     description: Just another chat color!
-  pistonchat.ITALIC:
+  nerochat.ITALIC:
     description: Just another chat color!
-  pistonchat.UNDERLINE:
+  nerochat.UNDERLINE:
    description: Just another chat color!
-  pistonchat.BOLD:
+  nerochat.BOLD:
     description: Just another chat color!
-  pistonchat.STRIKETHROUGH:
+  nerochat.STRIKETHROUGH:
     description: Just another chat color!
-  pistonchat.version:
-    description: Permission for /pistonchat version
-  pistonchat.bypass:
+  nerochat.version:
+    description: Permission for /nerochat version
+  nerochat.bypass:
     description: Allows to talk to vanished people or people with whispering disabled.
-  pistonchat.player:
+  nerochat.player:
     description: Default permissions for players!
     children:
-      pistonchat.last: true
-      pistonchat.reply: true
-      pistonchat.whisper: true
-      pistonchat.ignore: true
-      pistonchat.ignorehard: true
-      pistonchat.togglechat: true
-      pistonchat.help: true
-      pistonchat.GREEN: true
+      nerochat.last: true
+      nerochat.reply: true
+      nerochat.whisper: true
+      nerochat.ignore: true
+      nerochat.ignorehard: true
+      nerochat.togglechat: true
+      nerochat.help: true
+      nerochat.GREEN: true
     default: true
-  pistonchat.admin:
+  nerochat.admin:
     description: Default permissions for admins!
     children:
-      pistonchat.reload: true
-      pistonchat.version: true
-      pistonchat.bypass: true
+      nerochat.reload: true
+      nerochat.version: true
+      nerochat.bypass: true
     default: op

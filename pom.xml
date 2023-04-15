@@ -5,18 +5,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.pistonmaster</groupId>
-    <artifactId>PistonChat</artifactId>
+    <artifactId>NeroChat</artifactId>
     <version>1.5.2</version>
     <packaging>jar</packaging>
 
-    <name>PistonChat</name>
+    <name>NeroChat</name>
 
     <description>An advanced chat plugin for survival/anarchy servers.</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>https://pistonmaster.net/PistonChat</url>
+    <url>https://neromaster.net/NeroChat</url>
 
     <licenses>
         <license>
@@ -28,7 +28,7 @@
 
     <issueManagement>
         <system>Github Issues</system>
-        <url>https://github.com/AlexProgrammerDE/PistonChat/issues</url>
+        <url>https://github.com/AlexProgrammerDE/NeroChat/issues</url>
     </issueManagement>
 
     <distributionManagement>
@@ -43,7 +43,7 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:https://github.com/AlexProgrammerDE/PistonChat</connection>
+        <connection>scm:git:https://github.com/AlexProgrammerDE/NeroChat</connection>
     </scm>
 
     <build>
@@ -67,11 +67,11 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>net.pistonmaster.pistonchat.shade.bstats</shadedPattern>
+                            <shadedPattern>me.softik.nerochat.shade.bstats</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>net.pistonmaster.pistonutils</pattern>
-                            <shadedPattern>net.pistonmaster.pistonchat.shade.pistonutils</shadedPattern>
+                            <shadedPattern>me.softik.nerochat.shade.pistonutils</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
