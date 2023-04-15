@@ -17,7 +17,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonTool {
     private CommonTool() {
@@ -58,10 +61,37 @@ public class CommonTool {
 
         message = neroWhisperEvent.getMessage();
 
-        sendSender(sender, message, receiver);
-        sendReceiver(sender, message, receiver);
-
-        NeroChat.getPlugin(NeroChat.class).getCacheTool().sendMessage(sender, receiver);
+        List<String> regexList = NeroChat.getPlugin(NeroChat.class).getConfig().getStringList("RegexFilter.Whisper.Allowed-Regex");
+        try {
+            boolean useCaseInsensitive = NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.CaseInsensitive", true);
+            for (String regex : regexList) {
+                Pattern pattern;
+                if (useCaseInsensitive) {
+                    pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+                } else {
+                    pattern = Pattern.compile(regex);
+                }
+                Matcher matcher = pattern.matcher(message);
+                if (matcher.find()) {
+                    // The message contains an illegal pattern, so cancel the event
+                    if (!NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.SilentMode", true) && NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.PlayerNotify", true)) {
+                        sender.sendMessage(LanguageTool.getMessage("PlayerNotify"));
+                    }
+                    if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.ConsoleNotify", true)) {
+                        NeroChat.getPlugin(NeroChat.class).getLogger().warning(sender.getName() + " tried to send a whisper that didn't match the regex: " + message);
+                    }
+                    if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.SilentMode", false)) {
+                        sendSender(sender, message, receiver);
+                    }
+                    return;
+                }
+            }
+            sendSender(sender, message, receiver);
+            sendReceiver(sender, message, receiver);
+            NeroChat.getPlugin(NeroChat.class).getCacheTool().sendMessage(sender, receiver);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void sendSender(CommandSender sender, String message, CommandSender receiver) {
