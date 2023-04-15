@@ -8,9 +8,9 @@ website: https://neromaster.net/
 softdepend: ["PlaceholderAPI"]
 
 commands:
-  ignorehard:
+  ignore:
     description: Ignore a players chat messages permanently!
-    permission: nerochat.ignorehard
+    permission: nerochat.ignore
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <player>"
   whisper:
@@ -61,8 +61,8 @@ commands:
     permission-message: You have no permission to do that!
     usage: "§4Usage: /<command> <help|reload>"
 permissions:
-  nerochat.ignorehard:
-    description: Permission for /ignorehard!
+  nerochat.ignore:
+    description: Permission for /ignore!
     children:
       nerochat.ignorelist: true
   nerochat.last:
@@ -74,10 +74,6 @@ permissions:
     children:
       nerochat.playernamereply: true
       nerochat.togglewhispering: true
-  nerochat.ignore:
-    description: Permission for /ignore!
-    children:
-      nerochat.ignorelist: true
   nerochat.playernamereply:
     description: Make player names clickable!
   nerochat.ignorelist:
@@ -145,7 +141,6 @@ permissions:
       nerochat.reply: true
       nerochat.whisper: true
       nerochat.ignore: true
-      nerochat.ignorehard: true
       nerochat.togglechat: true
       nerochat.help: true
       nerochat.GREEN: true

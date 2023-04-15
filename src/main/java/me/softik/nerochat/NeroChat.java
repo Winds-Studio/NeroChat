@@ -63,7 +63,6 @@ public final class NeroChat extends JavaPlugin {
         }
 
         log.info("Registering commands");
-        PluginCommand ignorehard = server.getPluginCommand("ignorehard");
         PluginCommand ignore = server.getPluginCommand("ignore");
         PluginCommand whisper = server.getPluginCommand("whisper");
         PluginCommand reply = server.getPluginCommand("reply");
@@ -73,7 +72,6 @@ public final class NeroChat extends JavaPlugin {
         PluginCommand toggleChat = server.getPluginCommand("togglechat");
         PluginCommand main = server.getPluginCommand("nerochat");
 
-        assert ignorehard != null;
         assert ignore != null;
         assert whisper != null;
         assert reply != null;
@@ -83,8 +81,8 @@ public final class NeroChat extends JavaPlugin {
         assert toggleChat != null;
         assert main != null;
 
-        ignorehard.setExecutor(new HardIgnoreCommand(this));
-        ignorehard.setTabCompleter(new HardIgnoreCommand(this));
+        ignore.setExecutor(new HardIgnoreCommand(this));
+        ignore.setTabCompleter(new HardIgnoreCommand(this));
 
         whisper.setExecutor(new WhisperCommand(this));
         whisper.setTabCompleter(new WhisperCommand(this));
