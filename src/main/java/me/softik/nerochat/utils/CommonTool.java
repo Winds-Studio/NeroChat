@@ -8,6 +8,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -34,6 +35,20 @@ public class CommonTool {
         if (sender == receiver) {
             sender.sendMessage(LanguageTool.getMessage("pmself"));
             return;
+        }
+
+        if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("ReadableFormatting.Whisper", false)) {
+            String trimmedMessage = message.trim();
+            char lastChar = trimmedMessage.charAt(trimmedMessage.length() - 1);
+            if (lastChar == '.' || lastChar == '!' || lastChar == '?') {
+                char punctuationChar = '.';
+                if (lastChar == '.' || lastChar == '!' || lastChar == '?') {
+                    punctuationChar = lastChar;
+                }
+                message = StringUtils.capitalize(trimmedMessage.toLowerCase().replaceFirst("[" + ".!?" + "]+$", "")) + punctuationChar;
+            } else {
+                message = StringUtils.capitalize(trimmedMessage.toLowerCase()) + ".";
+            }
         }
 
         if (!sender.hasPermission("nerochat.bypass")) {

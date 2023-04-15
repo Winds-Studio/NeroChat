@@ -75,6 +75,26 @@ public class ChatEvent implements Listener {
                                     return;
                                 }
                             }
+
+                            boolean addPeriod = false;
+                            boolean capitalize = false;
+                            String lastChar = message.substring(message.length() - 1);
+                            if (!lastChar.matches("[.!?]")) {
+                                addPeriod = true;
+                            }
+                            if (Character.isLowerCase(message.charAt(0))) {
+                                capitalize = true;
+                            }
+
+                            if (plugin.getConfig().getBoolean("ReadableFormatting.PublicChat", false)) {
+                                if (addPeriod) {
+                                    message += ".";
+                                }
+                                if (capitalize) {
+                                    message = message.substring(0, 1).toUpperCase() + message.substring(1);
+                                }
+                            }
+
                             CommonTool.sendChatMessage(chatter, message, receiver);
                         } catch (NullPointerException e) {
                             e.printStackTrace();
