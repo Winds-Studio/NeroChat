@@ -73,11 +73,6 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                             throw new RuntimeException(e);
                         }
                         sender.sendMessage("Reloaded the config!");
-                        List<String> regexList = plugin.getConfig().getStringList("RegexFilter.Chat.Allowed-Regex");
-                        plugin.getLogger().info("You added REGEX:");
-                        for (String regex : regexList) {
-                            plugin.getLogger().info("- " + regex);
-                        }
                     } else {
                         sender.sendMessage(command.getPermissionMessage());
                     }
