@@ -2,6 +2,7 @@
 # / indicates disabled!
 # This config is configured to be what 2b2t.org has.
 bstats-metrics: true
+notify-updates: true
 
 whisper:
   from: "&d%player%&d whispers: %message%"

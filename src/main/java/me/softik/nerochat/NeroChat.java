@@ -116,24 +116,30 @@ public final class NeroChat extends JavaPlugin {
         server.getPluginManager().registerEvents(new ChatEvent(this), this);
         server.getPluginManager().registerEvents(new QuitEvent(this), this);
 
-        log.info("Checking for a newer version");
-        new UpdateChecker(new PistonLogger(getLogger())).getVersion("https://www.neromaster.net/NeroChat/VERSION.txt", version ->
-                new UpdateParser(getDescription().getVersion(), version).parseUpdate(updateType -> {
-                    if (updateType == UpdateType.NONE || updateType == UpdateType.AHEAD) {
-                        log.info("You're up to date!");
-                    } else {
-                        if (updateType == UpdateType.MAJOR) {
-                            log.info("There is a MAJOR update available!");
-                        } else if (updateType == UpdateType.MINOR) {
-                            log.info("There is a MINOR update available!");
-                        } else if (updateType == UpdateType.PATCH) {
-                            log.info("There is a PATCH update available!");
+        log.info("Checking for a newer version...");
+        if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("notify-updates")) {
+            new UpdateChecker(new PistonLogger(getLogger())).getVersion("https://raw.githubusercontent.com/ImNotSoftik/LamaChat/main/src/main/resources/version", version ->
+                    new UpdateParser(getDescription().getVersion(), version).parseUpdate(updateType -> {
+                        if (updateType == UpdateType.NONE || updateType == UpdateType.AHEAD) {
+                            log.info("You're up to date!");
+                        } else {
+                            if (updateType == UpdateType.MAJOR) {
+                                log.info("There is a MAJOR update available!");
+                            } else if (updateType == UpdateType.MINOR) {
+                                log.info("There is a MINOR update available!");
+                            } else if (updateType == UpdateType.PATCH) {
+                                log.info("There is a PATCH update available!");
+                            }
+                            log.warning("****************************************");
+                            log.warning("The new NeroChat update was found, please update!");
+                            log.warning("https://github.com/ImNotSoftik/LamaChat/releases");
+                            log.warning("Current version: " + this.getDescription().getVersion() + " New version: " + version);
+                            log.warning("****************************************");
                         }
-
-                        log.info("Current version: " + this.getDescription().getVersion() + " New version: " + version);
-                        log.info("Download it at: https://github.com/AlexProgrammerDE/NeroChat/releases");
-                    }
-                }));
+                    }));
+        } else {
+            log.info("Checking for a newer version is disabled in the config. Skip it");
+        }
         if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("bstats-metrics")) {
             log.info("Loading metrics");
             new Metrics(this, 18215);
