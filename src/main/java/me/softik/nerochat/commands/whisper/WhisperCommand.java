@@ -25,11 +25,7 @@ public class WhisperCommand implements CommandExecutor, TabExecutor {
 
             if (receiver.isPresent()) {
                 if (plugin.getIgnoreTool().isIgnored(sender, receiver.get())) {
-                    if (plugin.getConfig().getBoolean("onlyhidepms")) {
-                        CommonTool.sendSender(sender, CommonTool.mergeArgs(args, 0), receiver.get());
-                    } else {
-                        sender.sendMessage(CommonTool.getPrefix() + "This person ignores you!");
-                    }
+                    sender.sendMessage(CommonTool.getPrefix() + "This person ignores you!");
                 } else if (!plugin.getConfig().getBoolean("allowpmignored") && plugin.getIgnoreTool().isIgnored(receiver.get(), sender)) {
                     sender.sendMessage(CommonTool.getPrefix() + "You ignore this person!");
                 } else {

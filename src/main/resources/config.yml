@@ -19,7 +19,6 @@ consolename: "[console]"
 
 allowpmself: true
 allowpmignored: true
-onlyhidepms: true
 
 ignorelistsize: 9
 prefixes:
