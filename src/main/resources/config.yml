@@ -17,8 +17,6 @@ stripnamecolor: false
 
 consolename: "[console]"
 
-allowpmignored: true
-
 ignorelistsize: 9
 prefixes:
   GREEN: ">"

@@ -28,7 +28,7 @@ public class ReplyCommand implements CommandExecutor, TabExecutor {
                 } else {
                     sender.sendMessage(CommonTool.getPrefix() + "This person ignores you!");
                 }
-            } else if (!plugin.getConfig().getBoolean("allowpmignored") && plugin.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
+            } else if (plugin.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
                 sender.sendMessage(CommonTool.getPrefix() + "You ignore this person!");
             } else {
                 if (args.length > 0) {
