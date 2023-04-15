@@ -118,7 +118,7 @@ public final class NeroChat extends JavaPlugin {
 
         log.info("Checking for a newer version...");
         if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("notify-updates")) {
-            new UpdateChecker(new PistonLogger(getLogger())).getVersion("https://raw.githubusercontent.com/ImNotSoftik/LamaChat/main/src/main/resources/version", version ->
+            new UpdateChecker(new PistonLogger(getLogger())).getVersion("https://raw.githubusercontent.com/ImNotSoftik/NeroChat/master/src/main/resources/version", version ->
                     new UpdateParser(getDescription().getVersion(), version).parseUpdate(updateType -> {
                         if (updateType == UpdateType.NONE || updateType == UpdateType.AHEAD) {
                             log.info("You're up to date!");
@@ -132,7 +132,7 @@ public final class NeroChat extends JavaPlugin {
                             }
                             log.warning("****************************************");
                             log.warning("The new NeroChat update was found, please update!");
-                            log.warning("https://github.com/ImNotSoftik/LamaChat/releases");
+                            log.warning("https://github.com/ImNotSoftik/NeroChat/releases");
                             log.warning("Current version: " + this.getDescription().getVersion() + " New version: " + version);
                             log.warning("****************************************");
                         }
