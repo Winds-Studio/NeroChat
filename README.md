@@ -34,11 +34,7 @@ Original code: https://github.com/AlexProgrammerDE/PistonChat
 
 ## Player Commands
 
-- **/ignore {player}** - ignores or un-ignores the player.
-- **/ignorelist** - prints all ignored players.
-- **/unignoreall** - clears ignore list
-- **/togglechat** - disables regular chatting for the player - NOT PERSISTENT.
-- **/toggletells** - disables tells for the player - NOT PERSISTENT,
+![image](https://user-images.githubusercontent.com/78680226/232307796-39f2b7a4-b53a-42ae-af0b-60d61cefcb72.png)
 
 
 ## Config options
