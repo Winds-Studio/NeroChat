@@ -117,7 +117,7 @@ You can customize the appearance of whispers.
 
 ## Tested Minecraft Versions
 
-- 1.12.2
+- On all versions the plugin works correctly
 
 ## Statistics
 
