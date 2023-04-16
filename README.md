@@ -19,7 +19,7 @@
 - Automatic dot and capital letter.
 - Ability to ignore case in regular expressions, which will eliminate filtration bypasses.
 - Folia Support
-- PlaceHolderApi support
+- PlaceholderApi support
 - Personal and global message customization
 
 ## Source
