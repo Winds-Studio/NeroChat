@@ -44,7 +44,9 @@ Standard configuration for review
 
 <details>
   <summary>config.yml</summary>
+
 ```yml
+
 # To use these prefixes you need additionally the nerochat.<COLORCODE>
 # / indicates disabled!
 # This config is configured to be what 2b2t.org has.
@@ -105,7 +107,9 @@ RegexFilter:
 ReadableFormatting:
   PublicChat: true
   Whisper: true
+
 ```
+
 </details>
 
 Color codes and prefixes can be disabled by replacing the contents with / e.g. GREEN: /
