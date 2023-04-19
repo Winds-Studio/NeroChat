@@ -14,6 +14,7 @@ public class LanguageCache {
     private final FileConfiguration fileConfiguration;
     boolean addedMissing = false;
     public String no_permissions;
+    public String player_notify;
     public List<String> world_stats_message;
 
     public LanguageCache(String lang) {
@@ -36,6 +37,7 @@ public class LanguageCache {
                     "&3-----------------------------------------------------"
             ));
             this.no_permissions = getStringTranslation("no-permission", "You don't have permission to use this command.");
+            this.player_notify = getStringTranslation("player-notify", "Illegal characters were found in your message!");
 
             if (addedMissing) fileConfiguration.save(langFile);
         } catch (IOException e) {

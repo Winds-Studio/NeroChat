@@ -1,11 +1,12 @@
 package me.softik.nerochat.utils;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import me.softik.nerochat.NeroChat;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -13,15 +14,47 @@ import java.util.logging.Logger;
 
 public class ConfigCache {
 
+    private final boolean bstats_metrics;
+    private final boolean notify_updates;
+    private final String whisper_form;
+    private final String whisper_to;
+    private final String hover_text;
+    private final boolean display_nickname_color;
+    private final String console_name;
+    private final int ignore_list_size;
+    private final String prefixes_green;
+    private final String prefixes_red;
+    private final String prefixes_aqua;
+    private final String prefixes_gold;
+    private final String prefixes_yellow;
+    private final String prefixes_gray;
+    private final String prefixes_black;
+    private final String prefixes_dark_green;
+    private final String prefixes_dark_red;
+    private final String prefixes_dark_gray;
+    private final String prefixes_dark_blue;
+    private final String prefixes_dark_aqua;
+    private final String prefixes_dark_purple;
+    private final String prefixes_light_purple;
+    private final String prefixes_italic;
+    private final String prefixes_underline;
+    private final String prefixes_bold;
+    private final String prefixes_strikethrough;
+    private final String prefixes_blue;
+    private final String chat_format;
+    private final boolean RegexFilter_PublicChat_Logs_enabled;
+    private final boolean RegexFilter_PublicChat_Player_Notify;
+    private final boolean RegexFilter_PublicChat_Silent_mode;
+    private final boolean RegexFilter_PublicChat_Case_Insensitive;
+    private final List<String> RegexFilter_Public_Allowed_Regex;
+    private final boolean Readable_Formatting_Whisper;
+    private final boolean Readable_Formatting_Public_Chat;
     private ConfigFile config;
     private final File configFile;
     private final Logger logger;
     public final String default_lang;
-    public final DecimalFormat filesize_display_format;
     public final HashSet<String> directories_to_scan = new HashSet<>();
-    public final boolean auto_lang, log_is_enabled;
-    public final long server_birth_time, filesize_update_period;
-    public final double additional_spoofed_filesize;
+    public final boolean auto_lang;
 
     public ConfigCache() {
         NeroChat plugin = NeroChat.getInstance();
@@ -29,23 +62,55 @@ public class ConfigCache {
         logger = plugin.getLogger();
         createFiles();
         loadConfig();
-
-        this.default_lang = getString("language.default-language", "en_us", "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
-        this.auto_lang = getBoolean("language.auto-language", true, "Enable / Disable locale based messages.");
-
-        this.server_birth_time = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(), "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.");
-        this.filesize_update_period = getInt("filesize-update-period-in-seconds", 3600, "The update period at which the file size is checked.") * 20L;
-        this.filesize_display_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
-        directories_to_scan.addAll(getList("worlds", Arrays.asList(
-                "./world/region",
-                "./world_nether/DIM-1/region",
-                "./world_the_end/DIM1/region"
-        ), "The files to scan. The path you're in is the folder where your server.jar is located."));
-        this.additional_spoofed_filesize = getDouble("spoof-size", 0.0, "How many GB should be added on top of the actual filesize. Useful if you deleted useless chunks.");
-        this.log_is_enabled = getBoolean("enable-console-log", true, "Whether to log to console when plugin updates filesize.");
-
-        config.addComment("PlaceholderAPI placeholders:\n %worldstats_size%\n %worldstats_spoof%\n %worldstats_players%\n %worldstats_ageindays%");
-        config.addComment("These placeholders return the same values as the command:\n %worldstats_days%\n %worldstats_months%\n %worldstats_years%");
+        config.addSection("Language");
+        config.addDefault("Language", null);
+        this.default_lang = getString("Language.default-language", "en_us", "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
+        this.auto_lang = getBoolean("Language.auto-language", true, "Enable / Disable locale based messages.");
+        config.addSection("Main");
+        config.addDefault("Main", null);
+        this.bstats_metrics = getBoolean("Main.bstats-metrics", true, "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
+        this.notify_updates = getBoolean("Main.notify-updates", true, "Enable / Disable notification of a new version of the plugin. It is recommended to turn this on.");
+        this.display_nickname_color = getBoolean("Main.display-nickname-color", true, "Enable/disable the display of the player's nickname color.");
+        this.console_name = getString("Main.console-name", "[console]", "Defines the sender's name when sending messages from the server console.");
+        this.chat_format = getString("Main.chat-format", "<%player%&r>", "Change the format of messages in public chat.");
+        this.ignore_list_size = getInt("Main.ignore-list-size", 9, "The size of the ignore list in pages. It is not recommended to set more than 5.");
+        this.hover_text = getString("Main.hover-text", "&6Message &3%player%", "Text when hovering the cursor over the sender's chat nickname.");
+        config.addSection("Whisper");
+        config.addDefault("Whisper", null);
+        this.whisper_form = getString("Whisper.from", "&d%player%&d whispers: %message%", "Displaying incoming messages.");
+        this.whisper_to = getString("Whisper.to", "&dYou whisper to %player%&d: %message%", "Displaying outgoing messages.");
+        config.addSection("Prefixes");
+        config.addDefault("Prefixes", null, "To use these prefixes you need additionally the nerochat.<COLORCODE>\n/ indicates disabled!");
+        this.prefixes_green = getString("Prefixes.GREEN", ">");
+        this.prefixes_blue = getString("Prefixes.BLUE", "/");
+        this.prefixes_red = getString("Prefixes.RED", "/");
+        this.prefixes_aqua = getString("Prefixes.AQUA", "/");
+        this.prefixes_gold = getString("Prefixes.GOLD", "/");
+        this.prefixes_yellow = getString("Prefixes.YELLOW", "/");
+        this.prefixes_gray = getString("Prefixes.GRAY", "/");
+        this.prefixes_black = getString("Prefixes.BLACK", "/");
+        this.prefixes_dark_green = getString("Prefixes.DARK_GREEN", "/");
+        this.prefixes_dark_red = getString("Prefixes.DARK_RED", "/");
+        this.prefixes_dark_gray = getString("Prefixes.DARK_GRAY", "/");
+        this.prefixes_dark_blue = getString("Prefixes.DARK_BLUE", "/");
+        this.prefixes_dark_aqua = getString("Prefixes.DARK_AQUA", "/");
+        this.prefixes_dark_purple = getString("Prefixes.DARK_PURPLE", "/");
+        this.prefixes_light_purple = getString("Prefixes.LIGHT_PURPLE", "/");
+        this.prefixes_italic = getString("Prefixes.ITALIC", "/");
+        this.prefixes_underline = getString("Prefixes.UNDERLINE", "/");
+        this.prefixes_bold = getString("Prefixes.BOLD", "/");
+        this.prefixes_strikethrough = getString("Prefixes.STRIKETHROUGH", "/");
+        config.addSection("RegexFilter");
+        config.addDefault("RegexFilter", null, "Filtering chat messages using regular expressions.\nIf you don't know how to create them, you can use ChatGPT");
+        this.RegexFilter_PublicChat_Logs_enabled = getBoolean("RegexFilter.PublicChat.Logs-Enabled", true, "Outputs the player's name and regex when the message is canceled.");
+        this.RegexFilter_PublicChat_Player_Notify = getBoolean("RegexFilter.PublicChat.Player-Notify", true, "Do I inform the player that his message has not been sent? Doesn't work with silent mode.");
+        this.RegexFilter_PublicChat_Silent_mode = getBoolean("RegexFilter.PublicChat.Silent-Mode", true, "The player will think he is sending messages, but in fact no one will see his messages.");
+        this.RegexFilter_PublicChat_Case_Insensitive = getBoolean("RegexFilter.PublicChat.Case-Insensitive", true, "The search for matches will be case insensitive. Eliminates many regex bypasses with capslocks.");
+        this.RegexFilter_Public_Allowed_Regex = getList("RegexFilter.PublicChat.Allowed-Regex", Arrays.asList("[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"), "Regular expressions to which the messages in the chat should correspond.\nThe regular expression in the standard config allows only Russian and English letters + keyboard characters (not all).");
+        config.addSection("ReadableFormatting");
+        config.addDefault("ReadableFormatting", null, "Automatically puts a period at the end of a sentence and a capital letter at the beginning of a sentence.");
+        this.Readable_Formatting_Public_Chat = getBoolean("ReadableFormatting.PublicChat", true);
+        this.Readable_Formatting_Whisper = getBoolean("ReadableFormatting.Whisper", true);
     }
 
     private void createFiles() {
@@ -133,5 +198,18 @@ public class ConfigCache {
     public List<String> getList(String path, List<String> def) {
         config.addDefault(path, def);
         return config.getStringList(path);
+    }
+
+    public ConfigSection getConfigurationSection(String path) {
+        return config.getConfigSection(path);
+    }
+
+    public void reloadConfig(Plugin plugin, String configFile) {
+        try {
+            config.reload();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        plugin.getLogger().info("Plugin configuration has been reloaded.");
     }
 }

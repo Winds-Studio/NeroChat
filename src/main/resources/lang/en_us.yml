@@ -12,3 +12,4 @@ stats-message:
   - ' &7The world (with compression) is a total of &6%size% GB'
   - '&3-----------------------------------------------------'
 no-permission: "You don't have permission to use this command."
+player-notify: "Illegal characters were found in your message!"

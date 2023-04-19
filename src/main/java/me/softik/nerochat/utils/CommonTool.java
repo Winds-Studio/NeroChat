@@ -16,6 +16,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
+import me.softik.nerochat.utils.ConfigCache;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommonTool {
-    private CommonTool() {
-    }
 
     public static Optional<Player> getPlayer(String name) {
         return Optional.ofNullable(Bukkit.getPlayer(name));
@@ -37,7 +36,7 @@ public class CommonTool {
             return;
         }
 
-        if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("ReadableFormatting.Whisper", false)) {
+        if (NeroChat.getConfiguration().getBoolean("ReadableFormatting.Whisper", false)) {
             String trimmedMessage = message.trim();
             char lastChar = trimmedMessage.charAt(trimmedMessage.length() - 1);
             if (lastChar == '.' || lastChar == '!' || lastChar == '?') {
@@ -110,7 +109,7 @@ public class CommonTool {
     }
 
     public static void sendSender(CommandSender sender, String message, CommandSender receiver) {
-        String senderString = ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getConfig().getString("whisper.to")
+        String senderString = ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Whisper.to", "&dYou whisper to %player%&d: %message%")
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(receiver).getDisplayName()))
                 .replace("%message%", message));
 
@@ -118,7 +117,7 @@ public class CommonTool {
     }
 
     private static void sendReceiver(CommandSender sender, String message, CommandSender receiver) {
-        String receiverString = ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getConfig().getString("whisper.from")
+        String receiverString = ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Whisper.from", "&d%player%&d whispers: %message%")
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(sender).getDisplayName()))
                 .replace("%message%", message));
 
@@ -130,15 +129,12 @@ public class CommonTool {
     }
 
     public static String getPrefix() {
-        //return ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getLanguage().getString("prefix"));
-        return ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getConfig().getString("prefix"));
+        return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("prefix", "GREEN: '>'"));
     }
 
     public static ChatColor getChatColorFor(String message, Player player) {
-        FileConfiguration config = NeroChat.getPlugin(NeroChat.class).getConfig();
-
-        for (String str : config.getConfigurationSection("prefixes").getKeys(false)) {
-            if (!config.getString("prefixes." + str).equalsIgnoreCase("/") && message.toLowerCase().startsWith(config.getString("prefixes." + str))) {
+        for (String str : NeroChat.getConfiguration().getConfigurationSection("Prefixes").getKeys(false)) {
+            if (!NeroChat.getConfiguration().getString("Prefixes." + str, "GREEN: '>'").equalsIgnoreCase("/") && message.toLowerCase().startsWith(NeroChat.getConfiguration().getString("Prefixes." + str, "GREEN: '>'"))) {
                 if (player.hasPermission("nerochat." + str)) {
                     return ChatColor.valueOf(str);
                 } else {
@@ -151,7 +147,7 @@ public class CommonTool {
     }
 
     public static String getFormat(CommandSender sender) {
-        String str = ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getConfig().getString("chatformat").replace("%player%", getName(sender)));
+        String str = ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Main.chat-format", "<%player%&r>").replace("%player%", getName(sender)));
 
         if (sender instanceof Player && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             str = parse((OfflinePlayer) sender, str);
@@ -166,7 +162,7 @@ public class CommonTool {
         if (receiver.hasPermission("nerochat.playernamereply")) {
             builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/w " + ChatColor.stripColor(chatter.getDisplayName()) + " "));
 
-            String hoverText = NeroChat.getPlugin(NeroChat.class).getConfig().getString("hovertext");
+            String hoverText = NeroChat.getConfiguration().getString("Main.hover-text", "&6Message &3%player%");
 
             builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(
@@ -192,13 +188,13 @@ public class CommonTool {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("stripnamecolor")) {
+            if (NeroChat.getConfiguration().getBoolean("Main.display-nickname-color", true)) {
                 return ChatColor.stripColor(player.getDisplayName());
             } else {
                 return player.getDisplayName();
             }
         } else if (sender instanceof ConsoleCommandSender) {
-            return ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getConfig().getString("consolename"));
+            return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Main.console-name", "[console]"));
         } else {
             return sender.getName();
         }

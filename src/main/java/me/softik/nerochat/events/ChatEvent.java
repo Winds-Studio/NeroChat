@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,9 +49,9 @@ public class ChatEvent implements Listener {
 
                         message = perPlayerEvent.getMessage();
 
-                        List<String> regexList = plugin.getConfig().getStringList("RegexFilter.Chat.Allowed-Regex");
+                        List<String> regexList = NeroChat.getConfiguration().getList("RegexFilter.PublicChat.Allowed-Regex", Arrays.asList("#[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"));
                         try {
-                            boolean useCaseInsensitive = plugin.getConfig().getBoolean("RegexFilter.Chat.CaseInsensitive", true);
+                            boolean useCaseInsensitive =  NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Case-Insensitive", true);
                             for (String regex : regexList) {
                                 Pattern pattern;
                                 if (useCaseInsensitive) {
@@ -61,13 +62,13 @@ public class ChatEvent implements Listener {
                                 Matcher matcher = pattern.matcher(message);
                                 if (matcher.find()) {
                                     // The message contains an illegal pattern, so cancel the event
-                                    if (!plugin.getConfig().getBoolean("RegexFilter.Chat.SilentMode", true) && plugin.getConfig().getBoolean("RegexFilter.Chat.PlayerNotify", true)) {
-                                        chatter.sendMessage("PlayerNotify");
+                                    if (!NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Silent-Mode", true) &&  NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Player-Notify", true)) {
+                                        chatter.sendMessage(ChatColor.RED + NeroChat.getLang(chatter).player_notify);
                                     }
-                                    if (plugin.getConfig().getBoolean("RegexFilter.Chat.ConsoleNotify", true)) {
+                                    if (NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Logs-Enabled", true)) {
                                         plugin.getLogger().warning(chatter.getName() + " tried to send a message that didn't match the regex: " + message);
                                     }
-                                    if (plugin.getConfig().getBoolean("RegexFilter.Chat.SilentMode", false)) {
+                                    if (NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Silent-Mode", false)) {
                                         CommonTool.sendChatMessage(chatter, message, chatter);
                                     }
                                     event.setCancelled(true);
@@ -85,7 +86,7 @@ public class ChatEvent implements Listener {
                                 capitalize = true;
                             }
 
-                            if (plugin.getConfig().getBoolean("ReadableFormatting.PublicChat", false)) {
+                            if (NeroChat.getConfiguration().getBoolean("ReadableFormatting.PublicChat", false)) {
                                 if (addPeriod) {
                                     message += ".";
                                 }

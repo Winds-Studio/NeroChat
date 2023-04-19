@@ -50,13 +50,13 @@ public class UniqueSender {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("stripnamecolor")) {
+            if (NeroChat.getConfiguration().getBoolean("Main.display-nickname-color", true)) {
                 return ChatColor.stripColor(player.getDisplayName());
             } else {
                 return player.getDisplayName();
             }
         } else if (sender instanceof ConsoleCommandSender) {
-            return ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getConfig().getString("consolename"));
+            return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Main.console-name", "[console]"));
         } else {
             return sender.getName();
         }

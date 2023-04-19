@@ -1,5 +1,6 @@
 package me.softik.nerochat;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import lombok.Getter;
 import me.softik.nerochat.utils.*;
 import me.softik.nerochat.api.NeroChatAPI;
@@ -52,6 +53,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
+    private ConfigFile configFile;
 
     public static NeroChat getInstance()  {
         return instance;
@@ -125,7 +127,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
         server.getPluginManager().registerEvents(new QuitEvent(this), this);
 
         log.info("Checking for a newer version...");
-        if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("notify-updates")) {
+        if (NeroChat.getConfiguration().getBoolean("Main.notify-updates", true)) {
             new UpdateChecker(new PistonLogger(getLogger())).getVersion("https://raw.githubusercontent.com/ImNotSoftik/NeroChat/master/src/main/resources/version", version ->
                     new UpdateParser(getDescription().getVersion(), version).parseUpdate(updateType -> {
                         if (updateType == UpdateType.NONE || updateType == UpdateType.AHEAD) {
@@ -148,7 +150,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
         } else {
             log.info("Checking for a newer version is disabled in the config. Skip it");
         }
-        if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("bstats-metrics")) {
+        if (NeroChat.getConfiguration().getBoolean("Main.bstats-metrics", true)) {
             log.info("Loading metrics");
             new Metrics(this, 18215);
         } else {
@@ -161,12 +163,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
     public void reloadNeroChat() {
         reloadLang();
         configCache = new ConfigCache();
-        configCache.saveConfig();
-
-        HandlerList.unregisterAll((Plugin) this);
-        BukkitScheduler scheduler = getServer().getScheduler();
-        scheduler.cancelTasks(this);
-        getServer().getPluginManager().registerEvents(this, this);
+        configCache.reloadConfig(this, "config.yml");
     }
 
     public void reloadLang() {
