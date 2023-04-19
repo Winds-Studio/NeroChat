@@ -9,7 +9,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.utils.CommonTool;
 import me.softik.nerochat.utils.IgnoreTool;
-import me.softik.nerochat.utils.LanguageTool;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,7 +37,7 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
             }
 
             if (list.isEmpty()) {
-                player.sendMessage(LanguageTool.getMessage("nooneignored"));
+                player.sendMessage("nooneignored");
             } else {
                 if (args.length > 0) {
                     try {
@@ -57,7 +56,7 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
                 }
             }
         } else {
-            sender.sendMessage(LanguageTool.getMessage("playeronly"));
+            sender.sendMessage("playeronly");
         }
 
         return true;

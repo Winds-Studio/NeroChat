@@ -65,13 +65,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                     break;
                 case "reload":
                     if (sender.hasPermission("nerochat.reload")) {
-                        try {
-                            plugin.getConfig().load(new File(plugin.getDataFolder(), "config.yml"));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } catch (InvalidConfigurationException e) {
-                            throw new RuntimeException(e);
-                        }
+                        NeroChat.getInstance().reloadNeroChat();
                         sender.sendMessage("Reloaded the config!");
                     } else {
                         sender.sendMessage(command.getPermissionMessage());

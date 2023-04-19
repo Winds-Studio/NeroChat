@@ -5,7 +5,6 @@ import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroChatEvent;
 import me.softik.nerochat.api.NeroChatReceiveEvent;
 import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.LanguageTool;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -63,7 +62,7 @@ public class ChatEvent implements Listener {
                                 if (matcher.find()) {
                                     // The message contains an illegal pattern, so cancel the event
                                     if (!plugin.getConfig().getBoolean("RegexFilter.Chat.SilentMode", true) && plugin.getConfig().getBoolean("RegexFilter.Chat.PlayerNotify", true)) {
-                                        chatter.sendMessage(LanguageTool.getMessage("PlayerNotify"));
+                                        chatter.sendMessage("PlayerNotify");
                                     }
                                     if (plugin.getConfig().getBoolean("RegexFilter.Chat.ConsoleNotify", true)) {
                                         plugin.getLogger().warning(chatter.getName() + " tried to send a message that didn't match the regex: " + message);
@@ -102,7 +101,7 @@ public class ChatEvent implements Listener {
                     }
                 }
             } else {
-                chatter.sendMessage(LanguageTool.getMessage("chatisoff"));
+                chatter.sendMessage(("chatisoff"));
                 event.setCancelled(true);
             }
         }

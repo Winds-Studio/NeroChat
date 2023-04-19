@@ -2,7 +2,6 @@ package me.softik.nerochat.commands.toggle;
 
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
-import me.softik.nerochat.utils.LanguageTool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,12 +23,12 @@ public class ToggleWhisperingCommand implements CommandExecutor, TabExecutor {
             plugin.getTempDataTool().setWhisperingEnabled(player, !plugin.getTempDataTool().isWhisperingEnabled(player));
 
             if (plugin.getTempDataTool().isWhisperingEnabled(player)) {
-                player.sendMessage(LanguageTool.getMessage("pmson"));
+                player.sendMessage("pmson");
             } else {
-                player.sendMessage(LanguageTool.getMessage("pmsoff"));
+                player.sendMessage("pmsoff");
             }
         } else {
-            sender.sendMessage(LanguageTool.getMessage("playeronly"));
+            sender.sendMessage("playeronly");
         }
 
         return true;

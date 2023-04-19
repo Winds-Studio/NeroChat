@@ -33,7 +33,7 @@ public class CommonTool {
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
         if (sender == receiver) {
-            sender.sendMessage(LanguageTool.getMessage("pmself"));
+            sender.sendMessage("pmself");
             return;
         }
 
@@ -62,7 +62,7 @@ public class CommonTool {
             }
 
             if (receiver instanceof Player && isVanished((Player) receiver)) {
-                sender.sendMessage(LanguageTool.getMessage("notonline"));
+                sender.sendMessage("notonline");
                 return;
             }
         }
@@ -90,7 +90,7 @@ public class CommonTool {
                 if (matcher.find()) {
                     // The message contains an illegal pattern, so cancel the event
                     if (!NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.SilentMode", true) && NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.PlayerNotify", true)) {
-                        sender.sendMessage(LanguageTool.getMessage("PlayerNotify"));
+                        sender.sendMessage("PlayerNotify");
                     }
                     if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.ConsoleNotify", true)) {
                         NeroChat.getPlugin(NeroChat.class).getLogger().warning(sender.getName() + " tried to send a whisper that didn't match the regex: " + message);
@@ -130,7 +130,8 @@ public class CommonTool {
     }
 
     public static String getPrefix() {
-        return ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getLanguage().getString("prefix"));
+        //return ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getLanguage().getString("prefix"));
+        return ChatColor.translateAlternateColorCodes('&', NeroChat.getPlugin(NeroChat.class).getConfig().getString("prefix"));
     }
 
     public static ChatColor getChatColorFor(String message, Player player) {

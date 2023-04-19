@@ -15,11 +15,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class IgnoreTool {
     private final NeroChat plugin;
-
     public boolean isIgnored(CommandSender chatter, CommandSender receiver) {
         if (plugin.getSoftignoreTool().isSoftIgnored(chatter, receiver)) {
             return true;
-        } else return plugin.getConfigTool().isHardIgnored(chatter, receiver);
+        //} else return plugin.getConfigTool().isHardIgnored(chatter, receiver);
+        } else return false;
     }
 
     public Map<OfflinePlayer, IgnoreType> getIgnoredPlayers(Player player) {
@@ -29,9 +29,9 @@ public class IgnoreTool {
             map.put(ignoredPlayer, IgnoreType.SOFT);
         }
 
-        for (OfflinePlayer ignoredPlayer : plugin.getConfigTool().getHardIgnoredPlayers(player)) {
-            map.put(ignoredPlayer, IgnoreType.HARD);
-        }
+        //for (OfflinePlayer ignoredPlayer : plugin.getConfigTool().getHardIgnoredPlayers(player)) {
+            //map.put(ignoredPlayer, IgnoreType.HARD);
+        //}
 
         return map;
     }

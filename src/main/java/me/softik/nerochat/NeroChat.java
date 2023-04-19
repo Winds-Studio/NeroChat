@@ -20,25 +20,47 @@ import net.pistonmaster.pistonutils.update.UpdateType;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Getter
-public final class NeroChat extends JavaPlugin {
-    private final ConfigManager config = new ConfigManager(this, "config.yml");
-    private final ConfigManager language = new ConfigManager(this, "language.yml");
+public final class NeroChat extends JavaPlugin implements Listener {
+
     private final TempDataTool tempDataTool = new TempDataTool();
     private final SoftIgnoreTool softignoreTool = new SoftIgnoreTool();
     private final CacheTool cacheTool = new CacheTool(this);
     private final IgnoreTool ignoreTool = new IgnoreTool(this);
-    private final ConfigTool configTool = new ConfigTool(this);
+    private static NeroChat instance;
+    private static ConfigCache configCache;
+    private static HashMap<String, LanguageCache> languageCacheMap;
+    private static Logger logger;
+
+    public static NeroChat getInstance()  {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
+        instance = this;
+        logger = getLogger();
         NeroChatAPI.setInstance(this);
 
         Logger log = getLogger();
@@ -54,14 +76,7 @@ public final class NeroChat extends JavaPlugin {
         log.info("                                                             ");
 
         log.info("Loading config");
-        try {
-            config.create();
-            language.create();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Bukkit.getPluginManager().disablePlugin(this);
-        }
-
+        reloadNeroChat();
         log.info("Registering commands");
         PluginCommand ignore = server.getPluginCommand("ignore");
         PluginCommand whisper = server.getPluginCommand("whisper");
@@ -143,12 +158,70 @@ public final class NeroChat extends JavaPlugin {
         log.info("The plugin is ready to work!");
     }
 
-    @Override
-    public FileConfiguration getConfig() {
-        return config.get();
+    public void reloadNeroChat() {
+        reloadLang();
+        configCache = new ConfigCache();
+        configCache.saveConfig();
+
+        HandlerList.unregisterAll((Plugin) this);
+        BukkitScheduler scheduler = getServer().getScheduler();
+        scheduler.cancelTasks(this);
+        getServer().getPluginManager().registerEvents(this, this);
     }
 
-    public FileConfiguration getLanguage() {
-        return language.get();
+    public void reloadLang() {
+        languageCacheMap = new HashMap<>();
+        try {
+            File langDirectory = new File(instance.getDataFolder()+ "/lang");
+            Files.createDirectories(langDirectory.toPath());
+            for (String fileName : getDefaultLanguageFiles()) {
+                String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
+                logger.info(String.format("Found language file for %s", localeString));
+                LanguageCache langCache = new LanguageCache(localeString);
+                languageCacheMap.put(localeString, langCache);
+            }
+            Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
+            for (File langFile : langDirectory.listFiles()) {
+                Matcher langMatcher = langPattern.matcher(langFile.getName());
+                if (langMatcher.find()) {
+                    String localeString = langMatcher.group(1).toLowerCase();
+                    if(!languageCacheMap.containsKey(localeString)) {
+                        logger.info(String.format("Found language file for %s", localeString));
+                        LanguageCache langCache = new LanguageCache(localeString);
+                        languageCacheMap.put(localeString, langCache);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.severe("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!");
+        }
     }
+    private Set<String> getDefaultLanguageFiles(){
+        Reflections reflections = new Reflections("lang", Scanners.Resources);
+        return reflections.getResources(Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)"));
+    }
+
+    public static LanguageCache getLang(String lang) {
+        lang = lang.replace("-", "_");
+        if (configCache.auto_lang) {
+            return languageCacheMap.getOrDefault(lang, languageCacheMap.get(configCache.default_lang));
+        } else {
+            return languageCacheMap.get(configCache.default_lang);
+        }
+    }
+
+    public static LanguageCache getLang(CommandSender commandSender) {
+        if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
+            return getLang(player.getLocale());
+        } else {
+            return getLang(configCache.default_lang);
+        }
+    }
+
+    public static ConfigCache getConfiguration() {
+        return configCache;
+    }
+
 }

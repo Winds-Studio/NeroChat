@@ -3,7 +3,6 @@ package me.softik.nerochat.commands.whisper;
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.LanguageTool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -36,7 +35,7 @@ public class WhisperCommand implements CommandExecutor, TabExecutor {
                     }
                 }
             } else {
-                sender.sendMessage(LanguageTool.getMessage("notonline"));
+                sender.sendMessage("notonline");
             }
         } else {
             return false;
