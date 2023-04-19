@@ -21,6 +21,7 @@
 - Folia Support
 - PlaceholderApi support
 - Personal and global message customization
+- Configure that does not reset with plugin updates and multi-language support (credits: https://github.com/xGinko/BetterWorldStats)
 
 ## Source
 
