@@ -1,22 +1,20 @@
 package me.softik.nerochat.utils;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.api.NeroWhisperEvent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import me.softik.nerochat.NeroChat;
-import me.softik.nerochat.api.NeroWhisperEvent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
-import me.softik.nerochat.utils.ConfigCache;
 
 import java.util.Arrays;
 import java.util.List;

@@ -2,14 +2,13 @@ package me.softik.nerochat.commands.ignore;
 
 import com.google.common.math.IntMath;
 import lombok.RequiredArgsConstructor;
+import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.utils.CommonTool;
+import me.softik.nerochat.utils.IgnoreTool;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
-import me.softik.nerochat.NeroChat;
-import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.IgnoreTool;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
