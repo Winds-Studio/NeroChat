@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.pistonmaster</groupId>
+    <groupId>me.softik</groupId>
     <artifactId>NeroChat</artifactId>
     <version>2.0</version>
     <packaging>jar</packaging>
@@ -68,10 +68,6 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>me.softik.nerochat.shade.bstats</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.pistonmaster.pistonutils</pattern>
-                            <shadedPattern>me.softik.nerochat.shade.pistonutils</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -159,11 +155,6 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>net.pistonmaster</groupId>
-            <artifactId>PistonUtils</artifactId>
-            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
