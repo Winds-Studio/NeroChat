@@ -32,6 +32,7 @@ Original code: https://github.com/AlexProgrammerDE/PistonChat
 ## Popular servers running derivatives of this plugin
 
 - 6g6s.org
+- f3f5.online
 
 ## Player Commands
 
@@ -47,27 +48,40 @@ Standard configuration for review
 
 ```yml
 
+##############
+#  Language  #
+##############
+Language:
+  # The default language to be used if auto-lang is off or no matching language file was found.
+  default-language: en_us
+  # Enable / Disable locale based messages.
+  auto-language: true
+
+##########
+#  Main  #
+##########
+Main:
+  # Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.
+  bstats-metrics: true
+  # Enable / Disable notification of a new version of the plugin. It is recommended to turn this on.
+  notify-updates: true
+  # Enable/disable the display of the player's nickname color.
+  display-nickname-color: true
+  prefix: '[&2NeroChat&r] &6'
+  # Defines the sender's name when sending messages from the server console.
+  console-name: '[console]'
+  # Change the format of messages in public chat.
+  chat-format: <%player%&r>
+  # The size of the ignore list in pages. It is not recommended to set more than 5.
+  ignore-list-size: 9
+
+##############
+#  Prefixes  #
+##############
+
 # To use these prefixes you need additionally the nerochat.<COLORCODE>
 # / indicates disabled!
-# This config is configured to be what 2b2t.org has.
-bstats-metrics: true
-notify-updates: true
-
-whisper:
-  from: '&d%player%&d whispers: %message%'
-  to: '&dYou whisper to %player%&d: %message%'
-hovertext: '&6Message &3%player%'
-
-ignore: '&6Permanently ignoring %player%&6. This is saved in &4/ignorelist.'
-unignore: '&6No longer permanently ignoring &3%player%'
-
-chatformat: <%player%&r>
-stripnamecolor: false
-
-consolename: '[console]'
-
-ignorelistsize: 9
-prefixes:
+Prefixes:
   GREEN: '>'
   BLUE: /
   RED: /
@@ -88,22 +102,45 @@ prefixes:
   BOLD: /
   STRIKETHROUGH: /
 
-RegexFilter:
-  Chat:
-    ConsoleNotify: true
-    PlayerNotify: true
-    SilentMode: false
-    CaseInsensitive: true
-    Allowed-Regex:
-    - '[^A-Za-zА-Яа-яЁё0-9 !%()?>+-_,/:]+'
-  Whisper:
-    ConsoleNotify: true
-    PlayerNotify: true
-    SilentMode: false
-    CaseInsensitive: true
-    Allowed-Regex:
-    - '[^A-Za-zА-Яа-яЁё0-9 !%()?>+-_,/:]+'
+#################
+#  RegexFilter  #
+#################
 
+# Filtering chat messages using regular expressions.
+# If you don't know how to create them, you can use ChatGPT
+RegexFilter:
+  PublicChat:
+    # Outputs the player's name and regex when the message is canceled.
+    Logs-Enabled: true
+    # Do I inform the player that his message has not been sent? Doesn't work with silent mode.
+    Player-Notify: true
+    # The player will think he is sending messages, but in fact no one will see his messages.
+    Silent-Mode: false
+    # The search for matches will be case insensitive. Eliminates many regex bypasses with capslocks.
+    Case-Insensitive: true
+    # Regular expressions to which the messages in the chat should correspond.
+    # The regular expression in the standard config allows only Russian and English letters + keyboard characters (not all).
+    Allowed-Regex:
+    - '[^\[\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\>`|-]+'
+  Whisper:
+    # Outputs the player's name and regex when the message is canceled.
+    Logs-Enabled: true
+    # Do I inform the player that his message has not been sent? Doesn't work with silent mode.
+    Player-Notify: true
+    # The player will think he is sending messages, but in fact no one will see his messages.
+    Silent-Mode: false
+    # The search for matches will be case insensitive. Eliminates many regex bypasses with capslocks.
+    Case-Insensitive: true
+    # Regular expressions to which the messages in the chat should correspond.
+    # The regular expression in the standard config allows only Russian and English letters + keyboard characters (not all).
+    Allowed-Regex:
+    - '[^\[\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\>`|-]+'
+
+########################
+#  ReadableFormatting  #
+########################
+
+# Automatically puts a period at the end of a sentence and a capital letter at the beginning of a sentence.
 ReadableFormatting:
   PublicChat: true
   Whisper: true
