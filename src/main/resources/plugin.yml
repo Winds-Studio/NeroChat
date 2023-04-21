@@ -12,12 +12,10 @@ commands:
     description: Ignore a players chat messages permanently!
     permission: nerochat.ignore
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command> <player>"
   whisper:
     description: Whisper to a player!
     permission: nerochat.whisper
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command> <player> <message>"
     aliases:
       - tell
       - w
@@ -27,26 +25,22 @@ commands:
     description: Reply to the last message someone sent to you!
     permission: nerochat.reply
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command> <message>"
     aliases:
       - r
   last:
     description: Message the last person you messaged!
     permission: nerochat.reply
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command> <message>"
     aliases:
       - l
   ignorelist:
     description: List all ignored players!
     permission: nerochat.ignorelist
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command>"
   togglewhispering:
     description: Prevent getting whispered to!
     permission: nerochat.togglewhispering
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command>"
     aliases:
       - toggleprivatemsgs
       - toggletells
@@ -54,12 +48,11 @@ commands:
     description: Prevent getting chat messages!
     permission: nerochat.togglechat
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command>"
   nerochat:
     description: Main command!
     permission: nerochat.command
     permission-message: You have no permission to do that!
-    usage: "§cUsage: /<command> <help|reload>"
+    usage: "§cUsage: /<command> <reload>"
 permissions:
   nerochat.ignore:
     description: Permission for /ignore!
@@ -84,10 +77,6 @@ permissions:
     description: Permission for /togglechat!
   nerochat.command:
     description: Permission for /nerochat!
-  nerochat.help:
-    description: Permission for /nerochat help!
-    children:
-      nerochat.command: true
   nerochat.reload:
     description: Permission for /nerochat reload!
     children:
@@ -142,7 +131,6 @@ permissions:
       nerochat.whisper: true
       nerochat.ignore: true
       nerochat.togglechat: true
-      nerochat.help: true
       nerochat.GREEN: true
     default: true
   nerochat.admin:

@@ -127,29 +127,14 @@ public final class NeroChat extends JavaPlugin implements Listener {
         server.getPluginManager().registerEvents(new ChatEvent(this), this);
         server.getPluginManager().registerEvents(new QuitEvent(this), this);
 
-        log.info("Checking for a newer version...");
         if (NeroChat.getConfiguration().getBoolean("Main.notify-updates", true)) {
-            new UpdateChecker(new PistonLogger(getLogger())).getVersion("https://raw.githubusercontent.com/ImNotSoftik/NeroChat/master/src/main/resources/version", version ->
-                    new UpdateParser(getDescription().getVersion(), version).parseUpdate(updateType -> {
-                        if (updateType == UpdateType.NONE || updateType == UpdateType.AHEAD) {
-                            log.info("You're up to date!");
-                        } else {
-                            if (updateType == UpdateType.MAJOR) {
-                                log.info("There is a MAJOR update available!");
-                            } else if (updateType == UpdateType.MINOR) {
-                                log.info("There is a MINOR update available!");
-                            } else if (updateType == UpdateType.PATCH) {
-                                log.info("There is a PATCH update available!");
-                            }
-                            log.warning("****************************************");
-                            log.warning("The new NeroChat update was found, please update!");
-                            log.warning("https://github.com/ImNotSoftik/NeroChat/releases");
-                            log.warning("Current version: " + this.getDescription().getVersion() + " New version: " + version);
-                            log.warning("****************************************");
-                        }
-                    }));
-        } else {
-            log.info("Checking for a newer version is disabled in the config. Skip it");
+            log.info("Checking for a newer version...");
+            if (!UpdatesChecker.checkVersionByURL("https://raw.githubusercontent.com/ImNotSoftik/NeroChat/master/src/main/resources/version", this.getDescription().getVersion())) {
+                logger.warning("****************************************");
+                logger.warning("The new NeroChat update was found, please update.");
+                logger.warning("https://github.com/ImNotSoftik/NeroChat/releases");
+                logger.warning("****************************************");
+            }
         }
         if (NeroChat.getConfiguration().getBoolean("Main.bstats-metrics", true)) {
             log.info("Loading metrics");

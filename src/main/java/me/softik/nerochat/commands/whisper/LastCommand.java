@@ -20,6 +20,10 @@ public class LastCommand implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Optional<CommandSender> lastSentTo = plugin.getCacheTool().getLastSentTo(sender);
         Optional<CommandSender> lastMessagedOf = plugin.getCacheTool().getLastMessagedOf(sender);
+        if (args.length == 0) {
+            sender.sendMessage(NeroChat.getLang(sender).usage + " "+ "/reply "  + " " + NeroChat.getLang(sender).message_argument);
+            return false;
+        }
 
         if (lastSentTo.isPresent()) {
             if (plugin.getIgnoreTool().isIgnored(sender, lastSentTo.get())) {

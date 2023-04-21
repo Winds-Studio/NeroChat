@@ -32,29 +32,6 @@ public class MainCommand implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
-                case "help":
-                    if (sender.hasPermission("nerochat.help")) {
-                        ComponentBuilder builder = new ComponentBuilder("---" + CommonTool.getPrefix() + "---").color(ChatColor.GOLD);
-
-                        plugin.getDescription().getCommands().forEach((name, info) ->
-                                builder.append("\n/" + name)
-                                        .color(ChatColor.GOLD)
-                                        .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + name + " "))
-                                        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                                new ComponentBuilder("Click me!")
-                                                        .color(ChatColor.GOLD)
-                                                        .create()
-                                        ))
-                                        .append(" - ")
-                                        .color(ChatColor.GOLD)
-                                        .append(info.get("description").toString()));
-
-                        sender.spigot().sendMessage(builder.create());
-                    } else {
-                        sender.sendMessage(NeroChat.getLang(sender).no_permissions);
-                    }
-
-                    break;
                 case "version":
                     if (sender.hasPermission("nerochat.version")) {
                         sender.sendMessage(ChatColor.GOLD + "Currently running: " + plugin.getDescription().getFullName());
@@ -87,10 +64,6 @@ public class MainCommand implements CommandExecutor, TabExecutor {
         if (args.length == 1) {
             List<String> possibleCommands = new ArrayList<>();
             List<String> completions = new ArrayList<>();
-
-            if (sender.hasPermission("nerochat.help")) {
-                possibleCommands.add("help");
-            }
 
             if (sender.hasPermission("nerochat.reload")) {
                 possibleCommands.add("reload");

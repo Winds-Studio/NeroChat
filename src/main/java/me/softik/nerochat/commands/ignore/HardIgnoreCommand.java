@@ -22,6 +22,14 @@ public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
+            if (args.length == 0) {
+                sender.sendMessage(NeroChat.getLang(sender).usage + " "+ "/ignore " + NeroChat.getLang(sender).player_argument);
+                return false;
+            }
+            if (args[0].equalsIgnoreCase(player.getName())) {
+                player.sendMessage(NeroChat.getLang(player).ignore_yourself);
+                return true;
+            }
 
             if (args.length > 0) {
                 Optional<Player> ignored = CommonTool.getPlayer(args[0]);
@@ -30,9 +38,9 @@ public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
                     ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
 
                     if (type == ConfigTool.HardReturn.IGNORE) {
-                        player.sendMessage(plugin.getConfigTool().getPreparedString("ignore", ignored.get()));
+                        player.sendMessage(plugin.getConfigTool().getPreparedString("" + NeroChat.getLang(sender).ignore, ignored.get()));
                     } else if (type == ConfigTool.HardReturn.UN_IGNORE) {
-                        player.sendMessage(plugin.getConfigTool().getPreparedString("un-ignore", ignored.get()));
+                        player.sendMessage(plugin.getConfigTool().getPreparedString("" + NeroChat.getLang(sender).un_ignore, ignored.get()));
                     }
                 } else {
                     player.sendMessage(NeroChat.getLang(player).not_online);

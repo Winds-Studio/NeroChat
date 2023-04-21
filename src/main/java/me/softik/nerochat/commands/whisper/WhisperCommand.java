@@ -20,6 +20,10 @@ public class WhisperCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 0) {
+            sender.sendMessage(NeroChat.getLang(sender).usage + " "+ "/whisper " + NeroChat.getLang(sender).player_argument + " " + NeroChat.getLang(sender).message_argument);
+            return false;
+        }
         if (args.length > 0) {
             Optional<Player> receiver = CommonTool.getPlayer(args[0]);
 

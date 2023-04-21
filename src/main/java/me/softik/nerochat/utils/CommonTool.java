@@ -85,7 +85,7 @@ public class CommonTool {
                 if (matcher.find()) {
                     // The message contains an illegal pattern, so cancel the event
                     if (!NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Silent-Mode", false) && NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Player-Notify", true)) {
-                        sender.sendMessage("Player-Notify");
+                        sender.sendMessage(NeroChat.getLang(sender).player_notify);
                     }
                     if (NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Logs-Enabled", true)) {
                         NeroChat.getPlugin(NeroChat.class).getLogger().warning(sender.getName() + " tried to send a whisper that didn't match the regex: " + message);
@@ -105,17 +105,17 @@ public class CommonTool {
     }
 
     public static void sendSender(CommandSender sender, String message, CommandSender receiver) {
-        String senderString = ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Whisper.to", "&dYou whisper to %player%&d: %message%")
+        String senderString = ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).whisper_to)
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(receiver).getDisplayName()))
-                .replace("%message%", message));
+                .replace("%message%", message);
 
         sender.spigot().sendMessage(new TextComponent(TextComponent.fromLegacyText(senderString)));
     }
 
     private static void sendReceiver(CommandSender sender, String message, CommandSender receiver) {
-        String receiverString = ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Whisper.from", "&d%player%&d whispers: %message%")
+        String receiverString = ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).whisper_from)
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(sender).getDisplayName()))
-                .replace("%message%", message));
+                .replace("%message%", message);
 
         receiver.spigot().sendMessage(new TextComponent(TextComponent.fromLegacyText(receiverString)));
     }
@@ -125,7 +125,7 @@ public class CommonTool {
     }
 
     public static String getPrefix() {
-        return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("prefix", "GREEN: '>'"));
+        return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("prefix", "[&2NeroChat&r] &6"));
     }
 
     public static ChatColor getChatColorFor(String message, Player player) {
@@ -158,7 +158,7 @@ public class CommonTool {
         if (receiver.hasPermission("nerochat.playernamereply")) {
             builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/w " + ChatColor.stripColor(chatter.getDisplayName()) + " "));
 
-            String hoverText = NeroChat.getConfiguration().getString("Main.hover-text", "&6Message &3%player%");
+            String hoverText = NeroChat.getLang(chatter).hover_text;
 
             builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(

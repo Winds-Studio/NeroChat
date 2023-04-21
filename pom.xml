@@ -193,10 +193,9 @@
             <version>0.10.2</version>
         </dependency>
         <dependency>
-            <groupId>com.github.puregero</groupId>
-            <artifactId>multilib</artifactId>
-            <version>1.1.12</version>
-            <scope>compile</scope>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.2.3</version>
         </dependency>
     </dependencies>
 </project>

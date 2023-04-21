@@ -12,6 +12,8 @@ import java.util.List;
 
 public class LanguageCache {
     private final FileConfiguration fileConfiguration;
+    public String hover_text;
+    public String ignored_players;
     public String page_doesent_exist;
     public String error;
     public String chat_on;
@@ -24,8 +26,8 @@ public class LanguageCache {
     public String un_ignore;
     public String ignore_yourself;
     public String player_pm_off;
-    private String whisper_to;
-    private String whisper_from;
+    public String whisper_to;
+    public String whisper_from;
     public String player_only;
     public String not_online;
     public String pm_yourself;
@@ -33,6 +35,9 @@ public class LanguageCache {
     boolean addedMissing = false;
     public String no_permissions;
     public String player_notify;
+    public String usage;
+    public String player_argument;
+    public String message_argument;
     public String ignore_you;
     public List<String> world_stats_message;
 
@@ -57,8 +62,8 @@ public class LanguageCache {
             this.whisper_to = getStringTranslation("Whisper.to", "&dYou whisper to %player%&d: %message%");
             this.ignore_yourself = getStringTranslation("ignore-yourself", "You can't ignore yourself.");
             this.pm_yourself = getStringTranslation("pm-yourself", "You cannot write private messages to yourself.");
-            this.ignore = getStringTranslation("ignore", "&6You ignore a player &3%player%.");
-            this.un_ignore = getStringTranslation("un-ignore", "&6You are no longer ignoring a player &3%player%.");
+            this.ignore = getStringTranslation("ignore", "&6You ignore a player &3%player%");
+            this.un_ignore = getStringTranslation("un-ignore", "&6You are no longer ignoring a player &3%player%");
             this.no_one_ignored = getStringTranslation("no-one-ignored", "You are not ignoring anyone.");
             this.page_doesent_exist = getStringTranslation("page-doesent-exist", "This page doesn't exist.");
             this.error = getStringTranslation("error", "There's been a mistake! Please contact the administrator.");
@@ -68,6 +73,11 @@ public class LanguageCache {
             this.pm_off = getStringTranslation("pm-off", "You have turned off personal messages.");
             this.player_pm_off = getStringTranslation("player-pm-off", "This player has turned off personal messages.");
             this.chat_is_off = getStringTranslation("chat-is-off", "You have disabled public chat. Use /togglechat to turn it back on.");
+            this.ignored_players = getStringTranslation("ignored-players", "List of ignored players");
+            this.usage = getStringTranslation("usage", "Usage:");
+            this.player_argument = getStringTranslation("player-argument", "<player>");
+            this.message_argument = getStringTranslation("message-argument", "<message>");
+            this.hover_text = getStringTranslation("hover-text", "&6Message &3%player%");
             if (addedMissing) fileConfiguration.save(langFile);
         } catch (IOException e) {
             e.printStackTrace();

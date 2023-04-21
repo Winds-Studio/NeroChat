@@ -19,6 +19,10 @@ public class ReplyCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Optional<CommandSender> lastMessagedOf = plugin.getCacheTool().getLastMessagedOf(sender);
+        if (args.length == 0) {
+            sender.sendMessage(NeroChat.getLang(sender).usage + " "+ "/reply "  + " " + NeroChat.getLang(sender).message_argument);
+            return false;
+        }
 
         if (lastMessagedOf.isPresent()) {
             if (plugin.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {

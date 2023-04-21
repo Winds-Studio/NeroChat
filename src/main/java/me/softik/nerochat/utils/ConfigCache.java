@@ -16,7 +16,6 @@ public class ConfigCache {
 
     private final boolean bstats_metrics;
     private final boolean notify_updates;
-    private final String hover_text;
     private final boolean display_nickname_color;
     private final String console_name;
     private final int ignore_list_size;
@@ -52,6 +51,7 @@ public class ConfigCache {
     private final boolean RegexFilter_Whisper_Logs_enabled;
     private final boolean RegexFilter_Whisper_Silent_mode;
     private final List<String> RegexFilter_Whisper_Allowed_Regex;
+    private final String prefix;
     private ConfigFile config;
     private final File configFile;
     private final Logger logger;
@@ -74,10 +74,10 @@ public class ConfigCache {
         this.bstats_metrics = getBoolean("Main.bstats-metrics", true, "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
         this.notify_updates = getBoolean("Main.notify-updates", true, "Enable / Disable notification of a new version of the plugin. It is recommended to turn this on.");
         this.display_nickname_color = getBoolean("Main.display-nickname-color", true, "Enable/disable the display of the player's nickname color.");
+        this.prefix = getString("Main.prefix", "[&2NeroChat&r] &6");
         this.console_name = getString("Main.console-name", "[console]", "Defines the sender's name when sending messages from the server console.");
         this.chat_format = getString("Main.chat-format", "<%player%&r>", "Change the format of messages in public chat.");
         this.ignore_list_size = getInt("Main.ignore-list-size", 9, "The size of the ignore list in pages. It is not recommended to set more than 5.");
-        this.hover_text = getString("Main.hover-text", "&6Message &3%player%", "Text when hovering the cursor over the sender's chat nickname.");
         config.addSection("Prefixes");
         config.addDefault("Prefixes", null, "To use these prefixes you need additionally the nerochat.<COLORCODE>\n/ indicates disabled!");
         this.prefixes_green = getString("Prefixes.GREEN", ">");

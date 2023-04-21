@@ -98,8 +98,8 @@ public class ConfigTool {
     }
 
     public String getPreparedString(String str, Player player) {
-        return ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).getStringTranslation(str, "")
-                .replace("%player%", ChatColor.stripColor(player.getDisplayName())));
+        return ChatColor.translateAlternateColorCodes('&', str)
+                .replace("%player%", ChatColor.stripColor(player.getDisplayName()));
     }
 
     public enum HardReturn {

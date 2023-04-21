@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.utils.CommonTool;
 import me.softik.nerochat.utils.IgnoreTool;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -75,8 +76,7 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
 
         int allPages = IntMath.divide(map.size(), NeroChat.getConfiguration().getInt("Main.ignore-list-size", 9), RoundingMode.CEILING);
 
-        ComponentBuilder navigation = new ComponentBuilder("[ Ignored players ").color(ChatColor.GOLD);
-
+        ComponentBuilder navigation = new ComponentBuilder("").color(ChatColor.GOLD);
         navigation.append("[<]").color(page > 1 ? ChatColor.AQUA : ChatColor.GRAY);
 
         if (page > 1) {
@@ -93,8 +93,6 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
             navigation.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to go to the next page!").color(ChatColor.GOLD).create()));
         }
 
-        navigation.append(" ]").reset().color(ChatColor.GOLD);
-
         player.spigot().sendMessage(navigation.create());
 
         int i = 0;
@@ -110,12 +108,11 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
                 playerBuilder.color(ChatColor.GRAY);
 
                 if (entry.getValue() == IgnoreTool.IgnoreType.HARD) {
-                    playerBuilder.append("hard");
+                    playerBuilder.append("Ｘ");
 
-                    playerBuilder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to remove the permanent ignore").color(ChatColor.GOLD).create()));
                     playerBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ignore " + ChatColor.stripColor(entry.getKey().getName())));
                 }
-                playerBuilder.color(ChatColor.GOLD);
+                playerBuilder.color(ChatColor.RED);
 
                 playerBuilder.append("]").reset();
 
