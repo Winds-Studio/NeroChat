@@ -29,7 +29,7 @@ commands:
       - r
   last:
     description: Message the last person you messaged!
-    permission: nerochat.reply
+    permission: nerochat.last
     permission-message: You have no permission to do that!
     aliases:
       - l
