@@ -51,7 +51,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
 
                         sender.spigot().sendMessage(builder.create());
                     } else {
-                        sender.sendMessage(command.getPermissionMessage());
+                        sender.sendMessage(NeroChat.getLang(sender).no_permissions);
                     }
 
                     break;
@@ -59,7 +59,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                     if (sender.hasPermission("nerochat.version")) {
                         sender.sendMessage(ChatColor.GOLD + "Currently running: " + plugin.getDescription().getFullName());
                     } else {
-                        sender.sendMessage(command.getPermissionMessage());
+                        sender.sendMessage(NeroChat.getLang(sender).no_permissions);
                     }
 
                     break;
@@ -68,7 +68,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                         NeroChat.getInstance().reloadNeroChat();
                         sender.sendMessage("Reloaded the config!");
                     } else {
-                        sender.sendMessage(command.getPermissionMessage());
+                        sender.sendMessage(NeroChat.getLang(sender).no_permissions);
                     }
 
                     break;

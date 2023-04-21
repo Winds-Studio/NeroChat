@@ -23,12 +23,12 @@ public class ToggleWhisperingCommand implements CommandExecutor, TabExecutor {
             plugin.getTempDataTool().setWhisperingEnabled(player, !plugin.getTempDataTool().isWhisperingEnabled(player));
 
             if (plugin.getTempDataTool().isWhisperingEnabled(player)) {
-                player.sendMessage("pmson");
+                player.sendMessage(NeroChat.getLang(player).pm_on);
             } else {
-                player.sendMessage("pmsoff");
+                player.sendMessage(NeroChat.getLang(player).chat_off);
             }
         } else {
-            sender.sendMessage("playeronly");
+            sender.sendMessage(NeroChat.getLang(sender).player_only);
         }
 
         return true;

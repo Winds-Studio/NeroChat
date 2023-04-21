@@ -16,8 +16,6 @@ public class ConfigCache {
 
     private final boolean bstats_metrics;
     private final boolean notify_updates;
-    private final String whisper_form;
-    private final String whisper_to;
     private final String hover_text;
     private final boolean display_nickname_color;
     private final String console_name;
@@ -49,6 +47,11 @@ public class ConfigCache {
     private final List<String> RegexFilter_Public_Allowed_Regex;
     private final boolean Readable_Formatting_Whisper;
     private final boolean Readable_Formatting_Public_Chat;
+    private final boolean RegexFilter_Whisper_Case_Insensitive;
+    private final boolean RegexFilter_Whisper_Player_Notify;
+    private final boolean RegexFilter_Whisper_Logs_enabled;
+    private final boolean RegexFilter_Whisper_Silent_mode;
+    private final List<String> RegexFilter_Whisper_Allowed_Regex;
     private ConfigFile config;
     private final File configFile;
     private final Logger logger;
@@ -75,10 +78,6 @@ public class ConfigCache {
         this.chat_format = getString("Main.chat-format", "<%player%&r>", "Change the format of messages in public chat.");
         this.ignore_list_size = getInt("Main.ignore-list-size", 9, "The size of the ignore list in pages. It is not recommended to set more than 5.");
         this.hover_text = getString("Main.hover-text", "&6Message &3%player%", "Text when hovering the cursor over the sender's chat nickname.");
-        config.addSection("Whisper");
-        config.addDefault("Whisper", null);
-        this.whisper_form = getString("Whisper.from", "&d%player%&d whispers: %message%", "Displaying incoming messages.");
-        this.whisper_to = getString("Whisper.to", "&dYou whisper to %player%&d: %message%", "Displaying outgoing messages.");
         config.addSection("Prefixes");
         config.addDefault("Prefixes", null, "To use these prefixes you need additionally the nerochat.<COLORCODE>\n/ indicates disabled!");
         this.prefixes_green = getString("Prefixes.GREEN", ">");
@@ -104,9 +103,14 @@ public class ConfigCache {
         config.addDefault("RegexFilter", null, "Filtering chat messages using regular expressions.\nIf you don't know how to create them, you can use ChatGPT");
         this.RegexFilter_PublicChat_Logs_enabled = getBoolean("RegexFilter.PublicChat.Logs-Enabled", true, "Outputs the player's name and regex when the message is canceled.");
         this.RegexFilter_PublicChat_Player_Notify = getBoolean("RegexFilter.PublicChat.Player-Notify", true, "Do I inform the player that his message has not been sent? Doesn't work with silent mode.");
-        this.RegexFilter_PublicChat_Silent_mode = getBoolean("RegexFilter.PublicChat.Silent-Mode", true, "The player will think he is sending messages, but in fact no one will see his messages.");
+        this.RegexFilter_PublicChat_Silent_mode = getBoolean("RegexFilter.PublicChat.Silent-Mode", false, "The player will think he is sending messages, but in fact no one will see his messages.");
         this.RegexFilter_PublicChat_Case_Insensitive = getBoolean("RegexFilter.PublicChat.Case-Insensitive", true, "The search for matches will be case insensitive. Eliminates many regex bypasses with capslocks.");
         this.RegexFilter_Public_Allowed_Regex = getList("RegexFilter.PublicChat.Allowed-Regex", Arrays.asList("[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"), "Regular expressions to which the messages in the chat should correspond.\nThe regular expression in the standard config allows only Russian and English letters + keyboard characters (not all).");
+        this.RegexFilter_Whisper_Logs_enabled = getBoolean("RegexFilter.Whisper.Logs-Enabled", true, "Outputs the player's name and regex when the message is canceled.");
+        this.RegexFilter_Whisper_Player_Notify = getBoolean("RegexFilter.Whisper.Player-Notify", true, "Do I inform the player that his message has not been sent? Doesn't work with silent mode.");
+        this.RegexFilter_Whisper_Silent_mode = getBoolean("RegexFilter.Whisper.Silent-Mode", false, "The player will think he is sending messages, but in fact no one will see his messages.");
+        this.RegexFilter_Whisper_Case_Insensitive = getBoolean("RegexFilter.Whisper.Case-Insensitive", true, "The search for matches will be case insensitive. Eliminates many regex bypasses with capslocks.");
+        this.RegexFilter_Whisper_Allowed_Regex = getList("RegexFilter.Whisper.Allowed-Regex", Arrays.asList("[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"), "Regular expressions to which the messages in the chat should correspond.\nThe regular expression in the standard config allows only Russian and English letters + keyboard characters (not all).");
         config.addSection("ReadableFormatting");
         config.addDefault("ReadableFormatting", null, "Automatically puts a period at the end of a sentence and a capital letter at the beginning of a sentence.");
         this.Readable_Formatting_Public_Chat = getBoolean("ReadableFormatting.PublicChat", true);
@@ -210,6 +214,5 @@ public class ConfigCache {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        plugin.getLogger().info("Plugin configuration has been reloaded.");
     }
 }

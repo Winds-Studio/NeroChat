@@ -37,7 +37,7 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
             }
 
             if (list.isEmpty()) {
-                player.sendMessage("nooneignored");
+                player.sendMessage(NeroChat.getLang(sender).no_one_ignored);
             } else {
                 if (args.length > 0) {
                     try {
@@ -46,17 +46,17 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
                         if (page < plugin.getIgnoreTool().getIgnoredPlayers(player).size()) {
                             showList(page, player);
                         } else {
-                            player.sendMessage(CommonTool.getPrefix() + "This page doesn't exist!");
+                            player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).page_doesent_exist);
                         }
                     } catch (NumberFormatException e) {
-                        player.sendMessage(CommonTool.getPrefix() + "Not a number!");
+                        player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).error);
                     }
                 } else {
                     showList(1, player);
                 }
             }
         } else {
-            sender.sendMessage("playeronly");
+            sender.sendMessage(NeroChat.getLang(sender).player_only);
         }
 
         return true;
@@ -68,12 +68,12 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
     }
 
     private void showList(int page, Player player) {
-        int maxValue = page * plugin.getConfig().getInt("ignorelistsize");
-        int minValue = maxValue - plugin.getConfig().getInt("ignorelistsize");
+        int maxValue = page * NeroChat.getConfiguration().getInt("Main.ignore-list-size", 9);
+        int minValue = maxValue - NeroChat.getConfiguration().getInt("Main.ignore-list-size", 9);
 
         Map<OfflinePlayer, IgnoreTool.IgnoreType> map = plugin.getIgnoreTool().getIgnoredPlayers(player);
 
-        int allPages = IntMath.divide(map.size(), plugin.getConfig().getInt("ignorelistsize"), RoundingMode.CEILING);
+        int allPages = IntMath.divide(map.size(), NeroChat.getConfiguration().getInt("Main.ignore-list-size", 9), RoundingMode.CEILING);
 
         ComponentBuilder navigation = new ComponentBuilder("[ Ignored players ").color(ChatColor.GOLD);
 
@@ -114,12 +114,7 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
 
                     playerBuilder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to remove the permanent ignore").color(ChatColor.GOLD).create()));
                     playerBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ignore " + ChatColor.stripColor(entry.getKey().getName())));
-                } else {
-                    playerBuilder.append("soft");
-                    playerBuilder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to remove the temporary ignore").color(ChatColor.GOLD).create()));
-                    playerBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ignore " + ChatColor.stripColor(entry.getKey().getName())));
                 }
-
                 playerBuilder.color(ChatColor.GOLD);
 
                 playerBuilder.append("]").reset();

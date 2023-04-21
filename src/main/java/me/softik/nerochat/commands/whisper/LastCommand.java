@@ -23,13 +23,9 @@ public class LastCommand implements CommandExecutor, TabExecutor {
 
         if (lastSentTo.isPresent()) {
             if (plugin.getIgnoreTool().isIgnored(sender, lastSentTo.get())) {
-                if (plugin.getConfig().getBoolean("onlyhidepms")) {
-                    CommonTool.sendSender(sender, CommonTool.mergeArgs(args, 0), lastSentTo.get());
-                } else {
-                    sender.sendMessage(CommonTool.getPrefix() + "This person ignores you!");
-                }
+                sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
             } else if (plugin.getIgnoreTool().isIgnored(lastSentTo.get(), sender)) {
-                sender.sendMessage(CommonTool.getPrefix() + "You ignore this person!");
+                sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
             } else {
                 if (args.length > 0) {
                     CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 0), lastSentTo.get());
@@ -39,13 +35,9 @@ public class LastCommand implements CommandExecutor, TabExecutor {
             }
         } else if (lastMessagedOf.isPresent()) {
             if (plugin.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {
-                if (plugin.getConfig().getBoolean("onlyhidepms")) {
-                    CommonTool.sendSender(sender, CommonTool.mergeArgs(args, 0), lastMessagedOf.get());
-                } else {
-                    sender.sendMessage(CommonTool.getPrefix() + "This person ignores you!");
-                }
+                sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
             } else if (plugin.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
-                sender.sendMessage(CommonTool.getPrefix() + "You ignore this person!");
+                sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
             } else {
                 if (args.length > 0) {
                     CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 0), lastMessagedOf.get());
@@ -54,7 +46,7 @@ public class LastCommand implements CommandExecutor, TabExecutor {
                 }
             }
         } else {
-            sender.sendMessage("notonline");
+            sender.sendMessage(NeroChat.getLang(sender).not_online);
         }
 
         return true;

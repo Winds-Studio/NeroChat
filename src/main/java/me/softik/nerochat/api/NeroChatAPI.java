@@ -36,7 +36,7 @@ public final class NeroChatAPI {
         Preconditions.checkNotNull(ignorer, "Ignorer can not be null!");
         Preconditions.checkNotNull(ignored, "Ignored can not be null!");
 
-        //plugin.getConfigTool().hardIgnorePlayer(ignorer, ignored);
+        plugin.getConfigTool().hardIgnorePlayer(ignorer, ignored);
     }
 
     /**

@@ -32,7 +32,7 @@ public class CommonTool {
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
         if (sender == receiver) {
-            sender.sendMessage("pmself");
+            sender.sendMessage(NeroChat.getLang(sender).pm_yourself);
             return;
         }
 
@@ -52,16 +52,12 @@ public class CommonTool {
 
         if (!sender.hasPermission("nerochat.bypass")) {
             if (!NeroChat.getPlugin(NeroChat.class).getTempDataTool().isWhisperingEnabled(receiver)) {
-                if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("onlyhidepms")) {
-                    sendSender(sender, message, receiver);
-                } else {
-                    sender.sendMessage(CommonTool.getPrefix() + "This person has whispering disabled!");
-                }
+                    sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).player_pm_off);
                 return;
             }
 
             if (receiver instanceof Player && isVanished((Player) receiver)) {
-                sender.sendMessage("notonline");
+                sender.sendMessage(NeroChat.getLang(sender).not_online);
                 return;
             }
         }
@@ -75,9 +71,9 @@ public class CommonTool {
 
         message = neroWhisperEvent.getMessage();
 
-        List<String> regexList = NeroChat.getPlugin(NeroChat.class).getConfig().getStringList("RegexFilter.Whisper.Allowed-Regex");
+        List<String> regexList = NeroChat.getConfiguration().getList("RegexFilter.Whisper.Allowed-Regex", Arrays.asList("[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"));
         try {
-            boolean useCaseInsensitive = NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.CaseInsensitive", true);
+            boolean useCaseInsensitive = NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Case-Insensitive", true);
             for (String regex : regexList) {
                 Pattern pattern;
                 if (useCaseInsensitive) {
@@ -88,13 +84,13 @@ public class CommonTool {
                 Matcher matcher = pattern.matcher(message);
                 if (matcher.find()) {
                     // The message contains an illegal pattern, so cancel the event
-                    if (!NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.SilentMode", true) && NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.PlayerNotify", true)) {
-                        sender.sendMessage("PlayerNotify");
+                    if (!NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Silent-Mode", false) && NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Player-Notify", true)) {
+                        sender.sendMessage("Player-Notify");
                     }
-                    if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.ConsoleNotify", true)) {
+                    if (NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Logs-Enabled", true)) {
                         NeroChat.getPlugin(NeroChat.class).getLogger().warning(sender.getName() + " tried to send a whisper that didn't match the regex: " + message);
                     }
-                    if (NeroChat.getPlugin(NeroChat.class).getConfig().getBoolean("RegexFilter.Whisper.SilentMode", false)) {
+                    if (NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Silent-Mode", false)) {
                         sendSender(sender, message, receiver);
                     }
                     return;

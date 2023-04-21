@@ -3,6 +3,7 @@ package me.softik.nerochat.commands.ignore;
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.utils.CommonTool;
+import me.softik.nerochat.utils.ConfigTool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,30 +24,25 @@ public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
             Player player = (Player) sender;
 
             if (args.length > 0) {
-                if (args[0].equalsIgnoreCase(player.getName())) {
-                    player.sendMessage("ignoreyourself");
-                    return true;
-                }
-
                 Optional<Player> ignored = CommonTool.getPlayer(args[0]);
 
                 if (ignored.isPresent()) {
-                    //ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
+                    ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
 
-                    //if (type == ConfigTool.HardReturn.IGNORE) {
-                        //player.sendMessage(plugin.getConfigTool().getPreparedString("ignore", ignored.get()));
-                    //} else if (type == ConfigTool.HardReturn.UN_IGNORE) {
-                        //player.sendMessage(plugin.getConfigTool().getPreparedString("unignore", ignored.get()));
+                    if (type == ConfigTool.HardReturn.IGNORE) {
+                        player.sendMessage(plugin.getConfigTool().getPreparedString("ignore", ignored.get()));
+                    } else if (type == ConfigTool.HardReturn.UN_IGNORE) {
+                        player.sendMessage(plugin.getConfigTool().getPreparedString("un-ignore", ignored.get()));
                     }
                 } else {
-                    //player.sendMessage(LanguageTool.getMessage("notonline"));
+                    player.sendMessage(NeroChat.getLang(player).not_online);
                 }
             } else {
                 return false;
             }
-        //} else {
-            //sender.sendMessage(LanguageTool.getMessage("playeronly"));
-        //}
+        } else {
+            sender.sendMessage(NeroChat.getLang(sender).player_only);
+        }
 
         return true;
     }

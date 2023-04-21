@@ -23,12 +23,12 @@ public class ToggleChatCommand implements CommandExecutor, TabExecutor {
             plugin.getTempDataTool().setChatEnabled(player, !plugin.getTempDataTool().isChatEnabled(player));
 
             if (plugin.getTempDataTool().isChatEnabled(player)) {
-                player.sendMessage("chaton");
+                player.sendMessage(NeroChat.getLang(player).chat_on);
             } else {
-                player.sendMessage("chatoff");
+                player.sendMessage(NeroChat.getLang(player).chat_off);
             }
         } else {
-            sender.sendMessage("playeronly");
+            sender.sendMessage(NeroChat.getLang(sender).player_only);
         }
 
         return true;

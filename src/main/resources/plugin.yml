@@ -2,9 +2,8 @@ name: NeroChat
 version: ${project.version}
 api-version: 1.13
 main: me.softik.nerochat.NeroChat
-authors: [ AlexProgrammerDE ]
+authors: [ _Soft1k_ ]
 description: An advanced chat plugin for survival/anarchy servers.
-website: https://neromaster.net/
 softdepend: ["PlaceholderAPI"]
 folia-supported: true
 

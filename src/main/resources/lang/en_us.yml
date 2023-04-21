@@ -1,15 +1,24 @@
-# Placeholders:
-# %years%
-# %months%
-# %days%
-# %size%
-# %spoof%
-# %players%
-stats-message:
-  - '&3-----------------------------------------------------'
-  - ' &7The server has spawned &6%players% player(s)&7 at least once'
-  - ' &7The map is &6%years% year(s)&7, &6%months% month(s)&7 and &6%days% day(s)&7 old'
-  - ' &7The world (with compression) is a total of &6%size% GB'
-  - '&3-----------------------------------------------------'
 no-permission: "You don't have permission to use this command."
-player-notify: "Illegal characters were found in your message!"
+player-notify: "Illegal characters were found in your message."
+ignore-me: "This player ignores you."
+ignore-you: "You are ignoring this player."
+not-online: "This player is not online."
+player-only: "You need to be a player to do this."
+Whisper:
+  # Displaying incoming messages.
+  from: '&d%player%&d whispers: %message%'
+  # Displaying outgoing messages.
+  to: '&dYou whisper to %player%&d: %message%'
+ignore-yourself: "You can't ignore yourself."
+pm-yourself: "You cannot write private messages to yourself."
+ignore: "&6You ignore a player &3%player%."
+un-ignore: "&6You are no longer ignoring a player &3%player%."
+no-one-ignored: "You are not ignoring anyone."
+page-doesent-exist: "This page doesn't exist."
+error: "There's been a mistake! Please contact the administrator."
+chat-on: "You have enabled public chat."
+chat-off: "You turned off public chat."
+pm-on: "You have enabled personal messages."
+pm-off: "You have turned off personal messages."
+player-pm-off: "This player has turned off personal messages."
+chat-is-off: "You have disabled public chat. Use /togglechat to turn it back on."

@@ -49,6 +49,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
     private final SoftIgnoreTool softignoreTool = new SoftIgnoreTool();
     private final CacheTool cacheTool = new CacheTool(this);
     private final IgnoreTool ignoreTool = new IgnoreTool(this);
+    private final ConfigTool configTool = new ConfigTool(this);
     private static NeroChat instance;
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;

@@ -49,7 +49,7 @@ public class ChatEvent implements Listener {
 
                         message = perPlayerEvent.getMessage();
 
-                        List<String> regexList = NeroChat.getConfiguration().getList("RegexFilter.PublicChat.Allowed-Regex", Arrays.asList("#[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"));
+                        List<String> regexList = NeroChat.getConfiguration().getList("RegexFilter.PublicChat.Allowed-Regex", Arrays.asList("[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"));
                         try {
                             boolean useCaseInsensitive =  NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Case-Insensitive", true);
                             for (String regex : regexList) {
@@ -62,7 +62,7 @@ public class ChatEvent implements Listener {
                                 Matcher matcher = pattern.matcher(message);
                                 if (matcher.find()) {
                                     // The message contains an illegal pattern, so cancel the event
-                                    if (!NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Silent-Mode", true) &&  NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Player-Notify", true)) {
+                                    if (!NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Silent-Mode", false) &&  NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Player-Notify", true)) {
                                         chatter.sendMessage(ChatColor.RED + NeroChat.getLang(chatter).player_notify);
                                     }
                                     if (NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Logs-Enabled", true)) {
@@ -102,7 +102,7 @@ public class ChatEvent implements Listener {
                     }
                 }
             } else {
-                chatter.sendMessage(("chatisoff"));
+                chatter.sendMessage(NeroChat.getLang(chatter).chat_is_off);
                 event.setCancelled(true);
             }
         }
