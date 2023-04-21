@@ -2,6 +2,7 @@ package me.softik.nerochat.commands.toggle;
 
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,12 +24,12 @@ public class ToggleWhisperingCommand implements CommandExecutor, TabExecutor {
             plugin.getTempDataTool().setWhisperingEnabled(player, !plugin.getTempDataTool().isWhisperingEnabled(player));
 
             if (plugin.getTempDataTool().isWhisperingEnabled(player)) {
-                player.sendMessage(NeroChat.getLang(player).pm_on);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).pm_on));
             } else {
-                player.sendMessage(NeroChat.getLang(player).chat_off);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).chat_off));
             }
         } else {
-            sender.sendMessage(NeroChat.getLang(sender).player_only);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_only));
         }
 
         return true;

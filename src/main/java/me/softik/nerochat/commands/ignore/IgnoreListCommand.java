@@ -37,7 +37,7 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
             }
 
             if (list.isEmpty()) {
-                player.sendMessage(NeroChat.getLang(sender).no_one_ignored);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).no_one_ignored));
             } else {
                 if (args.length > 0) {
                     try {
@@ -46,17 +46,17 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
                         if (page < plugin.getIgnoreTool().getIgnoredPlayers(player).size()) {
                             showList(page, player);
                         } else {
-                            player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).page_doesent_exist);
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(player).page_doesent_exist));
                         }
                     } catch (NumberFormatException e) {
-                        player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).error);
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(player).error));
                     }
                 } else {
                     showList(1, player);
                 }
             }
         } else {
-            sender.sendMessage(NeroChat.getLang(sender).player_only);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_only));
         }
 
         return true;

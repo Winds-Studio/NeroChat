@@ -12,7 +12,6 @@ import java.util.List;
 public class LanguageCache {
     private final FileConfiguration fileConfiguration;
     public String hover_text;
-    public String ignored_players;
     public String page_doesent_exist;
     public String error;
     public String chat_on;
@@ -72,7 +71,6 @@ public class LanguageCache {
             this.pm_off = getStringTranslation("pm-off", "You have turned off personal messages.");
             this.player_pm_off = getStringTranslation("player-pm-off", "This player has turned off personal messages.");
             this.chat_is_off = getStringTranslation("chat-is-off", "You have disabled public chat. Use /togglechat to turn it back on.");
-            this.ignored_players = getStringTranslation("ignored-players", "List of ignored players");
             this.usage = getStringTranslation("usage", "Usage:");
             this.player_argument = getStringTranslation("player-argument", "<player>");
             this.message_argument = getStringTranslation("message-argument", "<message>");

@@ -3,6 +3,7 @@ package me.softik.nerochat.commands.whisper;
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.utils.CommonTool;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,15 +21,15 @@ public class ReplyCommand implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Optional<CommandSender> lastMessagedOf = plugin.getCacheTool().getLastMessagedOf(sender);
         if (args.length == 0) {
-            sender.sendMessage(NeroChat.getLang(sender).usage + " "+ "/reply "  + " " + NeroChat.getLang(sender).message_argument);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).usage) + " " + ChatColor.translateAlternateColorCodes('&', "/reply ") + " " + ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).message_argument));
             return false;
         }
 
         if (lastMessagedOf.isPresent()) {
             if (plugin.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {
-                    sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me));
             } else if (plugin.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
-                sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you));
             } else {
                 if (args.length > 0) {
                     CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 0), lastMessagedOf.get());
@@ -37,7 +38,7 @@ public class ReplyCommand implements CommandExecutor, TabExecutor {
                 }
             }
         } else {
-            sender.sendMessage(NeroChat.getLang(sender).not_online);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).not_online));
         }
 
         return true;

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.utils.CommonTool;
 import me.softik.nerochat.utils.ConfigTool;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,11 +24,13 @@ public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length == 0) {
-                sender.sendMessage(NeroChat.getLang(sender).usage + " "+ "/ignore " + NeroChat.getLang(sender).player_argument);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).usage) + " " +
+                        ChatColor.translateAlternateColorCodes('&', "/ignore ") +
+                        ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_argument));
                 return false;
             }
             if (args[0].equalsIgnoreCase(player.getName())) {
-                player.sendMessage(NeroChat.getLang(player).ignore_yourself);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).ignore_yourself));
                 return true;
             }
 
@@ -43,13 +46,13 @@ public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
                         player.sendMessage(plugin.getConfigTool().getPreparedString("" + NeroChat.getLang(sender).un_ignore, ignored.get()));
                     }
                 } else {
-                    player.sendMessage(NeroChat.getLang(player).not_online);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).not_online));
                 }
             } else {
                 return false;
             }
         } else {
-            sender.sendMessage(NeroChat.getLang(sender).player_only);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_only));
         }
 
         return true;

@@ -30,7 +30,7 @@ public class CommonTool {
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
         if (sender == receiver) {
-            sender.sendMessage(NeroChat.getLang(sender).pm_yourself);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).pm_yourself));
             return;
         }
 
@@ -50,12 +50,12 @@ public class CommonTool {
 
         if (!sender.hasPermission("nerochat.bypass")) {
             if (!NeroChat.getPlugin(NeroChat.class).getTempDataTool().isWhisperingEnabled(receiver)) {
-                    sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).player_pm_off);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(sender).player_pm_off));
                 return;
             }
 
             if (receiver instanceof Player && isVanished((Player) receiver)) {
-                sender.sendMessage(NeroChat.getLang(sender).not_online);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).not_online));
                 return;
             }
         }
@@ -83,7 +83,7 @@ public class CommonTool {
                 if (matcher.find()) {
                     // The message contains an illegal pattern, so cancel the event
                     if (!NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Silent-Mode", false) && NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Player-Notify", true)) {
-                        sender.sendMessage(NeroChat.getLang(sender).player_notify);
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_notify));
                     }
                     if (NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Logs-Enabled", true)) {
                         NeroChat.getPlugin(NeroChat.class).getLogger().warning(sender.getName() + " tried to send a whisper that didn't match the regex: " + message);

@@ -3,6 +3,7 @@ package me.softik.nerochat.commands.whisper;
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.utils.CommonTool;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +21,7 @@ public class WhisperCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(NeroChat.getLang(sender).usage + " "+ "/whisper " + NeroChat.getLang(sender).player_argument + " " + NeroChat.getLang(sender).message_argument);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).usage) + " " + ChatColor.translateAlternateColorCodes('&', "/whisper " + NeroChat.getLang(sender).player_argument) + " " + ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).message_argument));
             return false;
         }
         if (args.length > 0) {
@@ -28,9 +29,9 @@ public class WhisperCommand implements CommandExecutor, TabExecutor {
 
             if (receiver.isPresent()) {
                 if (plugin.getIgnoreTool().isIgnored(sender, receiver.get())) {
-                    sender.sendMessage(CommonTool.getPrefix() +  NeroChat.getLang(sender).ignore_me);
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me));
                 } else if (plugin.getIgnoreTool().isIgnored(receiver.get(), sender)) {
-                    sender.sendMessage(CommonTool.getPrefix() +  NeroChat.getLang(sender).ignore_you);
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you));
                 } else {
                     if (args.length > 1) {
                         CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 1), receiver.get());
@@ -39,7 +40,7 @@ public class WhisperCommand implements CommandExecutor, TabExecutor {
                     }
                 }
             } else {
-                sender.sendMessage(NeroChat.getLang(sender).not_online);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).not_online));
             }
         } else {
             return false;
