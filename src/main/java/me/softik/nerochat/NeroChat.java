@@ -172,7 +172,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
         }
     }
     private Set<String> getDefaultLanguageFiles(){
-        Reflections reflections = new Reflections("lang", Scanners.Resources);
+        Reflections reflections = new Reflections("plugins/NeroChat", Scanners.Resources);
         return reflections.getResources(Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)"));
     }
 
