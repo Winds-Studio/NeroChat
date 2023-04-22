@@ -54,6 +54,8 @@ commands:
     permission-message: You have no permission to do that!
     usage: "§cUsage: /<command> <reload>"
 permissions:
+  nerochat.RegexFilterBypass:
+    description: Permission RegexFilter Bypass.
   nerochat.ignore:
     description: Permission for /ignore!
     children:

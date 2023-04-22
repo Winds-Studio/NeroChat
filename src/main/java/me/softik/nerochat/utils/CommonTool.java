@@ -30,76 +30,35 @@ public class CommonTool {
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
         if (sender == receiver) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).pm_yourself));
+            sender.sendMessage(NeroChat.getLang(sender).pm_yourself);
             return;
-        }
-
-        if (NeroChat.getConfiguration().getBoolean("ReadableFormatting.Whisper", false)) {
-            String trimmedMessage = message.trim();
-            char lastChar = trimmedMessage.charAt(trimmedMessage.length() - 1);
-            if (lastChar == '.' || lastChar == '!' || lastChar == '?') {
-                char punctuationChar = '.';
-                if (lastChar == '.' || lastChar == '!' || lastChar == '?') {
-                    punctuationChar = lastChar;
-                }
-                message = StringUtils.capitalize(trimmedMessage.toLowerCase().replaceFirst("[" + ".!?" + "]+$", "")) + punctuationChar;
-            } else {
-                message = StringUtils.capitalize(trimmedMessage.toLowerCase()) + ".";
-            }
         }
 
         if (!sender.hasPermission("nerochat.bypass")) {
             if (!NeroChat.getPlugin(NeroChat.class).getTempDataTool().isWhisperingEnabled(receiver)) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(sender).player_pm_off));
+                    sender.sendMessage(NeroChat.getLang(sender).player_pm_off);
                 return;
             }
 
             if (receiver instanceof Player && isVanished((Player) receiver)) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).not_online));
+                sender.sendMessage(NeroChat.getLang(sender).not_online);
                 return;
             }
         }
 
-        NeroWhisperEvent neroWhisperEvent = new NeroWhisperEvent(sender, receiver, message);
+        NeroWhisperEvent pistonWhisperEvent = new NeroWhisperEvent(sender, receiver, message);
 
-        Bukkit.getPluginManager().callEvent(neroWhisperEvent);
+        Bukkit.getPluginManager().callEvent(pistonWhisperEvent);
 
-        if (neroWhisperEvent.isCancelled())
+        if (pistonWhisperEvent.isCancelled())
             return;
 
-        message = neroWhisperEvent.getMessage();
+        message = pistonWhisperEvent.getMessage();
 
-        List<String> regexList = NeroChat.getConfiguration().getList("RegexFilter.Whisper.Allowed-Regex", Arrays.asList("[^\\[\\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\\\>`|-]+"));
-        try {
-            boolean useCaseInsensitive = NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Case-Insensitive", true);
-            for (String regex : regexList) {
-                Pattern pattern;
-                if (useCaseInsensitive) {
-                    pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-                } else {
-                    pattern = Pattern.compile(regex);
-                }
-                Matcher matcher = pattern.matcher(message);
-                if (matcher.find()) {
-                    // The message contains an illegal pattern, so cancel the event
-                    if (!NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Silent-Mode", false) && NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Player-Notify", true)) {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_notify));
-                    }
-                    if (NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Logs-Enabled", true)) {
-                        NeroChat.getPlugin(NeroChat.class).getLogger().warning(sender.getName() + " tried to send a whisper that didn't match the regex: " + message);
-                    }
-                    if (NeroChat.getConfiguration().getBoolean("RegexFilter.Whisper.Silent-Mode", false)) {
-                        sendSender(sender, message, receiver);
-                    }
-                    return;
-                }
-            }
-            sendSender(sender, message, receiver);
-            sendReceiver(sender, message, receiver);
-            NeroChat.getPlugin(NeroChat.class).getCacheTool().sendMessage(sender, receiver);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        sendSender(sender, message, receiver);
+        sendReceiver(sender, message, receiver);
+
+        NeroChat.getPlugin(NeroChat.class).getCacheTool().sendMessage(sender, receiver);
     }
 
     public static void sendSender(CommandSender sender, String message, CommandSender receiver) {

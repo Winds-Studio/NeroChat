@@ -1,6 +1,7 @@
 package me.softik.nerochat.commands;
 
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.modules.NeroChatModule;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,6 +37,7 @@ public class MainCommand implements CommandExecutor, TabExecutor {
                 case "reload":
                     if (sender.hasPermission("nerochat.reload")) {
                         NeroChat.getInstance().reloadNeroChat();
+                        NeroChatModule.reloadModules();
                         sender.sendMessage("Reloaded the config!");
                     } else {
                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).no_permissions));

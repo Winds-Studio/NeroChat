@@ -13,6 +13,7 @@ import me.softik.nerochat.commands.whisper.ReplyCommand;
 import me.softik.nerochat.commands.whisper.WhisperCommand;
 import me.softik.nerochat.events.ChatEvent;
 import me.softik.nerochat.events.QuitEvent;
+import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.utils.*;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
@@ -25,10 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
@@ -49,7 +47,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
     private ConfigFile configFile;
-
+    public final SortedMap<String, Boolean> enabledModules = new TreeMap<>();
     public static NeroChat getInstance()  {
         return instance;
     }
@@ -74,6 +72,8 @@ public final class NeroChat extends JavaPlugin implements Listener {
 
         log.info("Loading config");
         reloadNeroChat();
+        log.info("Loading modules");
+        NeroChatModule.reloadModules();
         log.info("Registering commands");
         PluginCommand ignore = server.getPluginCommand("ignore");
         PluginCommand whisper = server.getPluginCommand("whisper");
@@ -142,6 +142,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
 
     public void reloadNeroChat() {
         reloadLang();
+        reloadConfig();
         configCache = new ConfigCache();
         configCache.reloadConfig(this, "config.yml");
     }
@@ -213,6 +214,10 @@ public final class NeroChat extends JavaPlugin implements Listener {
 
     public static ConfigCache getConfiguration() {
         return configCache;
+    }
+
+    public static Logger getLog() {
+        return logger;
     }
 
 }
