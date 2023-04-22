@@ -111,7 +111,7 @@ public class CommonTool {
     }
 
     private static void sendReceiver(CommandSender sender, String message, CommandSender receiver) {
-        String receiverString = ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).whisper_from)
+        String receiverString = ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(receiver).whisper_from)
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(sender).getDisplayName()))
                 .replace("%message%", message);
 
@@ -156,12 +156,10 @@ public class CommonTool {
         if (receiver.hasPermission("nerochat.playernamereply")) {
             builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/w " + ChatColor.stripColor(chatter.getDisplayName()) + " "));
 
-            String hoverText = NeroChat.getLang(chatter).hover_text;
-
             builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(
                             ChatColor.translateAlternateColorCodes('&',
-                                    hoverText.replace("%player%",
+                                    NeroChat.getLang(receiver).hover_text.replace("%player%",
                                             ChatColor.stripColor(chatter.getDisplayName())
                                     )
                             )

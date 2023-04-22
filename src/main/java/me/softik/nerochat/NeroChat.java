@@ -21,14 +21,17 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -171,9 +174,23 @@ public final class NeroChat extends JavaPlugin implements Listener {
             logger.severe("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!");
         }
     }
-    private Set<String> getDefaultLanguageFiles(){
-        Reflections reflections = new Reflections("plugins/NeroChat", Scanners.Resources);
-        return reflections.getResources(Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)"));
+    private Set<String> getDefaultLanguageFiles() {
+        try {
+            Set<String> languageFiles = new HashSet<>();
+            JarFile jar = new JarFile(this.getFile());
+            Enumeration<JarEntry> entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String path = entry.getName();
+                if (path.startsWith("lang/") && path.endsWith(".yml")) {
+                    languageFiles.add(path);
+                }
+            }
+            return languageFiles;
+        } catch (IOException e) {
+            this.getLogger().log(Level.SEVERE, "Failed to get default language files", e);
+            return new HashSet<>();
+        }
     }
 
     public static LanguageCache getLang(String lang) {
