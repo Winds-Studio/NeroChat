@@ -4,6 +4,7 @@ import me.softik.nerochat.NeroChat;
 
 import java.util.HashSet;
 
+import me.softik.nerochat.modules.ChatFilter.CapsFilter;
 import me.softik.nerochat.modules.ChatFilter.ReadableFormatting;
 import me.softik.nerochat.modules.ChatFilter.RegexFilterPublic;
 import me.softik.nerochat.modules.ChatFilter.RegexFilterWhisper;
@@ -28,6 +29,7 @@ public interface NeroChatModule {
         modules.add(new RegexFilterPublic());
         modules.add(new RegexFilterWhisper());
         modules.add(new ReadableFormatting());
+        modules.add(new CapsFilter());
 
         for (NeroChatModule module : modules) {
             if (module.shouldEnable()) module.enable();

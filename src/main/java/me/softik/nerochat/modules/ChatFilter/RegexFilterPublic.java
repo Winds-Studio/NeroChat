@@ -90,9 +90,9 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
                     String[] words = displayMessage.split(" ");
                     StringBuilder sb = new StringBuilder();
                     for (String word : words) {
-                        String originalWord = word; // сохраняем оригинальное слово для возврата к исходному регистру
-                        if (bannedRegex.matcher(word.toLowerCase()).find()) { // приводим слово к нижнему регистру перед проверкой на наличие запрещенных слов
-                            sb.append(ChatColor.RED).append(originalWord).append(ChatColor.RESET).append(" "); // используем оригинальный регистр слова при окрашивании в красный
+                        String originalWord = word;
+                        if (bannedRegex.matcher(word.toLowerCase()).find()) {
+                            sb.append(ChatColor.RED).append(originalWord).append(ChatColor.RESET).append(" ");
                         } else {
                             sb.append(ChatColor.YELLOW).append(word).append(ChatColor.RESET).append(" ");
                         }

@@ -56,6 +56,8 @@ public class ConfigCache {
     public boolean Readable_Formatting_Public_Chat_Auto_Dot;
     public boolean Readable_Formatting_Whisper_Auto_Caps;
     public boolean Readable_Formatting_Public_Chat_Auto_Caps;
+    private final boolean isEnabled;
+    private final int maxCapsPercentage;
     public boolean RegexFilter_Whisper_enabled;
     public List<String> RegexFilter_Whisper_Banned_Regex;
     public boolean RegexFilter_PublicChat_enabled;
@@ -128,6 +130,11 @@ public class ConfigCache {
         this.Readable_Formatting_Public_Chat_Auto_Dot = getBoolean("ReadableFormatting.PublicChat.Auto-Dot", true);
         this.Readable_Formatting_Whisper_Auto_Dot = getBoolean("ReadableFormatting.Whisper.Auto-Dot", true);
         this.Readable_Formatting_Whisper_Auto_Caps = getBoolean("ReadableFormatting.Whisper.Auto-Caps", true);
+
+        config.addSection("CapsFilter");
+        config.addDefault("CapsFilter", null, "Automatic message formatting with a large number of capital letters.");
+        this.isEnabled = getBoolean("CapsFilter.Enabled", true);
+        this.maxCapsPercentage = getInt("CapsFilter.Percentage", 50, "Sets the percentage of caps. If there are more drops in the message than are set here the message will be formatted.");
     }
 
     private void createFiles() {
