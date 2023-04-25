@@ -132,12 +132,18 @@ public final class NeroChat extends JavaPlugin implements Listener {
         } else {
             log.info("Metrics are disabled in the config");
         }
-
+        reloadConfiguration();
         log.info("The plugin is ready to work!");
     }
 
     public void reloadNeroChat() {
         reloadLang();
+        reloadConfig();
+        configCache = new ConfigCache();
+        configCache.reloadConfig(this, "config.yml");
+    }
+
+    public void reloadConfiguration() {
         reloadConfig();
         configCache = new ConfigCache();
         configCache.reloadConfig(this, "config.yml");
