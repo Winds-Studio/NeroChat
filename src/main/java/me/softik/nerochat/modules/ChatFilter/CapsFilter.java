@@ -5,6 +5,7 @@ import me.softik.nerochat.api.NeroWhisperEvent;
 import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.utils.ConfigCache;
 import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -63,6 +64,7 @@ public class CapsFilter implements NeroChatModule, Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onWhisper(NeroWhisperEvent event) {
+        if (event.getSender() instanceof ConsoleCommandSender) return;
         if (!isEnabled) return;
         Player player = (Player) event.getSender();
         if (player.hasPermission("nerochat.CapsFilterBypass")) return;

@@ -8,6 +8,7 @@ import me.softik.nerochat.utils.ConfigCache;
 import me.softik.nerochat.utils.LogUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,6 +69,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onWhisper(NeroWhisperEvent event) {
+        if (event.getSender() instanceof ConsoleCommandSender) return;
         CommandSender sender = event.getSender();
         CommandSender receiver = event.getReceiver();
         String message = event.getMessage();

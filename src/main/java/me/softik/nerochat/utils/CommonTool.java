@@ -30,18 +30,18 @@ public class CommonTool {
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
         if (sender == receiver) {
-            sender.sendMessage(NeroChat.getLang(sender).pm_yourself);
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).pm_yourself));
             return;
         }
 
         if (!sender.hasPermission("nerochat.bypass")) {
             if (!NeroChat.getPlugin(NeroChat.class).getTempDataTool().isWhisperingEnabled(receiver)) {
-                    sender.sendMessage(NeroChat.getLang(sender).player_pm_off);
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',NeroChat.getLang(sender).player_pm_off));
                 return;
             }
 
             if (receiver instanceof Player && isVanished((Player) receiver)) {
-                sender.sendMessage(NeroChat.getLang(sender).not_online);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',NeroChat.getLang(sender).not_online));
                 return;
             }
         }

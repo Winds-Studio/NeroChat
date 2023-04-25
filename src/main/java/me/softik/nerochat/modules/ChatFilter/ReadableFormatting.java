@@ -4,6 +4,7 @@ import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
 import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.utils.ConfigCache;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -68,6 +69,7 @@ public class ReadableFormatting implements NeroChatModule, Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerWhisper(NeroWhisperEvent event) {
+        if (event.getSender() instanceof ConsoleCommandSender) return;
         if (NeroChat.getConfiguration().Readable_Formatting_Whisper_Auto_Caps) {
             String message = event.getMessage();
             if (!message.isEmpty()) {

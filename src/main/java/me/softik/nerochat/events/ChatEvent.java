@@ -20,16 +20,16 @@ public class ChatEvent implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         Player chatter = event.getPlayer();
-        NeroChatEvent pistonChatEvent = new NeroChatEvent(chatter, event.getMessage(), event.isAsynchronous());
+        NeroChatEvent neroChatEvent = new NeroChatEvent(chatter, event.getMessage(), event.isAsynchronous());
 
         event.getRecipients().clear();
 
-        Bukkit.getPluginManager().callEvent(pistonChatEvent);
+        Bukkit.getPluginManager().callEvent(neroChatEvent);
 
-        event.setCancelled(pistonChatEvent.isCancelled());
+        event.setCancelled(neroChatEvent.isCancelled());
 
-        if (!pistonChatEvent.isCancelled()) {
-            String message = pistonChatEvent.getMessage();
+        if (!neroChatEvent.isCancelled()) {
+            String message = neroChatEvent.getMessage();
 
             if (plugin.getTempDataTool().isChatEnabled(chatter)) {
                 for (Player receiver : Bukkit.getOnlinePlayers()) {

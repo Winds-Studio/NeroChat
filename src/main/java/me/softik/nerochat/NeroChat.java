@@ -117,10 +117,6 @@ public final class NeroChat extends JavaPlugin implements Listener {
         main.setExecutor(new MainCommand(this));
         main.setTabCompleter(new MainCommand(this));
 
-        log.info("Registering listeners");
-        server.getPluginManager().registerEvents(new ChatEvent(this), this);
-        server.getPluginManager().registerEvents(new QuitEvent(this), this);
-
         if (NeroChat.getConfiguration().getBoolean("Main.notify-updates", true)) {
             log.info("Checking for a newer version...");
             if (!UpdatesChecker.checkVersionByURL("https://raw.githubusercontent.com/ImNotSoftik/NeroChat/master/src/main/resources/version", this.getDescription().getVersion())) {
@@ -145,6 +141,12 @@ public final class NeroChat extends JavaPlugin implements Listener {
         reloadConfig();
         configCache = new ConfigCache();
         configCache.reloadConfig(this, "config.yml");
+    }
+
+    public void reloadEvents() {
+        Server server = getServer();
+        server.getPluginManager().registerEvents(new ChatEvent(this), this);
+        server.getPluginManager().registerEvents(new QuitEvent(this), this);
     }
 
     public void reloadLang() {

@@ -11,6 +11,8 @@ import me.softik.nerochat.modules.ChatFilter.RegexFilterWhisper;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
+import static org.bukkit.Bukkit.getServer;
+
 public interface NeroChatModule {
 
     String name();
@@ -35,6 +37,9 @@ public interface NeroChatModule {
             if (module.shouldEnable()) module.enable();
             if (module.name() != null) plugin.enabledModules.put("<" + module.category() + "> " + module.name(), module.shouldEnable());
         }
+
+        NeroChat.getInstance().reloadEvents();
+
     }
 }
 
