@@ -111,6 +111,7 @@ Prefixes:
 # If you don't know how to create them, you can use ChatGPT
 RegexFilter:
   PublicChat:
+    Enabled: false
     # Outputs the player's name and regex when the message is canceled.
     Logs-Enabled: true
     # Do I inform the player that his message has not been sent? Doesn't work with silent mode.
@@ -119,11 +120,11 @@ RegexFilter:
     Silent-Mode: false
     # The search for matches will be case insensitive. Eliminates many regex bypasses with capslocks.
     Case-Insensitive: true
-    # Regular expressions to which the messages in the chat should correspond.
-    # The regular expression in the standard config allows only Russian and English letters + keyboard characters (not all).
-    Allowed-Regex:
-    - '[^\[\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\>`|-]+'
+    # Prevents any message that starts with "This is a" and ends with "banned message"
+    Banned-Regex:
+    - ^This is a(.*)banned message
   Whisper:
+    Enabled: false
     # Outputs the player's name and regex when the message is canceled.
     Logs-Enabled: true
     # Do I inform the player that his message has not been sent? Doesn't work with silent mode.
@@ -132,10 +133,9 @@ RegexFilter:
     Silent-Mode: false
     # The search for matches will be case insensitive. Eliminates many regex bypasses with capslocks.
     Case-Insensitive: true
-    # Regular expressions to which the messages in the chat should correspond.
-    # The regular expression in the standard config allows only Russian and English letters + keyboard characters (not all).
-    Allowed-Regex:
-    - '[^\[\]A-Za-zА-Яа-яЁё0-9 !%.(){}?/+_,=-@№*&^#$\\>`|-]+'
+    # Prevents any message that starts with "This is a" and ends with "banned message"
+    Banned-Regex:
+    - ^This is a(.*)banned message
 
 ########################
 #  ReadableFormatting  #
@@ -143,8 +143,26 @@ RegexFilter:
 
 # Automatically puts a period at the end of a sentence and a capital letter at the beginning of a sentence.
 ReadableFormatting:
-  PublicChat: true
-  Whisper: true
+  Enable: false
+  # If there are these characters at the end of the sentence, the plugin will not automatically put a period.
+  End-Sentence-Chars: .?!
+  PublicChat:
+    Auto-Caps: true
+    Auto-Dot: true
+  Whisper:
+    Auto-Dot: true
+    Auto-Caps: true
+
+################
+#  CapsFilter  #
+################
+
+# Automatic message formatting with a large number of capital letters.
+CapsFilter:
+  Enabled: true
+  # Sets the percentage of caps. If there are more drops in the message than are set here the message will be formatted.
+  Percentage: 50
+
 
 ```
 
