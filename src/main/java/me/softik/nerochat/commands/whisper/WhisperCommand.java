@@ -20,7 +20,7 @@ public class WhisperCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 0) {
+        if (args.length == 0 || args.length == 1) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).usage) + " " + ChatColor.translateAlternateColorCodes('&', "/whisper " + NeroChat.getLang(sender).player_argument) + " " + ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).message_argument));
             return false;
         }
