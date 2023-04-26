@@ -100,7 +100,7 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
                     String highlightedMessage = sb.toString().trim();
                     String logMessage = String.format("Prevented %s from saying: %s", player.getName(), highlightedMessage);
                     LogUtils.moduleLog(Level.WARNING, name(), logMessage);
-                    LogUtils.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" + bannedRegex.pattern() + "'");
+                    LogUtils.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" + bannedRegex.pattern().substring(0, 100) + "...'");
                 }
                 break;
             }
