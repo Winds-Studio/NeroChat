@@ -67,7 +67,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
         return NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Enabled", false);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onWhisper(NeroWhisperEvent event) {
         if (event.getSender() instanceof ConsoleCommandSender) return;
         CommandSender sender = event.getSender();

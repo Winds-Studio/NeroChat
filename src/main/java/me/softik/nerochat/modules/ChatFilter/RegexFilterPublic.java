@@ -65,7 +65,7 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
         return NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Enabled", false);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         if (player.hasPermission("nerochat.RegexFilterBypass")) return;

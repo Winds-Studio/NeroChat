@@ -38,7 +38,7 @@ public class ReadableFormatting implements NeroChatModule, Listener {
         return NeroChat.getConfiguration().getBoolean("ReadableFormatting.Enable", false);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (NeroChat.getConfiguration().Readable_Formatting_Public_Chat_Auto_Caps) {
             String message = event.getMessage();
