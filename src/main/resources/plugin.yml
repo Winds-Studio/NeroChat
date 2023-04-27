@@ -141,4 +141,5 @@ permissions:
       nerochat.reload: true
       nerochat.version: true
       nerochat.bypass: true
+      nerochat.RegexFilterBypass: true
     default: op
