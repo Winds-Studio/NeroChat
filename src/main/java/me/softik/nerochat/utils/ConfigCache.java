@@ -156,7 +156,7 @@ public class ConfigCache {
     private void loadConfig() {
         try {
             config = ConfigFile.loadConfig(configFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -164,7 +164,7 @@ public class ConfigCache {
     public void saveConfig() {
         try {
             config.save();
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.severe("Failed to save config file! - " + e.getLocalizedMessage());
         }
     }
@@ -231,7 +231,7 @@ public class ConfigCache {
     public void reloadConfig(Plugin plugin, String configFile) {
         try {
             config.reload();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
