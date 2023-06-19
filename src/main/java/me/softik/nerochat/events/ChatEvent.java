@@ -6,6 +6,7 @@ import me.softik.nerochat.api.NeroChatEvent;
 import me.softik.nerochat.api.NeroChatReceiveEvent;
 import me.softik.nerochat.utils.CommonTool;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -47,7 +48,7 @@ public class ChatEvent implements Listener {
                     }
                 }
             } else {
-                chatter.sendMessage(NeroChat.getLang(chatter).chat_is_off);
+                chatter.sendMessage(ChatColor.translateAlternateColorCodes('&',(NeroChat.getLang(chatter).chat_is_off)));
                 event.setCancelled(true);
             }
         }
