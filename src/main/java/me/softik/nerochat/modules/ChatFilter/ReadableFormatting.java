@@ -7,6 +7,7 @@ import me.softik.nerochat.utils.ConfigCache;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -36,6 +37,11 @@ public class ReadableFormatting implements NeroChatModule, Listener {
     @Override
     public boolean shouldEnable() {
         return NeroChat.getConfiguration().getBoolean("ReadableFormatting.Enable", false);
+    }
+
+    @Override
+    public void disable() {
+        HandlerList.unregisterAll(this);
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
