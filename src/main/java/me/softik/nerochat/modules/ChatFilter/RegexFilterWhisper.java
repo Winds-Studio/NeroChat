@@ -12,6 +12,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
 import java.util.Collections;
@@ -27,6 +28,11 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
     private final boolean Silent_Mode;
     private final boolean useCaseInsensitive;
     private final HashSet<Pattern> bannedRegex = new HashSet<>();
+
+    @Override
+    public void disable() {
+        HandlerList.unregisterAll(this);
+    }
 
     public RegexFilterWhisper() {
         shouldEnable();
