@@ -9,6 +9,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -22,6 +23,11 @@ public class CapsFilter implements NeroChatModule, Listener {
         ConfigCache config = NeroChat.getConfiguration();
         this.isEnabled = config.getBoolean("CapsFilter.Enabled", false);
         this.maxCapsPercentage = config.getInt("CapsFilter.Percentage", 50);
+    }
+
+    @Override
+    public void disable() {
+        HandlerList.unregisterAll(this);
     }
 
     @Override
