@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -25,6 +26,11 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
     private final boolean Silent_Mode;
     private final boolean useCaseInsensitive;
     private final HashSet<Pattern> bannedRegex = new HashSet<>();
+
+    @Override
+    public void disable() {
+        HandlerList.unregisterAll(this);
+    }
 
     public RegexFilterPublic() {
         shouldEnable();
