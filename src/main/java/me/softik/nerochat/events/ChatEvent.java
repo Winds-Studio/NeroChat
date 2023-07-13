@@ -16,40 +16,41 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 @RequiredArgsConstructor
 public class ChatEvent implements Listener {
     private final NeroChat plugin;
-    
-    @EventHandler(priority = EventPriority.HIGHEST)
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        if (event.isCancelled()) return;
-        Player chatter = event.getPlayer();
-        NeroChatEvent neroChatEvent = new NeroChatEvent(chatter, event.getMessage(), event.isAsynchronous());
+        if (!event.isCancelled()) {
+            Player chatter = event.getPlayer();
+            NeroChatEvent neroChatEvent = new NeroChatEvent(chatter, event.getMessage(), event.isAsynchronous());
 
-        event.getRecipients().clear();
+            event.getRecipients().clear();
 
-        Bukkit.getPluginManager().callEvent(neroChatEvent);
+            Bukkit.getPluginManager().callEvent(neroChatEvent);
 
-        event.setCancelled(neroChatEvent.isCancelled());
+            event.setCancelled(neroChatEvent.isCancelled());
 
-        if (!neroChatEvent.isCancelled()) {
-            String message = neroChatEvent.getMessage();
+            if (!neroChatEvent.isCancelled()) {
+                String message = neroChatEvent.getMessage();
 
-            if (plugin.getTempDataTool().isChatEnabled(chatter)) {
-                for (Player receiver : Bukkit.getOnlinePlayers()) {
-                    if (!plugin.getIgnoreTool().isIgnored(chatter, receiver) && plugin.getTempDataTool().isChatEnabled(receiver)) {
-                        NeroChatReceiveEvent perPlayerEvent = new NeroChatReceiveEvent(chatter, receiver, message);
+                if (plugin.getTempDataTool().isChatEnabled(chatter)) {
+                    for (Player receiver : Bukkit.getOnlinePlayers()) {
+                        if (!plugin.getIgnoreTool().isIgnored(chatter, receiver) && plugin.getTempDataTool().isChatEnabled(receiver)) {
+                            NeroChatReceiveEvent perPlayerEvent = new NeroChatReceiveEvent(chatter, receiver, message);
 
-                        Bukkit.getPluginManager().callEvent(perPlayerEvent);
+                            Bukkit.getPluginManager().callEvent(perPlayerEvent);
 
-                        if (perPlayerEvent.isCancelled())
-                            continue;
+                            if (perPlayerEvent.isCancelled())
+                                continue;
 
-                        message = perPlayerEvent.getMessage();
+                            message = perPlayerEvent.getMessage();
 
-                        CommonTool.sendChatMessage(chatter, message, receiver);
+                            CommonTool.sendChatMessage(chatter, message, receiver);
+                        }
                     }
+                } else {
+                    chatter.sendMessage(ChatColor.translateAlternateColorCodes('&', (NeroChat.getLang(chatter).chat_is_off)));
+                    event.setCancelled(true);
                 }
-            } else {
-                chatter.sendMessage(ChatColor.translateAlternateColorCodes('&',(NeroChat.getLang(chatter).chat_is_off)));
-                event.setCancelled(true);
             }
         }
     }
