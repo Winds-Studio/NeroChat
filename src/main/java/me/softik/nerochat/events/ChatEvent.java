@@ -18,7 +18,7 @@ public class ChatEvent implements Listener {
     private final NeroChat plugin;
 
     // Mute plugins should have a lower priority to work!
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent event) {
         Player chatter = event.getPlayer();
         NeroChatEvent neroChatEvent = new NeroChatEvent(chatter, event.getMessage(), event.isAsynchronous());
