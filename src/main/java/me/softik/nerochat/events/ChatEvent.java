@@ -19,6 +19,7 @@ public class ChatEvent implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent event) {
+        if (event.isCancelled()) return;
         Player chatter = event.getPlayer();
         NeroChatEvent neroChatEvent = new NeroChatEvent(chatter, event.getMessage(), event.isAsynchronous());
 
