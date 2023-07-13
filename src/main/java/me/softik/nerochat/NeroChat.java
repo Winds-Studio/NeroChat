@@ -69,7 +69,6 @@ public final class NeroChat extends JavaPlugin implements Listener {
         log.info("██║░╚███║███████╗██║░░██║╚█████╔╝╚█████╔╝██║░░██║██║░░██║░░░██║░░░");
         log.info("╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝░╚════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░");
         log.info("                                                             ");
-
         log.info("Loading config");
         reloadNeroChat();
         log.info("Loading modules");
@@ -116,6 +115,10 @@ public final class NeroChat extends JavaPlugin implements Listener {
 
         main.setExecutor(new MainCommand(this));
         main.setTabCompleter(new MainCommand(this));
+        log.info("Register Events!");
+        server.getPluginManager().registerEvents(new ChatEvent(this), this);
+        server.getPluginManager().registerEvents(new QuitEvent(this), this);
+
 
         if (NeroChat.getConfiguration().getBoolean("Main.notify-updates", true)) {
             log.info("Checking for a newer version...");
@@ -147,12 +150,6 @@ public final class NeroChat extends JavaPlugin implements Listener {
         reloadConfig();
         configCache = new ConfigCache();
         configCache.reloadConfig(this, "config.yml");
-    }
-
-    public void reloadEvents() {
-        Server server = getServer();
-        server.getPluginManager().registerEvents(new ChatEvent(this), this);
-        server.getPluginManager().registerEvents(new QuitEvent(this), this);
     }
 
     public void reloadLang() {

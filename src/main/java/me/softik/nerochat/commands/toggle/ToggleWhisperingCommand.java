@@ -26,7 +26,7 @@ public class ToggleWhisperingCommand implements CommandExecutor, TabExecutor {
             if (plugin.getTempDataTool().isWhisperingEnabled(player)) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).pm_on));
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).chat_off));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).pm_off));
             }
         } else {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_only));
