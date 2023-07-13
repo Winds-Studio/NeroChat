@@ -17,7 +17,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class ChatEvent implements Listener {
     private final NeroChat plugin;
     
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player chatter = event.getPlayer();
         NeroChatEvent neroChatEvent = new NeroChatEvent(chatter, event.getMessage(), event.isAsynchronous());
