@@ -24,7 +24,6 @@ public interface NeroChatModule {
         modules.add(new RegexFilterWhisper());
         modules.add(new ReadableFormatting());
         modules.add(new CapsFilter());
-        modules.add(new PreventChatSpam());
         modules.forEach(module -> {
             if (module.shouldEnable()) module.enable();
         });

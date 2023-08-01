@@ -42,14 +42,6 @@ public class ConfigCache {
     private final String chat_format;
     private final boolean RegexFilter_PublicChat_Logs_enabled;
     private final boolean RegexFilter_PublicChat_Player_Notify;
-    public static long antiSpamTime;
-    public static long antiSpamCheckTime;
-    public static long antiSpamWordTime;
-    public static int messagesPerTime;
-    public static int lenientWordCharacterLimit;
-    public static boolean logIsEnabled;
-    public static boolean lenientWordCheckIsEnabled;
-    public static double antiSpamWordSimilarityPercentage;
     private final boolean RegexFilter_PublicChat_Silent_mode;
     private final boolean RegexFilter_PublicChat_Case_Insensitive;
     private final List<String> RegexFilter_Public_Banned_Regex;
@@ -58,7 +50,6 @@ public class ConfigCache {
     private final boolean RegexFilter_Whisper_Logs_enabled;
     private final boolean RegexFilter_Whisper_Silent_mode;
     private final String prefix;
-    public static boolean chat_prevent_spam_enable;
     public boolean Readable_Formatting_Whisper_Auto_Dot;
     public String Readable_Formatting_Last_Char;
     public boolean Readable_Formatting_Enable;
@@ -144,17 +135,6 @@ public class ConfigCache {
         config.addDefault("CapsFilter", null, "Automatic message formatting with a large number of capital letters.");
         this.isEnabled = getBoolean("CapsFilter.Enabled", true);
         this.maxCapsPercentage = getInt("CapsFilter.Percentage", 50, "Sets the percentage of caps. If there are more drops in the message than are set here the message will be formatted.");
-        config.addSection("Chat");
-        config.addDefault("chat", null);
-        this.chat_prevent_spam_enable = getBoolean("chat.prevent-spam.enable", false);
-        this.logIsEnabled = getBoolean("chat.prevent-spam.log", false, "Bit spammy, intended for debug");
-        this.antiSpamTime = getInt("chat.prevent-spam.anti-spam-time", 1, "Global limit (Messages per X seconds)") * 20L;
-        this.antiSpamCheckTime = getInt("chat.prevent-spam.anti-spam-check-time", 30, "How many messages should we allow to send in X seconds") * 20L;
-        this.antiSpamWordTime = getInt("chat.prevent-spam.anti-spam-word-time", 60, "How long a player should wait before being able to send another exact same message") * 20L;
-        this.antiSpamWordSimilarityPercentage = getDouble("chat.prevent-spam.anti-spam-word-similarity-percentage", 94.8, "The percentage of similarity to previously sent messages for it to count as spam");
-        this.lenientWordCheckIsEnabled = getBoolean("chat.prevent-spam.lenient-word-check.enable", true, "Will not count messages as word spam that are shorter than or equal to the length of the configured limit.");
-        this.lenientWordCharacterLimit = getInt("chat.prevent-spam.lenient-word-check.message-character-limit", 10);
-        this.messagesPerTime = getInt("chat.prevent-spam.anti-spam-messages-per-time", 10, "~1 message every 3 seconds if constantly spamming");
     }
 
     private void createFiles() {
