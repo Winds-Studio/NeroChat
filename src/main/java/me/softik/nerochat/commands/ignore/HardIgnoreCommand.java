@@ -36,6 +36,10 @@ public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
 
             if (args.length > 0) {
                 Optional<Player> ignored = CommonTool.getPlayer(args[0]);
+                if (ignored.get() == sender) {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).ignore_yourself));
+                    return true;
+                }
 
                 if (ignored.isPresent()) {
                     ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
