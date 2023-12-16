@@ -42,38 +42,37 @@ public final class NeroChat extends JavaPlugin implements Listener {
     private final CacheTool cacheTool = new CacheTool(this);
     private final IgnoreTool ignoreTool = new IgnoreTool(this);
     private final ConfigTool configTool = new ConfigTool(this);
+    @Getter
     private static NeroChat instance;
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
     private ConfigFile configFile;
     public final SortedMap<String, Boolean> enabledModules = new TreeMap<>();
-    public static NeroChat getInstance()  {
-        return instance;
-    }
 
     @Override
     public void onEnable() {
         instance = this;
         logger = getLogger();
         NeroChatAPI.setInstance(this);
-
-        Logger log = getLogger();
         Server server = getServer();
 
-        log.info("                                                             ");
-        log.info("███╗░░██╗███████╗██████╗░░█████╗░░█████╗░██╗░░██╗░█████╗░████████╗");
-        log.info("████╗░██║██╔════╝██╔══██╗██╔══██╗██╔══██╗██║░░██║██╔══██╗╚══██╔══╝");
-        log.info("██╔██╗██║█████╗░░██████╔╝██║░░██║██║░░╚═╝███████║███████║░░░██║░░░");
-        log.info("██║╚████║██╔══╝░░██╔══██╗██║░░██║██║░░██╗██╔══██║██╔══██║░░░██║░░░");
-        log.info("██║░╚███║███████╗██║░░██║╚█████╔╝╚█████╔╝██║░░██║██║░░██║░░░██║░░░");
-        log.info("╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝░╚════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░");
-        log.info("                                                             ");
-        log.info("Loading config");
-        reloadNeroChat();
-        log.info("Loading modules");
-        NeroChatModule.reloadModules();
-        log.info("Registering commands");
+        logger.info("                                                             ");
+        logger.info("███╗░░██╗███████╗██████╗░░█████╗░░█████╗░██╗░░██╗░█████╗░████████╗");
+        logger.info("████╗░██║██╔════╝██╔══██╗██╔══██╗██╔══██╗██║░░██║██╔══██╗╚══██╔══╝");
+        logger.info("██╔██╗██║█████╗░░██████╔╝██║░░██║██║░░╚═╝███████║███████║░░░██║░░░");
+        logger.info("██║╚████║██╔══╝░░██╔══██╗██║░░██║██║░░██╗██╔══██║██╔══██║░░░██║░░░");
+        logger.info("██║░╚███║███████╗██║░░██║╚█████╔╝╚█████╔╝██║░░██║██║░░██║░░░██║░░░");
+        logger.info("╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝░╚════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░");
+        logger.info("                                                             ");
+
+        logger.info("Loading translations");
+        reloadLang();
+
+        logger.info("Loading config");
+        reloadConfiguration();
+
+        logger.info("Registering commands");
         PluginCommand ignore = server.getPluginCommand("ignore");
         PluginCommand whisper = server.getPluginCommand("whisper");
         PluginCommand reply = server.getPluginCommand("reply");
@@ -82,15 +81,6 @@ public final class NeroChat extends JavaPlugin implements Listener {
         PluginCommand toggleWhispering = server.getPluginCommand("togglewhispering");
         PluginCommand toggleChat = server.getPluginCommand("togglechat");
         PluginCommand main = server.getPluginCommand("nerochat");
-
-        assert ignore != null;
-        assert whisper != null;
-        assert reply != null;
-        assert last != null;
-        assert ignorelist != null;
-        assert toggleWhispering != null;
-        assert toggleChat != null;
-        assert main != null;
 
         ignore.setExecutor(new HardIgnoreCommand(this));
         ignore.setTabCompleter(new HardIgnoreCommand(this));
@@ -115,51 +105,42 @@ public final class NeroChat extends JavaPlugin implements Listener {
 
         main.setExecutor(new MainCommand(this));
         main.setTabCompleter(new MainCommand(this));
-        log.info("Register Events!");
+
+        logger.info("Register Events!");
         server.getPluginManager().registerEvents(new ChatEvent(this), this);
         server.getPluginManager().registerEvents(new QuitEvent(this), this);
 
-
-        if (NeroChat.getConfiguration().getBoolean("Main.notify-updates", true)) {
-            log.info("Checking for a newer version...");
-            if (!UpdatesChecker.checkVersionByURL("https://raw.githubusercontent.com/ImNotSoftik/NeroChat/master/src/main/resources/version", this.getDescription().getVersion())) {
-                logger.warning("****************************************");
-                logger.warning("The new NeroChat update was found, please update.");
-                logger.warning("https://github.com/ImNotSoftik/NeroChat/releases");
-                logger.warning("****************************************");
-            }
-        }
         if (NeroChat.getConfiguration().getBoolean("Main.bstats-metrics", true)) {
-            log.info("Loading metrics");
+            logger.info("Loading metrics");
             new Metrics(this, 18215);
         } else {
-            log.info("Metrics are disabled in the config");
+            logger.info("Metrics are disabled in the config");
         }
         reloadConfiguration();
-        log.info("The plugin is ready to work!");
+        logger.info("The plugin is ready to work!");
     }
 
     public void reloadNeroChat() {
         reloadLang();
-        reloadConfig();
-        configCache = new ConfigCache();
-        configCache.reloadConfig(this, "config.yml");
+        reloadConfiguration();
     }
 
+    // Because the config handler is used wrongly in various methods, this change will break
+    // the plugin until its correctly used. Its called config CACHE for a reason
     public void reloadConfiguration() {
-        reloadConfig();
         configCache = new ConfigCache();
-        configCache.reloadConfig(this, "config.yml");
+        NeroChatModule.reloadModules();
+        configCache.saveConfig();
     }
 
-    public void reloadLang() {
+    private void reloadLang() {
         languageCacheMap = new HashMap<>();
         try {
-            File langDirectory = new File(instance.getDataFolder()+ "/lang");
+            File langDirectory = new File(this.getDataFolder() + "/lang");
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
                 String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
-                logger.info(String.format("Found language file for %s", localeString));
+                logger.info("Found language file for " + localeString);
                 LanguageCache langCache = new LanguageCache(localeString);
                 languageCacheMap.put(localeString, langCache);
             }
@@ -168,61 +149,51 @@ public final class NeroChat extends JavaPlugin implements Listener {
                 Matcher langMatcher = langPattern.matcher(langFile.getName());
                 if (langMatcher.find()) {
                     String localeString = langMatcher.group(1).toLowerCase();
-                    if(!languageCacheMap.containsKey(localeString)) {
-                        logger.info(String.format("Found language file for %s", localeString));
+                    if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
+                        logger.info("Found language file for " + localeString);
                         LanguageCache langCache = new LanguageCache(localeString);
                         languageCacheMap.put(localeString, langCache);
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!");
         }
     }
+
     private Set<String> getDefaultLanguageFiles() {
-        try {
-            Set<String> languageFiles = new HashSet<>();
-            JarFile jar = new JarFile(this.getFile());
-            Enumeration<JarEntry> entries = jar.entries();
+        Set<String> languageFiles = new HashSet<>();
+        try (JarFile jarFile = new JarFile(this.getFile())) {
+            Enumeration<JarEntry> entries = jarFile.entries();
             while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                String path = entry.getName();
-                if (path.startsWith("lang/") && path.endsWith(".yml")) {
+                String path = entries.nextElement().getName();
+                if (path.startsWith("lang/") && path.endsWith(".yml"))
                     languageFiles.add(path);
-                }
             }
-            return languageFiles;
         } catch (IOException e) {
-            this.getLogger().log(Level.SEVERE, "Failed to get default language files", e);
-            return new HashSet<>();
+            logger.severe("Error while getting default language file names! - " + e.getLocalizedMessage());
+            e.printStackTrace();
         }
+        return languageFiles;
     }
 
     public static LanguageCache getLang(String lang) {
-        lang = lang.replace("-", "_");
         if (configCache.auto_lang) {
-            return languageCacheMap.getOrDefault(lang, languageCacheMap.get(configCache.default_lang));
+            return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(configCache.default_lang));
         } else {
             return languageCacheMap.get(configCache.default_lang);
         }
     }
 
     public static LanguageCache getLang(CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
-            return getLang(player.getLocale());
-        } else {
-            return getLang(configCache.default_lang);
-        }
+        return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(configCache.default_lang);
     }
 
     public static ConfigCache getConfiguration() {
         return configCache;
     }
-
     public static Logger getLog() {
         return logger;
     }
-
 }

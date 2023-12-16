@@ -37,9 +37,7 @@ public class ConfigCache {
     private final String prefixes_italic;
     private final String prefixes_underline;
     private final String prefixes_bold;
-    private final String prefixes_strikethrough;
-    private final String prefixes_blue;
-    private final String chat_format;
+    private final String prefixes_strikethrough, prefixes_blue, chat_format;
     private final boolean RegexFilter_PublicChat_Logs_enabled;
     private final boolean RegexFilter_PublicChat_Player_Notify;
     private final boolean RegexFilter_PublicChat_Silent_mode;
@@ -65,19 +63,19 @@ public class ConfigCache {
     private final File configFile;
     private final Logger logger;
     public final String default_lang;
-    public final HashSet<String> directories_to_scan = new HashSet<>();
     public final boolean auto_lang;
 
     public ConfigCache() {
         NeroChat plugin = NeroChat.getInstance();
         configFile = new File(plugin.getDataFolder(), "config.yml");
         logger = plugin.getLogger();
-        createFiles();
+
         loadConfig();
         config.addSection("Language");
         config.addDefault("Language", null);
         this.default_lang = getString("Language.default-language", "en_us", "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
         this.auto_lang = getBoolean("Language.auto-language", true, "Enable / Disable locale based messages.");
+
         config.addSection("Main");
         config.addDefault("Main", null);
         this.bstats_metrics = getBoolean("Main.bstats-metrics", true, "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
@@ -87,8 +85,11 @@ public class ConfigCache {
         this.console_name = getString("Main.console-name", "[console]", "Defines the sender's name when sending messages from the server console.");
         this.chat_format = getString("Main.chat-format", "<%player%&r>", "Change the format of messages in public chat.");
         this.ignore_list_size = getInt("Main.ignore-list-size", 9, "The size of the ignore list in pages. It is not recommended to set more than 5.");
+
         config.addSection("Prefixes");
         config.addDefault("Prefixes", null, "To use these prefixes you need additionally the nerochat.<COLORCODE>\n/ indicates disabled!");
+        // This needs to be cached as map, so we can read from it in a different method  more efficiently
+        // Also, lets create pre-constructed permissions here so it can show up as suggestion in luckperms
         this.prefixes_green = getString("Prefixes.GREEN", ">");
         this.prefixes_blue = getString("Prefixes.BLUE", "/");
         this.prefixes_red = getString("Prefixes.RED", "/");
@@ -108,6 +109,8 @@ public class ConfigCache {
         this.prefixes_underline = getString("Prefixes.UNDERLINE", "/");
         this.prefixes_bold = getString("Prefixes.BOLD", "/");
         this.prefixes_strikethrough = getString("Prefixes.STRIKETHROUGH", "/");
+
+
         config.addSection("RegexFilter");
         config.addDefault("RegexFilter", null, "Filtering chat messages using regular expressions.\nIf you don't know how to create them, you can use ChatGPT");
         this.RegexFilter_PublicChat_enabled = getBoolean("RegexFilter.PublicChat.Enabled", false);
@@ -137,24 +140,11 @@ public class ConfigCache {
         this.maxCapsPercentage = getInt("CapsFilter.Percentage", 50, "Sets the percentage of caps. If there are more drops in the message than are set here the message will be formatted.");
     }
 
-    private void createFiles() {
-        try {
-            File parent = new File(configFile.getParent());
-            if (!parent.exists()) {
-                if (!parent.mkdir())
-                    logger.severe("Unable to create plugin directory.");
-            }
-            if (!configFile.exists()) {
-                if (!configFile.createNewFile())
-                    logger.severe("Unable to create config file.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void loadConfig() {
         try {
+            File parent = new File(configFile.getParent());
+            if (!parent.exists() && !parent.mkdir())
+                logger.severe("Unable to create plugin directory.");
             config = ConfigFile.loadConfig(configFile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,14 +215,7 @@ public class ConfigCache {
     }
 
     public ConfigSection getConfigurationSection(String path) {
+        // This only works because we manually created a config section on init
         return config.getConfigSection(path);
-    }
-
-    public void reloadConfig(Plugin plugin, String configFile) {
-        try {
-            config.reload();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

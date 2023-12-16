@@ -16,10 +16,10 @@ import java.util.Map;
  */
 @SuppressWarnings({"unused"})
 public final class NeroChatAPI {
-    private static NeroChat plugin = null;
 
-    private NeroChatAPI() {
-    }
+    private static NeroChat plugin;
+
+    private NeroChatAPI() {}
 
     public static void setInstance(NeroChat plugin) {
         if (plugin != null && NeroChatAPI.plugin == null)

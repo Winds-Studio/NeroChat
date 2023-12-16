@@ -85,6 +85,7 @@ public class CommonTool {
         return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("prefix", "[&2NeroChat&r] &6"));
     }
 
+    // This needs a bit of improvement
     public static ChatColor getChatColorFor(String message, Player player) {
         for (String str : NeroChat.getConfiguration().getConfigurationSection("Prefixes").getKeys(false)) {
             if (!NeroChat.getConfiguration().getString("Prefixes." + str, "GREEN: '>'").equalsIgnoreCase("/") && message.toLowerCase().startsWith(NeroChat.getConfiguration().getString("Prefixes." + str, "GREEN: '>'"))) {

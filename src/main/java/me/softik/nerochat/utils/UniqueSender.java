@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Getter
 @RequiredArgsConstructor
 public class UniqueSender {
     private static final Map<CommandSender, UUID> customUUID = new HashMap<>();
-    @Getter
     private final CommandSender sender;
 
     public static CommandSender byUUID(UUID uuid) {
@@ -42,14 +42,9 @@ public class UniqueSender {
         sender.sendMessage(message);
     }
 
-    public CommandSender.Spigot spigot() {
-        return sender.spigot();
-    }
-
     public String getDisplayName() {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
             if (NeroChat.getConfiguration().getBoolean("Main.display-nickname-color", true)) {
                 return ChatColor.stripColor(player.getDisplayName());
             } else {
