@@ -1,5 +1,6 @@
 package me.softik.nerochat.tools;
 
+import me.softik.nerochat.models.UniqueSender;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

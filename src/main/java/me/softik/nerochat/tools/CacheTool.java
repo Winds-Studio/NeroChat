@@ -2,6 +2,7 @@ package me.softik.nerochat.tools;
 
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.models.UniqueSender;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

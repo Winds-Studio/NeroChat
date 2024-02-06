@@ -1,4 +1,4 @@
-package me.softik.nerochat.tools;
+package me.softik.nerochat.models;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
