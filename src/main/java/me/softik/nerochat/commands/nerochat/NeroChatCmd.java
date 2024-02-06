@@ -1,5 +1,6 @@
 package me.softik.nerochat.commands.nerochat;
 
+import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.commands.SubCommand;
 import net.md_5.bungee.api.ChatColor;
@@ -12,10 +13,12 @@ import java.util.stream.Collectors;
 
 public class NeroChatCmd implements NeroChatCommand {
 
+    private final NeroChat plugin;
     private final List<SubCommand> subCommands;
     private final List<String> tabCompleter;
 
-    public NeroChatCmd() {
+    public NeroChatCmd(NeroChat plugin) {
+        this.plugin = plugin;
         this.subCommands = Arrays.asList(new ReloadSubCmd(), new VersionSubCmd());
         this.tabCompleter = subCommands.stream().map(SubCommand::label).sorted().collect(Collectors.toList());
     }
@@ -33,30 +36,26 @@ public class NeroChatCmd implements NeroChatCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
+            sendCommandOverview(sender);
             return false;
         }
-
-        boolean cmdExists = false;
 
         for (SubCommand subCommand : subCommands) {
             if (args[0].equalsIgnoreCase(subCommand.label())) {
                 subCommand.perform(sender, args);
-                cmdExists = true;
-                break;
+                return true;
             }
         }
 
-        if (!cmdExists) {
-            sendCommandOverview(sender);
-        }
-
+        sendCommandOverview(sender);
         return true;
     }
 
     private void sendCommandOverview(CommandSender sender) {
-        if (!sender.hasPermission("spawnauth.cmd.*")) return;
+        if (!sender.hasPermission("nerochat.*")) return;
+
         sender.sendMessage(ChatColor.GRAY + "-----------------------------------------------------");
-        sender.sendMessage(ChatColor.GOLD + "NeroChat Commands");
+        sender.sendMessage(ChatColor.GOLD + plugin.getDescription().getName() + " Commands");
         sender.sendMessage(ChatColor.GRAY + "-----------------------------------------------------");
         subCommands.forEach(subCommand -> sender.sendMessage(subCommand.syntax() + " - " + subCommand.description()));
         sender.sendMessage(ChatColor.GRAY + "-----------------------------------------------------");
