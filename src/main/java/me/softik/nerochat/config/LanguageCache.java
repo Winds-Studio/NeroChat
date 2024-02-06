@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class LanguageCache {
 
     private final ConfigFile lang;
-    public String hover_text, page_does_not_exist, error, chat_on, chat_off, pm_on, pm_off, chat_is_off, no_one_ignored,
+    public final String hover_text, page_does_not_exist, error, chat_on, chat_off, pm_on, pm_off, chat_is_off, no_one_ignored,
             ignore, un_ignore, ignore_yourself, player_pm_off, whisper_to, whisper_from, player_only, not_online,
             pm_yourself, ignore_me, no_permissions, player_notify, usage, player_argument, message_argument, ignore_you,
             slowmode_notification, too_many_messages, too_many_similar_messages, too_many_violations, blocked_unicode;
@@ -61,30 +61,35 @@ public class LanguageCache {
         this.blocked_unicode = getTranslation("blocked-unicode", "&cYour message includes spammy characters, please change it.");
 
         try {
-            lang.save();
+            this.lang.save();
         } catch (Exception e) {
-            NeroChat.getLog().severe("Failed to save language file: "+ langYML.getName() +" - " + e.getLocalizedMessage());
+            plugin.getLogger().severe("Failed to save language file: "+ langYML.getName() +" - " + e.getLocalizedMessage());
         }
     }
 
     public String getTranslation(String path, String defaultTranslation) {
-        lang.addDefault(path, defaultTranslation);
-        return ChatColor.translateAlternateColorCodes('&', lang.getString(path, defaultTranslation));
+        this.lang.addDefault(path, defaultTranslation);
+        return ChatColor.translateAlternateColorCodes('&', this.lang.getString(path, defaultTranslation));
     }
 
     public String getTranslation(String path, String defaultTranslation, String comment) {
-        lang.addDefault(path, defaultTranslation, comment);
-        return ChatColor.translateAlternateColorCodes('&', lang.getString(path, defaultTranslation));
+        this.lang.addDefault(path, defaultTranslation, comment);
+        return ChatColor.translateAlternateColorCodes('&', this.lang.getString(path, defaultTranslation));
     }
 
     public List<String> getListTranslation(String path, List<String> defaultTranslation) {
-        lang.addDefault(path, defaultTranslation);
-        return lang.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
+        this.lang.addDefault(path, defaultTranslation);
+        return this.lang.getStringList(path)
+                .stream()
+                .map(line -> ChatColor.translateAlternateColorCodes('&', line))
+                .collect(Collectors.toList());
     }
 
     public List<String> getListTranslation(String path, List<String> defaultTranslation, String comment) {
-        lang.addDefault(path, defaultTranslation, comment);
-        return lang.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
+        this.lang.addDefault(path, defaultTranslation, comment);
+        return this.lang.getStringList(path)
+                .stream()
+                .map(line -> ChatColor.translateAlternateColorCodes('&', line))
+                .collect(Collectors.toList());
     }
 }
-
