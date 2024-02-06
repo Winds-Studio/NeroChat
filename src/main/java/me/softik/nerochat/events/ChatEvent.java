@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroChatEvent;
 import me.softik.nerochat.api.NeroChatReceiveEvent;
-import me.softik.nerochat.utils.CommonTool;
+import me.softik.nerochat.tools.CommonTool;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

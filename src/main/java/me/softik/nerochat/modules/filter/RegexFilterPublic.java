@@ -1,10 +1,10 @@
 package me.softik.nerochat.modules.filter;
 
 import me.softik.nerochat.NeroChat;
-import me.softik.nerochat.config.ConfigCache;
+import me.softik.nerochat.config.Config;
 import me.softik.nerochat.modules.NeroChatModule;
-import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.LogUtils;
+import me.softik.nerochat.tools.CommonTool;
+import me.softik.nerochat.utils.NeroLogUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +28,7 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
 
     public RegexFilterPublic() {
         shouldEnable();
-        ConfigCache config = NeroChat.getConfiguration();
+        Config config = NeroChat.getConfiguration();
         this.logIsEnabled = config.getBoolean("RegexFilter.PublicChat.Logs-Enabled", false);
         this.notifyPlayer = config.getBoolean("RegexFilter.PublicChat.Player-Notify", true);
         this.silent = config.getBoolean("RegexFilter.PublicChat.Silent-Mode", true);
@@ -43,11 +43,6 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
     @Override
     public String name() {
         return "banned-regex-public";
-    }
-
-    @Override
-    public String category() {
-        return "chat";
     }
 
     @Override
@@ -97,9 +92,9 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
                         sb.append(ChatColor.YELLOW).append(word).append(ChatColor.RESET).append(" ");
                     }
                 }
-                LogUtils.moduleLog(Level.WARNING, name(), String.format("Prevented %s from saying: %s",
+                NeroLogUtil.moduleLog(Level.WARNING, name(), String.format("Prevented %s from saying: %s",
                         player.getName(), sb.toString().trim()));
-                LogUtils.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" +
+                NeroLogUtil.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" +
                         (bannedRegex.pattern().length() > 100 ? bannedRegex.pattern().substring(0, 100) + "...(" +
                         (bannedRegex.pattern().length() - 100) + " more characters)" : bannedRegex.pattern()) + "'");
             }

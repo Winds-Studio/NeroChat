@@ -2,10 +2,10 @@ package me.softik.nerochat.modules.filter;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
-import me.softik.nerochat.config.ConfigCache;
+import me.softik.nerochat.config.Config;
 import me.softik.nerochat.modules.NeroChatModule;
-import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.LogUtils;
+import me.softik.nerochat.tools.CommonTool;
+import me.softik.nerochat.utils.NeroLogUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
 
     public RegexFilterWhisper() {
         shouldEnable();
-        ConfigCache config = NeroChat.getConfiguration();
+        Config config = NeroChat.getConfiguration();
         config.master().addComment("RegexFilter.Enabled",
                 "Filtering chat messages using regular expressions.\n" +
                 "If you don't know how to create them, you can use ChatGPT");
@@ -47,11 +47,6 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
     @Override
     public String name() {
         return "banned-regex-whisper";
-    }
-
-    @Override
-    public String category() {
-        return "chat";
     }
 
     @Override
@@ -104,9 +99,9 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
                         sb.append(ChatColor.YELLOW).append(word).append(ChatColor.RESET).append(" ");
                     }
                 }
-                LogUtils.moduleLog(Level.WARNING, name(), String.format("Prevented %s from whispering to %s: %s",
+                NeroLogUtil.moduleLog(Level.WARNING, name(), String.format("Prevented %s from whispering to %s: %s",
                         player.getName(), receiver.getName(), sb.toString().trim()));
-                LogUtils.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" +
+                NeroLogUtil.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" +
                         (bannedRegex.pattern().length() > 100 ? bannedRegex.pattern().substring(0, 100) + "...(" +
                         (bannedRegex.pattern().length() - 100) + " more characters)" : bannedRegex.pattern()) + "'");
             }

@@ -3,7 +3,7 @@ package me.softik.nerochat.modules.filter;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
 import me.softik.nerochat.modules.NeroChatModule;
-import me.softik.nerochat.config.ConfigCache;
+import me.softik.nerochat.config.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ public class CapsFilter implements NeroChatModule, Listener {
 
     public CapsFilter() {
         shouldEnable();
-        ConfigCache config = NeroChat.getConfiguration();
+        Config config = NeroChat.getConfiguration();
         config.master().addComment("CapsFilter.Enabled",
                 "Automatic message formatting with a large number of capital letters.");
         this.maxCapsPercentage = config.getDouble("CapsFilter.Percentage", 50.0);
@@ -33,11 +33,6 @@ public class CapsFilter implements NeroChatModule, Listener {
     @Override
     public String name() {
         return "caps-filter";
-    }
-
-    @Override
-    public String category() {
-        return "chat";
     }
 
     @Override

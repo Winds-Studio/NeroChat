@@ -1,8 +1,8 @@
-package me.softik.nerochat.modules.formatting;
+package me.softik.nerochat.modules.filter;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
-import me.softik.nerochat.config.ConfigCache;
+import me.softik.nerochat.config.Config;
 import me.softik.nerochat.modules.NeroChatModule;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
@@ -18,7 +18,7 @@ public class ReadableFormatting implements NeroChatModule, Listener {
 
     public ReadableFormatting() {
         shouldEnable();
-        ConfigCache config = NeroChat.getConfiguration();
+        Config config = NeroChat.getConfiguration();
         config.master().addSection("ReadableFormatting");
         config.master().addDefault("ReadableFormatting", null,
                 "Automatically puts a period at the end of a sentence and a capital letter at the beginning of a sentence.");
@@ -33,11 +33,6 @@ public class ReadableFormatting implements NeroChatModule, Listener {
     @Override
     public String name() {
         return "AutoCaps";
-    }
-
-    @Override
-    public String category() {
-        return "chat";
     }
 
     @Override

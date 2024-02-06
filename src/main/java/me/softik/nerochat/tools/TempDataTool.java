@@ -1,4 +1,4 @@
-package me.softik.nerochat.utils;
+package me.softik.nerochat.tools;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

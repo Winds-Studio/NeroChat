@@ -1,9 +1,9 @@
-package me.softik.nerochat.utils;
+package me.softik.nerochat.tools;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
-import me.softik.nerochat.config.ConfigCache;
+import me.softik.nerochat.models.ColoredPrefix;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -80,7 +80,7 @@ public class CommonTool {
     public static ChatColor getChatColorFor(String message, Player player) {
         ChatColor color = ChatColor.WHITE;
 
-        for (ConfigCache.ColoredPrefix coloredPrefix : NeroChat.getConfiguration().color_prefixes) {
+        for (ColoredPrefix coloredPrefix : NeroChat.getConfiguration().color_prefixes) {
             if (message.toLowerCase().startsWith(coloredPrefix.chat_prefix) && player.hasPermission(coloredPrefix.permission)) {
                 color = coloredPrefix.chat_color;
             }

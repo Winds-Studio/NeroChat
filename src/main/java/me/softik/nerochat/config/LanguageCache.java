@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LanguageCache {
-    private final ConfigFile lang;
 
+    private final ConfigFile lang;
     public String hover_text, page_doesent_exist, error, chat_on, chat_off, pm_on, pm_off, chat_is_off, no_one_ignored,
             ignore, un_ignore, ignore_yourself, player_pm_off, whisper_to, whisper_from, player_only, not_online,
-            pm_yourself, ignore_me, no_permissions, player_notify, usage, player_argument, message_argument, ignore_you;
+            pm_yourself, ignore_me, no_permissions, player_notify, usage, player_argument, message_argument, ignore_you,
+            slowmode_notification, too_many_messages, too_many_similar_messages, too_many_violations, blocked_unicode;
 
     public LanguageCache(String locale) throws Exception {
         NeroChat plugin = NeroChat.getInstance();
@@ -53,6 +54,11 @@ public class LanguageCache {
         this.player_argument = getTranslation("player-argument", "<player>");
         this.message_argument = getTranslation("message-argument", "<message>");
         this.hover_text = getTranslation("hover-text", "&6Message &3%player%");
+        this.slowmode_notification = getTranslation("slowmode-notification", "&cYou need to wait a bit before sending another message.");
+        this.too_many_messages = getTranslation("too-many-messages-notification", "&cYou're sending too many messages at a time.");
+        this.too_many_similar_messages = getTranslation("similar-message-notification", "&cYou're sending too many similar messages at a time.");
+        this.too_many_violations = getTranslation("too-many-violations", "&cYou're blocked from spamming.");
+        this.blocked_unicode = getTranslation("blocked-unicode", "&cYour message includes spammy characters, please change it.");
 
         try {
             lang.save();

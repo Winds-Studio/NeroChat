@@ -3,6 +3,7 @@ package me.softik.nerochat.config;
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.models.ColoredPrefix;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -10,7 +11,7 @@ import org.bukkit.permissions.PermissionDefault;
 import java.io.File;
 import java.util.*;
 
-public class ConfigCache {
+public class Config {
 
     private final ConfigFile config;
     public final Set<ColoredPrefix> color_prefixes;
@@ -18,7 +19,7 @@ public class ConfigCache {
     public final int ignore_list_size;
     public final boolean auto_lang, bstats_metrics, notify_updates, display_nickname_color;
 
-    public ConfigCache() throws Exception {
+    public Config() throws Exception {
         // Create plugin folder first if it does not exist yet
         File pluginFolder = NeroChat.getInstance().getDataFolder();
         if (!pluginFolder.exists() && !pluginFolder.mkdir())
@@ -78,17 +79,6 @@ public class ConfigCache {
             } catch (Throwable t) {
                 NeroChat.getLog().warning("Cant register color '" + color + "' because something unexpected happened - "+t.getLocalizedMessage());
             }
-        }
-    }
-
-    public static class ColoredPrefix {
-        public final String chat_prefix;
-        public final Permission permission;
-        public final ChatColor chat_color;
-        public ColoredPrefix(String chat_prefix, Permission permission, ChatColor chat_color) {
-            this.chat_prefix = chat_prefix;
-            this.permission = permission;
-            this.chat_color = chat_color;
         }
     }
 
@@ -176,5 +166,31 @@ public class ConfigCache {
         config.makeSectionLenient(path);
         defaultKeyValue.forEach((string, object) -> config.addExample(path+"."+string, object));
         return config.getConfigSection(path);
+    }
+
+    public List<String> getListFile(String fileName, String path, List<String> def) {
+        try {
+            ConfigFile list = ConfigFile.loadConfig(new File(NeroChat.getInstance().getDataFolder(), fileName));
+            list.addDefault(path, def);
+            list.save();
+            return list.getStringList(path);
+        } catch (Exception e) {
+            NeroChat.getLog().severe("Error handling list file: "+fileName+"! - " + e.getLocalizedMessage());
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
+    public List<String> getListFile(String fileName, String path, List<String> def, String comment) {
+        try {
+            ConfigFile list = ConfigFile.loadConfig(new File(NeroChat.getInstance().getDataFolder(), fileName));
+            list.addDefault(path, def, comment);
+            list.save();
+            return list.getStringList(path);
+        } catch (Exception e) {
+            NeroChat.getLog().severe("Error handling list file: "+fileName+"! - " + e.getLocalizedMessage());
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package me.softik.nerochat.utils;
+package me.softik.nerochat.tools;
 
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;

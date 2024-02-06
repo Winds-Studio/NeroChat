@@ -2,8 +2,8 @@ package me.softik.nerochat.commands.ignore;
 
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
-import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.ConfigTool;
+import me.softik.nerochat.tools.CommonTool;
+import me.softik.nerochat.tools.ConfigTool;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

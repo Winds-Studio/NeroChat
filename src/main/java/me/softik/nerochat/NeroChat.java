@@ -10,12 +10,12 @@ import me.softik.nerochat.commands.toggle.ToggleWhisperingCommand;
 import me.softik.nerochat.commands.whisper.LastCommand;
 import me.softik.nerochat.commands.whisper.ReplyCommand;
 import me.softik.nerochat.commands.whisper.WhisperCommand;
-import me.softik.nerochat.config.ConfigCache;
+import me.softik.nerochat.config.Config;
 import me.softik.nerochat.config.LanguageCache;
 import me.softik.nerochat.events.ChatEvent;
 import me.softik.nerochat.events.QuitEvent;
 import me.softik.nerochat.modules.NeroChatModule;
-import me.softik.nerochat.utils.*;
+import me.softik.nerochat.tools.*;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -38,24 +38,23 @@ import java.util.zip.ZipEntry;
 @Getter
 public final class NeroChat extends JavaPlugin implements Listener {
 
+    @Getter
+    private static NeroChat instance;
+    private static Config config;
+    private static HashMap<String, LanguageCache> languageCacheMap;
+    private static Logger logger;
+
     private final TempDataTool tempDataTool = new TempDataTool();
     private final SoftIgnoreTool softignoreTool = new SoftIgnoreTool();
     private final CacheTool cacheTool = new CacheTool(this);
     private final IgnoreTool ignoreTool = new IgnoreTool(this);
     private final ConfigTool configTool = new ConfigTool(this);
-    @Getter
-    private static NeroChat instance;
-    private static ConfigCache configCache;
-    private static HashMap<String, LanguageCache> languageCacheMap;
-    private static Logger logger;
-    public final SortedMap<String, Boolean> enabledModules = new TreeMap<>();
 
     @Override
     public void onEnable() {
         instance = this;
+        NeroChatAPI.setInstance(instance);
         logger = getLogger();
-        NeroChatAPI.setInstance(this);
-        Server server = getServer();
 
         logger.info("                                                             ");
         logger.info("███╗░░██╗███████╗██████╗░░█████╗░░█████╗░██╗░░██╗░█████╗░████████╗");
@@ -73,6 +72,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
         reloadConfiguration();
 
         logger.info("Registering commands");
+        Server server = getServer();
         PluginCommand ignore = server.getPluginCommand("ignore");
         PluginCommand whisper = server.getPluginCommand("whisper");
         PluginCommand reply = server.getPluginCommand("reply");
@@ -110,14 +110,14 @@ public final class NeroChat extends JavaPlugin implements Listener {
         server.getPluginManager().registerEvents(new ChatEvent(this), this);
         server.getPluginManager().registerEvents(new QuitEvent(this), this);
 
-        if (configCache.bstats_metrics) {
-            logger.info("Loading metrics");
+        if (config.bstats_metrics) {
+            logger.info("Enabling metrics");
             new Metrics(this, 18215);
         } else {
-            logger.info("Metrics are disabled in the config");
+            logger.info("Not enabling metrics");
         }
 
-        logger.info("The plugin is ready to work!");
+        logger.info("ready!");
     }
 
     public void reloadNeroChat() {
@@ -127,9 +127,9 @@ public final class NeroChat extends JavaPlugin implements Listener {
 
     public void reloadConfiguration() {
         try {
-            configCache = new ConfigCache();
+            config = new Config();
             NeroChatModule.reloadModules();
-            configCache.saveConfig();
+            config.saveConfig();
         } catch (Exception e) {
             logger.severe("Error loading config! - "+e.getLocalizedMessage());
         }
@@ -175,20 +175,21 @@ public final class NeroChat extends JavaPlugin implements Listener {
     }
 
     public static LanguageCache getLang(String lang) {
-        if (configCache.auto_lang) {
-            return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(configCache.default_lang));
+        if (config.auto_lang) {
+            return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang));
         } else {
-            return languageCacheMap.get(configCache.default_lang);
+            return languageCacheMap.get(config.default_lang);
         }
     }
 
     public static LanguageCache getLang(CommandSender commandSender) {
-        return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(configCache.default_lang);
+        return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(config.default_lang);
     }
 
-    public static ConfigCache getConfiguration() {
-        return configCache;
+    public static Config getConfiguration() {
+        return config;
     }
+
     public static Logger getLog() {
         return logger;
     }

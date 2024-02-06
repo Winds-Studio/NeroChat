@@ -2,8 +2,8 @@ package me.softik.nerochat.api;
 
 import com.google.common.base.Preconditions;
 import me.softik.nerochat.NeroChat;
-import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.IgnoreTool;
+import me.softik.nerochat.tools.CommonTool;
+import me.softik.nerochat.tools.IgnoreTool;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
