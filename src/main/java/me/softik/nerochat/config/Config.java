@@ -13,31 +13,34 @@ import java.util.*;
 
 public class Config {
 
+    private final NeroChat plugin;
     private final ConfigFile config;
+
     public final Set<ColoredPrefix> color_prefixes;
     public final String default_lang, chat_format, console_name, prefix;
     public final int ignore_list_size;
     public final boolean auto_lang, bstats_metrics, notify_updates, display_nickname_color;
 
     public Config() throws Exception {
+        this.plugin = NeroChat.getInstance();
         // Create plugin folder first if it does not exist yet
-        File pluginFolder = NeroChat.getInstance().getDataFolder();
+        File pluginFolder = this.plugin.getDataFolder();
         if (!pluginFolder.exists() && !pluginFolder.mkdir())
-            NeroChat.getLog().severe("Failed to create plugin folder.");
-        // Load config.yml with ConfigMaster
-        this.config = ConfigFile.loadConfig(new File(pluginFolder, "config.yml"));
+            this.plugin.getLogger().severe("Failed to create plugin folder.");
+        // Load this.config.yml with ConfigMaster
+        this.config = ConfigFile.loadConfig(new File(pluginFolder, "this.config.yml"));
 
-        createTitledSection("Language", "Language");
+        this.createTitledSection("Language", "Language");
         this.default_lang = getString("Language.default-language", "en_us",
                 "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
         this.auto_lang = getBoolean("Language.auto-language", true,
                 "Enable / Disable locale based messages.");
 
-        createTitledSection("General", "Main");
+        this.createTitledSection("General", "Main");
         this.bstats_metrics = getBoolean("Main.bstats-metrics", true,
                 "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
         this.notify_updates = getBoolean("Main.notify-updates", false,
-                "Enable / Disable notification of a new version of the plugin. It is recommended to turn this on.");
+                "Enable / Disable notification of a new version of the this.plugin. It is recommended to turn this on.");
         this.display_nickname_color = getBoolean("Main.display-nickname-color", true,
                 "Enable/disable the display of the player's nickname color.");
         this.prefix = ChatColor.translateAlternateColorCodes('&', getString("Main.prefix", "[&2NeroChat&r] &6"));
@@ -48,11 +51,11 @@ public class Config {
         this.ignore_list_size = getInt("Main.ignore-list-size", 9,
                 "The size of the ignore list in pages. It is not recommended to set more than 5.");
 
-        createTitledSection("CapsFilter", "CapsFilter");
-        createTitledSection("RegexFilter", "RegexFilter");
+        this.createTitledSection("CapsFilter", "CapsFilter");
+        this.createTitledSection("RegexFilter", "RegexFilter");
 
-        createTitledSection("Prefixes", "Prefixes");
-        config.addComment("Prefixes", "To use these you need to add the respective permission.\n" +
+        this.createTitledSection("Prefixes", "Prefixes");
+        this.config.addComment("Prefixes", "To use these you need to add the respective permission.\n" +
                 "EXAMPLE: Prefixes.BLUE -> nerochat.BLUE");
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("GREEN", ">");
@@ -61,121 +64,121 @@ public class Config {
         ConfigSection prefix_section = getConfigSection("Prefixes", defaults);
         final List<String> keys = prefix_section.getKeys(false);
         this.color_prefixes = new HashSet<>(keys.size());
-        for (String color : keys) {
+        for (final String configuredColor : keys) {
             try {
-                final String chatPrefix = Objects.requireNonNull(prefix_section.getString(color));
-                final ChatColor chatColor = ChatColor.valueOf(color);
+                final String chatPrefix = Objects.requireNonNull(prefix_section.getString(configuredColor));
+                final ChatColor chatColor = ChatColor.valueOf(configuredColor);
                 final Permission permission = new Permission( // Constructing a permission also makes it visible in perm plugins
-                        "nerochat.chatcolor." + color,
-                        "Chat prefix '" + chatPrefix + "' will apply chatcolor '" + color + "' to a players messages.",
+                        "nerochat.chatcolor." + configuredColor,
+                        "Chat prefix '" + chatPrefix + "' will apply chatcolor '" + configuredColor + "' to a players messages.",
                         PermissionDefault.FALSE
                 );
                 this.color_prefixes.add(new ColoredPrefix(chatPrefix, permission, chatColor));
             } catch (NullPointerException e) {
-                NeroChat.getLog().warning("Cant register color '" + color + "' because you did not specify a prefix");
+                this.plugin.getLogger().warning("Cant register color '" + configuredColor + "' because you did not specify a prefix");
             } catch (IllegalArgumentException e) {
-                NeroChat.getLog().warning("Cant register color '" + color + "' because its not an enum of ChatColor " +
+                this.plugin.getLogger().warning("Cant register color '" + configuredColor + "' because its not an enum of ChatColor " +
                         "(https://jd.papermc.io/paper/1.12/org/bukkit/ChatColor.html)");
             } catch (Throwable t) {
-                NeroChat.getLog().warning("Cant register color '" + color + "' because something unexpected happened - "+t.getLocalizedMessage());
+                this.plugin.getLogger().warning("Cant register color '" + configuredColor + "' because something unexpected happened - "+t.getLocalizedMessage());
             }
         }
     }
 
     public ConfigFile master() {
-        return config;
+        return this.config;
     }
 
     public void saveConfig() {
         try {
-            config.save();
+            this.config.save();
         } catch (Exception e) {
-            NeroChat.getLog().severe("Failed to save config file! - " + e.getLocalizedMessage());
+            this.plugin.getLogger().severe("Failed to save config file! - " + e.getLocalizedMessage());
         }
     }
 
     public void createTitledSection(String title, String path) {
-        config.addSection(title);
-        config.addDefault(path, null);
+        this.config.addSection(title);
+        this.config.addDefault(path, null);
     }
 
     public boolean getBoolean(String path, boolean def, String comment) {
-        config.addDefault(path, def, comment);
-        return config.getBoolean(path, def);
+        this.config.addDefault(path, def, comment);
+        return this.config.getBoolean(path, def);
     }
 
     public boolean getBoolean(String path, boolean def) {
-        config.addDefault(path, def);
-        return config.getBoolean(path, def);
+        this.config.addDefault(path, def);
+        return this.config.getBoolean(path, def);
     }
 
     public String getString(String path, String def, String comment) {
-        config.addDefault(path, def, comment);
-        return config.getString(path, def);
+        this.config.addDefault(path, def, comment);
+        return this.config.getString(path, def);
     }
 
     public String getString(String path, String def) {
-        config.addDefault(path, def);
-        return config.getString(path, def);
+        this.config.addDefault(path, def);
+        return this.config.getString(path, def);
     }
 
     public double getDouble(String path, double def, String comment) {
-        config.addDefault(path, def, comment);
-        return config.getDouble(path, def);
+        this.config.addDefault(path, def, comment);
+        return this.config.getDouble(path, def);
     }
 
     public double getDouble(String path, double def) {
-        config.addDefault(path, def);
-        return config.getDouble(path, def);
+        this.config.addDefault(path, def);
+        return this.config.getDouble(path, def);
     }
 
     public int getInt(String path, int def, String comment) {
-        config.addDefault(path, def, comment);
-        return config.getInteger(path, def);
+        this.config.addDefault(path, def, comment);
+        return this.config.getInteger(path, def);
     }
 
     public int getInt(String path, int def) {
-        config.addDefault(path, def);
-        return config.getInteger(path, def);
+        this.config.addDefault(path, def);
+        return this.config.getInteger(path, def);
     }
 
     public long getLong(String path, long def, String comment) {
-        config.addDefault(path, def, comment);
-        return config.getLong(path, def);
+        this.config.addDefault(path, def, comment);
+        return this.config.getLong(path, def);
     }
 
     public List<String> getList(String path, List<String> def, String comment) {
-        config.addDefault(path, def, comment);
-        return config.getStringList(path);
+        this.config.addDefault(path, def, comment);
+        return this.config.getStringList(path);
     }
 
     public List<String> getList(String path, List<String> def) {
-        config.addDefault(path, def);
-        return config.getStringList(path);
+        this.config.addDefault(path, def);
+        return this.config.getStringList(path);
     }
 
     public ConfigSection getConfigSection(String path, Map<String, Object> defaultKeyValue) {
-        config.addDefault(path, null);
-        config.makeSectionLenient(path);
-        defaultKeyValue.forEach((string, object) -> config.addExample(path+"."+string, object));
-        return config.getConfigSection(path);
+        this.config.addDefault(path, null);
+        this.config.makeSectionLenient(path);
+        defaultKeyValue.forEach((string, object) -> this.config.addExample(path+"."+string, object));
+        return this.config.getConfigSection(path);
     }
 
     public ConfigSection getConfigSection(String path, Map<String, Object> defaultKeyValue, String comment) {
-        config.addDefault(path, null, comment);
-        config.makeSectionLenient(path);
-        defaultKeyValue.forEach((string, object) -> config.addExample(path+"."+string, object));
-        return config.getConfigSection(path);
+        this.config.addDefault(path, null, comment);
+        this.config.makeSectionLenient(path);
+        defaultKeyValue.forEach((string, object) -> this.config.addExample(path+"."+string, object));
+        return this.config.getConfigSection(path);
     }
 
     public List<String> getListFile(String fileName, String path, List<String> def) {
         try {
-            ConfigFile list = ConfigFile.loadConfig(new File(NeroChat.getInstance().getDataFolder(), fileName));
+            ConfigFile list = ConfigFile.loadConfig(new File(this.plugin.getDataFolder(), fileName));
             list.addDefault(path, def);
             list.save();
             return list.getStringList(path);
         } catch (Exception e) {
-            NeroChat.getLog().severe("Error handling list file: "+fileName+"! - " + e.getLocalizedMessage());
+            this.plugin.getLogger().severe("Error handling list file: "+fileName+"! - " + e.getLocalizedMessage());
             e.printStackTrace();
             return Collections.emptyList();
         }
@@ -183,12 +186,12 @@ public class Config {
 
     public List<String> getListFile(String fileName, String path, List<String> def, String comment) {
         try {
-            ConfigFile list = ConfigFile.loadConfig(new File(NeroChat.getInstance().getDataFolder(), fileName));
+            ConfigFile list = ConfigFile.loadConfig(new File(this.plugin.getDataFolder(), fileName));
             list.addDefault(path, def, comment);
             list.save();
             return list.getStringList(path);
         } catch (Exception e) {
-            NeroChat.getLog().severe("Error handling list file: "+fileName+"! - " + e.getLocalizedMessage());
+            this.plugin.getLogger().severe("Error handling list file: "+fileName+"! - " + e.getLocalizedMessage());
             e.printStackTrace();
             return Collections.emptyList();
         }
