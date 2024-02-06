@@ -1,6 +1,7 @@
 package me.softik.nerochat.modules;
 
-import me.softik.nerochat.modules.ChatFilter.*;
+import me.softik.nerochat.modules.filter.*;
+import me.softik.nerochat.modules.filter.CapsFilter;
 import me.softik.nerochat.modules.formatting.ReadableFormatting;
 
 import java.util.HashSet;

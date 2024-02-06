@@ -1,4 +1,4 @@
-package me.softik.nerochat.modules.ChatFilter;
+package me.softik.nerochat.modules.filter;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.config.ConfigCache;
