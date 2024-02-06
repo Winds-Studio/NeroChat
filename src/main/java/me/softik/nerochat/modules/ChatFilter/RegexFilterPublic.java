@@ -3,7 +3,7 @@ package me.softik.nerochat.modules.ChatFilter;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.utils.ConfigCache;
+import me.softik.nerochat.config.ConfigCache;
 import me.softik.nerochat.utils.LogUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

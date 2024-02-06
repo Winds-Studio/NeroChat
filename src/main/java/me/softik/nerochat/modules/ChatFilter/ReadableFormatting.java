@@ -2,8 +2,8 @@ package me.softik.nerochat.modules.ChatFilter;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
+import me.softik.nerochat.config.ConfigCache;
 import me.softik.nerochat.modules.NeroChatModule;
-import me.softik.nerochat.utils.ConfigCache;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,9 +13,18 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ReadableFormatting implements NeroChatModule, Listener {
 
+    private final String end_Chars;
+    private final boolean public_Chat_Auto_Caps, public_Chat_Auto_Dot, whisper_Auto_Dot, whisper_Auto_Caps;
+
     public ReadableFormatting() {
         shouldEnable();
         ConfigCache config = NeroChat.getConfiguration();
+        this.end_Chars = config.getString("ReadableFormatting.End-Sentence-Chars", ".?!",
+                "If there are these characters at the end of the sentence, the plugin will not automatically put a period.");
+        this.public_Chat_Auto_Caps = config.getBoolean("ReadableFormatting.PublicChat.Auto-Caps", true);
+        this.public_Chat_Auto_Dot = config.getBoolean("ReadableFormatting.PublicChat.Auto-Dot", true);
+        this.whisper_Auto_Dot = config.getBoolean("ReadableFormatting.Whisper.Auto-Dot", true);
+        this.whisper_Auto_Caps = config.getBoolean("ReadableFormatting.Whisper.Auto-Caps", true);
     }
 
     @Override
@@ -46,60 +55,56 @@ public class ReadableFormatting implements NeroChatModule, Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (NeroChat.getConfiguration().Readable_Formatting_Public_Chat_Auto_Caps) {
-            String message = event.getMessage();
-            if (!message.isEmpty()) {
-                char[] chars = message.toCharArray();
-                for (int i = 0; i < chars.length; i++) {
-                    if (Character.isLetter(chars[i])) {
-                        chars[i] = Character.toUpperCase(chars[i]);
-                        break;
-                    }
-                }
-                String newMessage = new String(chars);
-                event.setMessage(newMessage);
-            }
-        }
-        if (NeroChat.getConfiguration().Readable_Formatting_Public_Chat_Auto_Dot) {
-            String message = event.getMessage();
-            if (!message.isEmpty()) {
-                char lastChar = message.charAt(message.length() - 1);
-                String endSentenceChars = NeroChat.getConfiguration().getString("ReadableFormatting.End-Sentence-Chars", ".?!");
-                if (endSentenceChars.indexOf(lastChar) == -1) {
-                    message += ".";
-                    event.setMessage(message);
+        if (!public_Chat_Auto_Dot && !public_Chat_Auto_Caps) return;
+
+        String message = event.getMessage();
+        if (message.isEmpty()) return;
+
+        if (public_Chat_Auto_Caps) {
+            char[] chars = message.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if (Character.isLetter(chars[i])) {
+                    chars[i] = Character.toUpperCase(chars[i]);
+                    break;
                 }
             }
+            message = new String(chars);
         }
+
+        if (public_Chat_Auto_Dot) {
+            if (end_Chars.indexOf(message.charAt(message.length() - 1)) == -1) {
+                message += ".";
+            }
+        }
+
+        event.setMessage(message);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerWhisper(NeroWhisperEvent event) {
+        if (!whisper_Auto_Dot && !whisper_Auto_Caps) return;
+
         if (event.getSender() instanceof ConsoleCommandSender) return;
-        if (NeroChat.getConfiguration().Readable_Formatting_Whisper_Auto_Caps) {
-            String message = event.getMessage();
-            if (!message.isEmpty()) {
-                char[] chars = message.toCharArray();
-                for (int i = 0; i < chars.length; i++) {
-                    if (Character.isLetter(chars[i])) {
-                        chars[i] = Character.toUpperCase(chars[i]);
-                        break;
-                    }
-                }
-                String newMessage = new String(chars);
-                event.setMessage(newMessage);
-            }
-        }
-        if (NeroChat.getConfiguration().Readable_Formatting_Whisper_Auto_Dot) {
-            String message = event.getMessage();
-            if (!message.isEmpty()) {
-                char lastChar = message.charAt(message.length() - 1);
-                String endSentenceChars = NeroChat.getConfiguration().getString("ReadableFormatting.End-Sentence-Chars", ".?!");
-                if (endSentenceChars.indexOf(lastChar) == -1) {
-                    message += ".";
-                    event.setMessage(message);
+        String message = event.getMessage();
+        if (message.isEmpty()) return;
+
+        if (whisper_Auto_Caps) {
+            char[] chars = message.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if (Character.isLetter(chars[i])) {
+                    chars[i] = Character.toUpperCase(chars[i]);
+                    break;
                 }
             }
+            message = new String(chars);
         }
+
+        if (whisper_Auto_Dot) {
+            if (end_Chars.indexOf(message.charAt(message.length() - 1)) == -1) {
+                message += ".";
+            }
+        }
+
+        event.setMessage(message);
     }
 }

@@ -3,12 +3,12 @@ package me.softik.nerochat.utils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
+import me.softik.nerochat.config.ConfigCache;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -17,10 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CommonTool {
 
@@ -30,39 +27,34 @@ public class CommonTool {
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
         if (sender == receiver) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).pm_yourself));
+            sender.sendMessage(NeroChat.getLang(sender).pm_yourself);
             return;
         }
 
         if (!sender.hasPermission("nerochat.bypass")) {
-            if (!NeroChat.getPlugin(NeroChat.class).getTempDataTool().isWhisperingEnabled(receiver)) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',NeroChat.getLang(sender).player_pm_off));
+            if (!NeroChat.getInstance().getTempDataTool().isWhisperingEnabled(receiver)) {
+                sender.sendMessage(NeroChat.getLang(sender).player_pm_off);
                 return;
             }
 
             if (receiver instanceof Player && isVanished((Player) receiver)) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',NeroChat.getLang(sender).not_online));
+                sender.sendMessage(NeroChat.getLang(sender).not_online);
                 return;
             }
         }
 
         NeroWhisperEvent pistonWhisperEvent = new NeroWhisperEvent(sender, receiver, message);
-
-        Bukkit.getPluginManager().callEvent(pistonWhisperEvent);
-
-        if (pistonWhisperEvent.isCancelled())
-            return;
+        if (!pistonWhisperEvent.callEvent()) return;
 
         message = pistonWhisperEvent.getMessage();
-
         sendSender(sender, message, receiver);
         sendReceiver(sender, message, receiver);
 
-        NeroChat.getPlugin(NeroChat.class).getCacheTool().sendMessage(sender, receiver);
+        NeroChat.getInstance().getCacheTool().sendMessage(sender, receiver);
     }
 
     public static void sendSender(CommandSender sender, String message, CommandSender receiver) {
-        String senderString = ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).whisper_to)
+        String senderString = NeroChat.getLang(sender).whisper_to
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(receiver).getDisplayName()))
                 .replace("%message%", message);
 
@@ -82,28 +74,26 @@ public class CommonTool {
     }
 
     public static String getPrefix() {
-        return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("prefix", "[&2NeroChat&r] &6"));
+        return NeroChat.getConfiguration().prefix;
     }
 
-    // This needs a bit of improvement
     public static ChatColor getChatColorFor(String message, Player player) {
-        for (String str : NeroChat.getConfiguration().getConfigurationSection("Prefixes").getKeys(false)) {
-            if (!NeroChat.getConfiguration().getString("Prefixes." + str, "GREEN: '>'").equalsIgnoreCase("/") && message.toLowerCase().startsWith(NeroChat.getConfiguration().getString("Prefixes." + str, "GREEN: '>'"))) {
-                if (player.hasPermission("nerochat." + str)) {
-                    return ChatColor.valueOf(str);
-                } else {
-                    return ChatColor.WHITE;
-                }
+        ChatColor color = ChatColor.WHITE;
+
+        for (ConfigCache.ColoredPrefix coloredPrefix : NeroChat.getConfiguration().color_prefixes) {
+            if (message.toLowerCase().startsWith(coloredPrefix.chat_prefix) && player.hasPermission(coloredPrefix.permission)) {
+                color = coloredPrefix.chat_color;
+                break;
             }
         }
 
-        return ChatColor.WHITE;
+        return color;
     }
 
     public static String getFormat(CommandSender sender) {
-        String str = ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Main.chat-format", "<%player%&r>").replace("%player%", getName(sender)));
+        String str = NeroChat.getConfiguration().chat_format.replace("%player%", getName(sender));
 
-        if (sender instanceof Player && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (sender instanceof Player && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             str = parse((OfflinePlayer) sender, str);
         }
 
@@ -114,15 +104,15 @@ public class CommonTool {
         ComponentBuilder builder = new ComponentBuilder(CommonTool.getFormat(chatter));
 
         if (receiver.hasPermission("nerochat.playernamereply")) {
-            builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/w " + ChatColor.stripColor(chatter.getDisplayName()) + " "));
+            builder.event(new ClickEvent(
+                    ClickEvent.Action.SUGGEST_COMMAND,
+                    "/w " + ChatColor.stripColor(chatter.getDisplayName()) + " "
+            ));
 
-            builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+            builder.event(new HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
                     new ComponentBuilder(
-                            ChatColor.translateAlternateColorCodes('&',
-                                    NeroChat.getLang(receiver).hover_text.replace("%player%",
-                                            ChatColor.stripColor(chatter.getDisplayName())
-                                    )
-                            )
+                            NeroChat.getLang(receiver).hover_text.replace("%player%", ChatColor.stripColor(chatter.getDisplayName()))
                     ).create()
             ));
         }
@@ -139,17 +129,18 @@ public class CommonTool {
     private static String getName(CommandSender sender) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
-            if (NeroChat.getConfiguration().getBoolean("Main.display-nickname-color", true)) {
-                return ChatColor.stripColor(player.getDisplayName());
-            } else {
+            if (NeroChat.getConfiguration().display_nickname_color) {
                 return player.getDisplayName();
+            } else {
+                return ChatColor.stripColor(player.getDisplayName());
             }
-        } else if (sender instanceof ConsoleCommandSender) {
-            return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Main.console-name", "[console]"));
-        } else {
-            return sender.getName();
         }
+
+        if (sender instanceof ConsoleCommandSender) {
+            return NeroChat.getConfiguration().console_name;
+        }
+
+        return sender.getName();
     }
 
     public static String parse(OfflinePlayer player, String str) {

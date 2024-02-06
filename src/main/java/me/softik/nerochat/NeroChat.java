@@ -1,6 +1,5 @@
 package me.softik.nerochat;
 
-import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import lombok.Getter;
 import me.softik.nerochat.api.NeroChatAPI;
 import me.softik.nerochat.commands.MainCommand;
@@ -11,6 +10,8 @@ import me.softik.nerochat.commands.toggle.ToggleWhisperingCommand;
 import me.softik.nerochat.commands.whisper.LastCommand;
 import me.softik.nerochat.commands.whisper.ReplyCommand;
 import me.softik.nerochat.commands.whisper.WhisperCommand;
+import me.softik.nerochat.config.ConfigCache;
+import me.softik.nerochat.config.LanguageCache;
 import me.softik.nerochat.events.ChatEvent;
 import me.softik.nerochat.events.QuitEvent;
 import me.softik.nerochat.modules.NeroChatModule;
@@ -27,12 +28,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 
 @Getter
 public final class NeroChat extends JavaPlugin implements Listener {
@@ -47,7 +48,6 @@ public final class NeroChat extends JavaPlugin implements Listener {
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
-    private ConfigFile configFile;
     public final SortedMap<String, Boolean> enabledModules = new TreeMap<>();
 
     @Override
@@ -110,13 +110,13 @@ public final class NeroChat extends JavaPlugin implements Listener {
         server.getPluginManager().registerEvents(new ChatEvent(this), this);
         server.getPluginManager().registerEvents(new QuitEvent(this), this);
 
-        if (NeroChat.getConfiguration().getBoolean("Main.bstats-metrics", true)) {
+        if (configCache.bstats_metrics) {
             logger.info("Loading metrics");
             new Metrics(this, 18215);
         } else {
             logger.info("Metrics are disabled in the config");
         }
-        reloadConfiguration();
+
         logger.info("The plugin is ready to work!");
     }
 
@@ -125,34 +125,34 @@ public final class NeroChat extends JavaPlugin implements Listener {
         reloadConfiguration();
     }
 
-    // Because the config handler is used wrongly in various methods, this change will break
-    // the plugin until its correctly used. Its called config CACHE for a reason
     public void reloadConfiguration() {
-        configCache = new ConfigCache();
-        NeroChatModule.reloadModules();
-        configCache.saveConfig();
+        try {
+            configCache = new ConfigCache();
+            NeroChatModule.reloadModules();
+            configCache.saveConfig();
+        } catch (Exception e) {
+            logger.severe("Error loading config! - "+e.getLocalizedMessage());
+        }
     }
 
     private void reloadLang() {
         languageCacheMap = new HashMap<>();
         try {
-            File langDirectory = new File(this.getDataFolder() + "/lang");
+            File langDirectory = new File(getDataFolder() + File.separator + "lang");
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
-                String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
+                final String localeString = fileName.substring(fileName.lastIndexOf(File.separator) + 1, fileName.lastIndexOf('.'));
                 logger.info("Found language file for " + localeString);
-                LanguageCache langCache = new LanguageCache(localeString);
-                languageCacheMap.put(localeString, langCache);
+                languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
-            Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
+            final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
             for (File langFile : langDirectory.listFiles()) {
-                Matcher langMatcher = langPattern.matcher(langFile.getName());
+                final Matcher langMatcher = langPattern.matcher(langFile.getName());
                 if (langMatcher.find()) {
-                    String localeString = langMatcher.group(1).toLowerCase();
+                    final String localeString = langMatcher.group(1).toLowerCase();
                     if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
                         logger.info("Found language file for " + localeString);
-                        LanguageCache langCache = new LanguageCache(localeString);
-                        languageCacheMap.put(localeString, langCache);
+                        languageCacheMap.put(localeString, new LanguageCache(localeString));
                     }
                 }
             }
@@ -163,19 +163,15 @@ public final class NeroChat extends JavaPlugin implements Listener {
     }
 
     private Set<String> getDefaultLanguageFiles() {
-        Set<String> languageFiles = new HashSet<>();
-        try (JarFile jarFile = new JarFile(this.getFile())) {
-            Enumeration<JarEntry> entries = jarFile.entries();
-            while (entries.hasMoreElements()) {
-                String path = entries.nextElement().getName();
-                if (path.startsWith("lang/") && path.endsWith(".yml"))
-                    languageFiles.add(path);
-            }
+        try (final JarFile pluginJarFile = new JarFile(this.getFile())) {
+            return pluginJarFile.stream()
+                    .map(ZipEntry::getName)
+                    .filter(name -> name.startsWith("lang" + File.separator) && name.endsWith(".yml"))
+                    .collect(Collectors.toSet());
         } catch (IOException e) {
-            logger.severe("Error while getting default language file names! - " + e.getLocalizedMessage());
-            e.printStackTrace();
+            logger.severe("Failed getting default lang files! - "+e.getLocalizedMessage());
+            return Collections.emptySet();
         }
-        return languageFiles;
     }
 
     public static LanguageCache getLang(String lang) {
