@@ -1,4 +1,4 @@
-package me.softik.nerochat.events;
+package me.softik.nerochat.listener;
 
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
@@ -7,7 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 @RequiredArgsConstructor
-public class QuitEvent implements Listener {
+public class QuitListener implements Listener {
+
     private final NeroChat plugin;
 
     @EventHandler

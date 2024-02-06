@@ -2,72 +2,70 @@ package me.softik.nerochat.commands.ignore;
 
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.tools.CommonTool;
 import me.softik.nerochat.tools.ConfigTool;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class HardIgnoreCommand implements CommandExecutor, TabExecutor {
+public class HardIgnoreCommand implements NeroChatCommand {
+
     private final NeroChat plugin;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (args.length == 0) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).usage) + " " +
-                        ChatColor.translateAlternateColorCodes('&', "/ignore ") +
-                        ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_argument));
-                return false;
-            }
-            if (args[0].equalsIgnoreCase(player.getName())) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).ignore_yourself));
-                return true;
-            }
-
-            if (args.length > 0) {
-                Optional<Player> ignored = CommonTool.getPlayer(args[0]);
-                if (ignored.get() == sender) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).ignore_yourself));
-                    return true;
-                }
-
-                if (ignored.isPresent()) {
-                    ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
-
-                    if (type == ConfigTool.HardReturn.IGNORE) {
-                        player.sendMessage(plugin.getConfigTool().getPreparedString("" + NeroChat.getLang(sender).ignore, ignored.get()));
-                    } else if (type == ConfigTool.HardReturn.UN_IGNORE) {
-                        player.sendMessage(plugin.getConfigTool().getPreparedString("" + NeroChat.getLang(sender).un_ignore, ignored.get()));
-                    }
-                } else {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).not_online));
-                }
-            } else {
-                return false;
-            }
-        } else {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_only));
-        }
-
-        return true;
+    public String label() {
+        return "ignore";
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return null;
+            return plugin.getServer().getOnlinePlayers().stream().map(Player::getName).distinct().collect(Collectors.toList());
         } else {
-            return new ArrayList<>();
+            return NO_COMPLETIONS;
         }
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(NeroChat.getLang(sender).player_only);
+            return true;
+        }
+
+        Player player = (Player) sender;
+
+        if (args.length == 0) {
+            sender.sendMessage(NeroChat.getLang(sender).usage + " "+label()+" " + NeroChat.getLang(sender).player_argument);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase(player.getName())) {
+            player.sendMessage(NeroChat.getLang(player).ignore_yourself);
+            return true;
+        }
+
+        Optional<Player> ignored = CommonTool.getPlayer(args[0]);
+
+        if (ignored.get() == sender) {
+            player.sendMessage(NeroChat.getLang(player).ignore_yourself);
+            return true;
+        }
+
+        ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
+
+        if (type == ConfigTool.HardReturn.IGNORE) {
+            player.sendMessage(plugin.getConfigTool().getPreparedString(NeroChat.getLang(sender).ignore, ignored.get()));
+        } else if (type == ConfigTool.HardReturn.UN_IGNORE) {
+            player.sendMessage(plugin.getConfigTool().getPreparedString(NeroChat.getLang(sender).un_ignore, ignored.get()));
+        }
+
+        return true;
     }
 }

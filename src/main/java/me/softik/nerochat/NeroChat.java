@@ -2,24 +2,16 @@ package me.softik.nerochat;
 
 import lombok.Getter;
 import me.softik.nerochat.api.NeroChatAPI;
-import me.softik.nerochat.commands.MainCommand;
-import me.softik.nerochat.commands.ignore.HardIgnoreCommand;
-import me.softik.nerochat.commands.ignore.IgnoreListCommand;
-import me.softik.nerochat.commands.toggle.ToggleChatCommand;
-import me.softik.nerochat.commands.toggle.ToggleWhisperingCommand;
-import me.softik.nerochat.commands.whisper.LastCommand;
-import me.softik.nerochat.commands.whisper.ReplyCommand;
-import me.softik.nerochat.commands.whisper.WhisperCommand;
+import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.config.Config;
 import me.softik.nerochat.config.LanguageCache;
-import me.softik.nerochat.events.ChatEvent;
-import me.softik.nerochat.events.QuitEvent;
+import me.softik.nerochat.listener.ChatListener;
+import me.softik.nerochat.listener.QuitListener;
 import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.tools.*;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +19,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -71,44 +65,14 @@ public final class NeroChat extends JavaPlugin implements Listener {
         logger.info("Loading config");
         reloadConfiguration();
 
-        logger.info("Registering commands");
         Server server = getServer();
-        PluginCommand ignore = server.getPluginCommand("ignore");
-        PluginCommand whisper = server.getPluginCommand("whisper");
-        PluginCommand reply = server.getPluginCommand("reply");
-        PluginCommand last = server.getPluginCommand("last");
-        PluginCommand ignorelist = server.getPluginCommand("ignorelist");
-        PluginCommand toggleWhispering = server.getPluginCommand("togglewhispering");
-        PluginCommand toggleChat = server.getPluginCommand("togglechat");
-        PluginCommand main = server.getPluginCommand("nerochat");
 
-        ignore.setExecutor(new HardIgnoreCommand(this));
-        ignore.setTabCompleter(new HardIgnoreCommand(this));
+        logger.info("Registering commands");
+        NeroChatCommand.reloadCommands();
 
-        whisper.setExecutor(new WhisperCommand(this));
-        whisper.setTabCompleter(new WhisperCommand(this));
-
-        reply.setExecutor(new ReplyCommand(this));
-        reply.setTabCompleter(new ReplyCommand(this));
-
-        last.setExecutor(new LastCommand(this));
-        last.setTabCompleter(new LastCommand(this));
-
-        ignorelist.setExecutor(new IgnoreListCommand(this));
-        ignorelist.setTabCompleter(new IgnoreListCommand(this));
-
-        toggleWhispering.setExecutor(new ToggleWhisperingCommand(this));
-        toggleWhispering.setTabCompleter(new ToggleWhisperingCommand(this));
-
-        toggleChat.setExecutor(new ToggleChatCommand(this));
-        toggleChat.setTabCompleter(new ToggleChatCommand(this));
-
-        main.setExecutor(new MainCommand(this));
-        main.setTabCompleter(new MainCommand(this));
-
-        logger.info("Register Events!");
-        server.getPluginManager().registerEvents(new ChatEvent(this), this);
-        server.getPluginManager().registerEvents(new QuitEvent(this), this);
+        logger.info("Registering Listeners");
+        server.getPluginManager().registerEvents(new ChatListener(this), this);
+        server.getPluginManager().registerEvents(new QuitListener(this), this);
 
         if (config.bstats_metrics) {
             logger.info("Enabling metrics");
@@ -117,12 +81,13 @@ public final class NeroChat extends JavaPlugin implements Listener {
             logger.info("Not enabling metrics");
         }
 
-        logger.info("ready!");
+        logger.info("Ready!");
     }
 
     public void reloadNeroChat() {
         reloadLang();
         reloadConfiguration();
+        NeroChatCommand.reloadCommands();
     }
 
     public void reloadConfiguration() {

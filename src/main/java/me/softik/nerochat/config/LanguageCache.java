@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class LanguageCache {
 
     private final ConfigFile lang;
-    public String hover_text, page_doesent_exist, error, chat_on, chat_off, pm_on, pm_off, chat_is_off, no_one_ignored,
+    public String hover_text, page_does_not_exist, error, chat_on, chat_off, pm_on, pm_off, chat_is_off, no_one_ignored,
             ignore, un_ignore, ignore_yourself, player_pm_off, whisper_to, whisper_from, player_only, not_online,
             pm_yourself, ignore_me, no_permissions, player_notify, usage, player_argument, message_argument, ignore_you,
             slowmode_notification, too_many_messages, too_many_similar_messages, too_many_violations, blocked_unicode;
@@ -42,7 +42,7 @@ public class LanguageCache {
         this.ignore = getTranslation("ignore", "&6You ignore a player &3%player%");
         this.un_ignore = getTranslation("un-ignore", "&6You are no longer ignoring a player &3%player%");
         this.no_one_ignored = getTranslation("no-one-ignored", "You are not ignoring anyone.");
-        this.page_doesent_exist = getTranslation("page-doesent-exist", "This page doesn't exist.");
+        this.page_does_not_exist = getTranslation("page-doesent-exist", "This page doesn't exist.");
         this.error = getTranslation("error", "There's been a mistake! Please contact the administrator.");
         this.chat_on = getTranslation("chat-on", "You have enabled public chat.");
         this.chat_off = getTranslation("chat-off", "You turned off public chat.");

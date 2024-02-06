@@ -1,10 +1,11 @@
 name: NeroChat
-version: ${project.version}
-api-version: 1.13
+version: '${project.version}'
+api-version: '1.12'
 main: me.softik.nerochat.NeroChat
-authors: [ _Soft1k_ ]
+authors: [ _Soft1k_, xGinko ]
 description: An advanced chat plugin for survival/anarchy servers.
-softdepend: ["PlaceholderAPI"]
+website: '${project.url}'
+softdepend: [ "PlaceholderAPI" ]
 folia-supported: true
 
 commands:
@@ -83,44 +84,6 @@ permissions:
     description: Permission for /nerochat reload!
     children:
       nerochat.command: true
-  nerochat.GREEN:
-    description: Just another chat color!
-  nerochat.BLUE:
-    description: Just another chat color!
-  nerochat.RED:
-    description: Just another chat color!
-  nerochat.AQUA:
-    description: Just another chat color!
-  nerochat.GOLD:
-    description: Just another chat color!
-  nerochat.YELLOW:
-    description: Just another chat color!
-  nerochat.GRAY:
-    description: Just another chat color!
-  nerochat.BLACK:
-    description: Just another chat color!
-  nerochat.DARK_GREEN:
-    description: Just another chat color!
-  nerochat.DARK_RED:
-    description: Just another chat color!
-  nerochat.DARK_GRAY:
-    description: Just another chat color!
-  nerochat.DARK_BLUE:
-    description: Just another chat color!
-  nerochat.DARK_AQUA:
-    description: Just another chat color!
-  nerochat.DARK_PURPLE:
-    description: Just another chat color!
-  nerochat.LIGHT_PURPLE:
-    description: Just another chat color!
-  nerochat.ITALIC:
-    description: Just another chat color!
-  nerochat.UNDERLINE:
-   description: Just another chat color!
-  nerochat.BOLD:
-    description: Just another chat color!
-  nerochat.STRIKETHROUGH:
-    description: Just another chat color!
   nerochat.version:
     description: Permission for /nerochat version
   nerochat.bypass:

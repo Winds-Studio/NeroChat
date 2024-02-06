@@ -3,6 +3,7 @@ package me.softik.nerochat.commands.ignore;
 import com.google.common.math.IntMath;
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.tools.CommonTool;
 import me.softik.nerochat.tools.IgnoreTool;
 import net.md_5.bungee.api.ChatColor;
@@ -11,9 +12,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.math.RoundingMode;
@@ -22,64 +21,72 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class IgnoreListCommand implements CommandExecutor, TabExecutor {
+public class IgnoreListCommand implements NeroChatCommand {
+
     private final NeroChat plugin;
 
     @Override
+    public String label() {
+        return "ignorelist";
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return NO_COMPLETIONS;
+    }
+
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(NeroChat.getLang(sender).player_only);
+            return true;
+        }
 
-            List<String> list = new ArrayList<>();
+        Player player = (Player) sender;
+        List<String> list = new ArrayList<>();
 
-            for (OfflinePlayer offlinePlayer : plugin.getIgnoreTool().getIgnoredPlayers(player).keySet()) {
-                list.add(offlinePlayer.getName());
-            }
+        for (OfflinePlayer offlinePlayer : plugin.getIgnoreTool().getIgnoredPlayers(player).keySet()) {
+            list.add(offlinePlayer.getName());
+        }
 
-            if (list.isEmpty()) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).no_one_ignored));
+        if (list.isEmpty()) {
+            player.sendMessage(NeroChat.getLang(sender).no_one_ignored);
+            return true;
+        }
+
+        if (args.length == 0) {
+            showList(1, player);
+            return true;
+        }
+
+        try {
+            int page = Integer.parseInt(args[0]);
+
+            if (page < plugin.getIgnoreTool().getIgnoredPlayers(player).size()) {
+                showList(page, player);
             } else {
-                if (args.length > 0) {
-                    try {
-                        int page = Integer.parseInt(args[0]);
-
-                        if (page < plugin.getIgnoreTool().getIgnoredPlayers(player).size()) {
-                            showList(page, player);
-                        } else {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(player).page_doesent_exist));
-                        }
-                    } catch (NumberFormatException e) {
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', CommonTool.getPrefix() + NeroChat.getLang(player).error));
-                    }
-                } else {
-                    showList(1, player);
-                }
+                player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).page_does_not_exist);
             }
-        } else {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).player_only));
+        } catch (NumberFormatException e) {
+            player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).error);
         }
 
         return true;
     }
 
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return new ArrayList<>();
-    }
-
     private void showList(int page, Player player) {
-        int maxValue = page * NeroChat.getConfiguration().getInt("Main.ignore-list-size", 9);
-        int minValue = maxValue - NeroChat.getConfiguration().getInt("Main.ignore-list-size", 9);
+        int maxValue = page * NeroChat.getConfiguration().ignore_list_size;
+        int minValue = maxValue - NeroChat.getConfiguration().ignore_list_size;
 
         Map<OfflinePlayer, IgnoreTool.IgnoreType> map = plugin.getIgnoreTool().getIgnoredPlayers(player);
 
-        int allPages = IntMath.divide(map.size(), NeroChat.getConfiguration().getInt("Main.ignore-list-size", 9), RoundingMode.CEILING);
+        int allPages = IntMath.divide(map.size(), NeroChat.getConfiguration().ignore_list_size, RoundingMode.CEILING);
 
         ComponentBuilder navigation = new ComponentBuilder("").color(ChatColor.GOLD);
         navigation.append("[<]").color(page > 1 ? ChatColor.AQUA : ChatColor.GRAY);
 
         if (page > 1) {
-            navigation.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ignorelist " + (page - 1)));
+            navigation.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"+label()+" "+ (page - 1)));
             navigation.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to go to the previous page!").color(ChatColor.GOLD).create()));
         }
 
@@ -88,7 +95,7 @@ public class IgnoreListCommand implements CommandExecutor, TabExecutor {
         navigation.append("[>]").color(allPages > page ? ChatColor.AQUA : ChatColor.GRAY);
 
         if (allPages > page) {
-            navigation.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ignorelist " + (page + 1)));
+            navigation.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"+label()+" " + (page + 1)));
             navigation.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to go to the next page!").color(ChatColor.GOLD).create()));
         }
 
