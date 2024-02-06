@@ -37,7 +37,7 @@ public class NeroChatCmd implements NeroChatCommand {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             sendCommandOverview(sender);
-            return false;
+            return true;
         }
 
         for (SubCommand subCommand : subCommands) {
