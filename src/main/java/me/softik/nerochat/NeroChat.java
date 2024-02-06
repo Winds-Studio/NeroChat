@@ -6,7 +6,6 @@ import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.config.Config;
 import me.softik.nerochat.config.LanguageCache;
 import me.softik.nerochat.listener.ChatListener;
-import me.softik.nerochat.listener.QuitListener;
 import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.tools.*;
 import org.bstats.bukkit.Metrics;
@@ -37,8 +36,8 @@ public final class NeroChat extends JavaPlugin implements Listener {
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
 
-    private final TempDataTool tempDataTool = new TempDataTool();
-    private final SoftIgnoreTool softignoreTool = new SoftIgnoreTool();
+    private final TempDataTool tempDataTool = new TempDataTool(this);
+    private final SoftIgnoreTool softignoreTool = new SoftIgnoreTool(this);
     private final CacheTool cacheTool = new CacheTool(this);
     private final IgnoreTool ignoreTool = new IgnoreTool(this);
     private final ConfigTool configTool = new ConfigTool(this);
@@ -67,9 +66,8 @@ public final class NeroChat extends JavaPlugin implements Listener {
         logger.info("Registering commands");
         NeroChatCommand.reloadCommands();
 
-        logger.info("Registering Listeners");
+        logger.info("Registering listeners");
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-        getServer().getPluginManager().registerEvents(new QuitListener(this), this);
 
         if (config.bstats_metrics) {
             logger.info("Enabling metrics");

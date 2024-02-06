@@ -1,16 +1,26 @@
 package me.softik.nerochat.tools;
 
+import me.softik.nerochat.NeroChat;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TempDataTool {
+public class TempDataTool implements Listener {
+
     private final Map<CommandSender, TempData> map = new HashMap<>();
 
-    public void onQuit(Player player) {
-        map.remove(player);
+    public TempDataTool(NeroChat plugin) {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onQuit(PlayerQuitEvent event) {
+        map.remove(event.getPlayer());
     }
 
     public void setWhisperingEnabled(CommandSender player, boolean value) {

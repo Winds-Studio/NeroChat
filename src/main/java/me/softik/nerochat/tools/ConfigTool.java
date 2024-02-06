@@ -3,8 +3,6 @@ package me.softik.nerochat.tools;
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.models.UniqueSender;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,9 +11,10 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ConfigTool {
@@ -57,15 +56,11 @@ public class ConfigTool {
     }
 
     protected List<OfflinePlayer> getHardIgnoredPlayers(Player player) {
-        List<String> listUUID = dataConfig.getStringList(player.getUniqueId().toString());
-
-        List<OfflinePlayer> returnedPlayers = new ArrayList<>();
-
-        for (String str : listUUID) {
-            returnedPlayers.add(Bukkit.getOfflinePlayer(UUID.fromString(str)));
-        }
-
-        return returnedPlayers;
+        return dataConfig.getStringList(player.getUniqueId().toString())
+                .stream()
+                .map(uuid -> plugin.getServer().getOfflinePlayer(UUID.fromString(uuid)))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private void loadData() {
@@ -96,11 +91,6 @@ public class ConfigTool {
                 e.printStackTrace();
             }
         }
-    }
-
-    public String getPreparedString(String str, Player player) {
-        return ChatColor.translateAlternateColorCodes('&', str)
-                .replace("%player%", ChatColor.stripColor(player.getDisplayName()));
     }
 
     public enum HardReturn {

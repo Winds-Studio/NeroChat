@@ -10,50 +10,19 @@ import org.bukkit.event.HandlerList;
  */
 @SuppressWarnings("unused")
 public class NeroChatReceiveEvent extends Event implements Cancellable {
+
     private static final HandlerList HANDLERS = new HandlerList();
-    private final Player sender;
-    private final Player receiver;
     private boolean isCancelled;
+
+    private final Player sender, receiver;
     private String message;
 
     public NeroChatReceiveEvent(Player sender, Player receiver, String message) {
         super(true);
-
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
         this.isCancelled = false;
-    }
-
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
-    /**
-     * Gets the cancellation state of this event. A cancelled event will not
-     * be executed in the server, but will still pass to other plugins.
-     *
-     * @return true if this event is cancelled
-     */
-    @Override
-    public boolean isCancelled() {
-        return isCancelled;
-    }
-
-    /**
-     * Sets the cancellation state of this event. A cancelled event will not
-     * be executed in the server, but will still pass to other plugins.
-     *
-     * @param cancel true if you wish to cancel this event
-     */
-    @Override
-    public void setCancelled(boolean cancel) {
-        isCancelled = cancel;
     }
 
     /**
@@ -90,5 +59,36 @@ public class NeroChatReceiveEvent extends Event implements Cancellable {
      */
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    /**
+     * Gets the cancellation state of this event. A cancelled event will not
+     * be executed in the server, but will still pass to other plugins.
+     *
+     * @return true if this event is cancelled
+     */
+    @Override
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    /**
+     * Sets the cancellation state of this event. A cancelled event will not
+     * be executed in the server, but will still pass to other plugins.
+     *
+     * @param cancel true if you wish to cancel this event
+     */
+    @Override
+    public void setCancelled(boolean cancel) {
+        isCancelled = cancel;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
     }
 }

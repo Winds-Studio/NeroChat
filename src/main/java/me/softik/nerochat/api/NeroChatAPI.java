@@ -22,8 +22,9 @@ public final class NeroChatAPI {
     private NeroChatAPI() {}
 
     public static void setInstance(NeroChat plugin) {
-        if (plugin != null && NeroChatAPI.plugin == null)
-            NeroChatAPI.plugin = plugin;
+        Preconditions.checkNotNull(plugin, "Plugin can not be null");
+
+        NeroChatAPI.plugin = plugin;
     }
 
     /**

@@ -1,14 +1,18 @@
 package me.softik.nerochat.tools;
 
+import lombok.RequiredArgsConstructor;
+import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.models.UniqueSender;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class SoftIgnoreTool {
+    private final NeroChat plugin;
     private final Map<UUID, List<UUID>> map = new HashMap<>();
 
     public SoftReturn softIgnorePlayer(Player player, Player ignored) {
@@ -32,15 +36,11 @@ public class SoftIgnoreTool {
     }
 
     protected List<OfflinePlayer> getSoftIgnoredPlayers(Player player) {
-        List<UUID> listUUID = map.getOrDefault(player.getUniqueId(), Collections.emptyList());
-
-        List<OfflinePlayer> returnedPlayers = new ArrayList<>();
-
-        for (UUID uuid : listUUID) {
-            returnedPlayers.add(Bukkit.getOfflinePlayer(uuid));
-        }
-
-        return returnedPlayers;
+        return map.getOrDefault(player.getUniqueId(), Collections.emptyList())
+                .stream()
+                .map(uuid -> plugin.getServer().getOfflinePlayer(uuid))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     public enum SoftReturn {

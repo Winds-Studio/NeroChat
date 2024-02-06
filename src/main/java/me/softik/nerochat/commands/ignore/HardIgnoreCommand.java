@@ -5,6 +5,7 @@ import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.tools.CommonTool;
 import me.softik.nerochat.tools.ConfigTool;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,9 +62,11 @@ public class HardIgnoreCommand implements NeroChatCommand {
         ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
 
         if (type == ConfigTool.HardReturn.IGNORE) {
-            player.sendMessage(plugin.getConfigTool().getPreparedString(NeroChat.getLang(sender).ignore, ignored.get()));
+            player.sendMessage(NeroChat.getLang(sender).ignore
+                    .replace("%player%", ChatColor.stripColor(ignored.get().getDisplayName())));
         } else if (type == ConfigTool.HardReturn.UN_IGNORE) {
-            player.sendMessage(plugin.getConfigTool().getPreparedString(NeroChat.getLang(sender).un_ignore, ignored.get()));
+            player.sendMessage(NeroChat.getLang(sender).un_ignore
+                    .replace("%player%", ChatColor.stripColor(ignored.get().getDisplayName())));
         }
 
         return true;
