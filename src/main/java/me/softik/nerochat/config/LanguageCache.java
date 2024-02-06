@@ -27,67 +27,67 @@ public class LanguageCache {
         if (!langYML.exists())
             plugin.saveResource("lang" + File.separator + locale + ".yml", false);
         // Finally, load the lang file with configmaster
-        this.lang = ConfigFile.loadConfig(langYML);
+        lang = ConfigFile.loadConfig(langYML);
 
-        this.no_permissions = getTranslation("no-permission", "You don't have permission to use this command.");
-        this.player_notify = getTranslation("player-notify", "Illegal characters were found in your message.");
-        this.ignore_me = getTranslation("ignore-me", "This player ignores you.");
-        this.ignore_you = getTranslation("ignore-you", "You are ignoring this player.");
-        this.not_online = getTranslation("not-online", "This player is not online.");
-        this.player_only = getTranslation("player-only", "You need to be a player to do this.");
-        this.whisper_from = getTranslation("Whisper.from", "&d%player%&d whispers: %message%");
-        this.whisper_to = getTranslation("Whisper.to", "&dYou whisper to %player%&d: %message%");
-        this.ignore_yourself = getTranslation("ignore-yourself", "You can't ignore yourself.");
-        this.pm_yourself = getTranslation("pm-yourself", "You cannot write private messages to yourself.");
-        this.ignore = getTranslation("ignore", "&6You ignore a player &3%player%");
-        this.un_ignore = getTranslation("un-ignore", "&6You are no longer ignoring a player &3%player%");
-        this.no_one_ignored = getTranslation("no-one-ignored", "You are not ignoring anyone.");
-        this.page_does_not_exist = getTranslation("page-doesent-exist", "This page doesn't exist.");
-        this.error = getTranslation("error", "There's been a mistake! Please contact the administrator.");
-        this.chat_on = getTranslation("chat-on", "You have enabled public chat.");
-        this.chat_off = getTranslation("chat-off", "You turned off public chat.");
-        this.pm_on = getTranslation("pm-on", "You have enabled personal messages.");
-        this.pm_off = getTranslation("pm-off", "You have turned off personal messages.");
-        this.player_pm_off = getTranslation("player-pm-off", "This player has turned off personal messages.");
-        this.chat_is_off = getTranslation("chat-is-off", "You have disabled public chat. Use /togglechat to turn it back on.");
-        this.usage = getTranslation("usage", "Usage:");
-        this.player_argument = getTranslation("player-argument", "<player>");
-        this.message_argument = getTranslation("message-argument", "<message>");
-        this.hover_text = getTranslation("hover-text", "&6Message &3%player%");
-        this.slowmode_notification = getTranslation("slowmode-notification", "&cYou need to wait a bit before sending another message.");
-        this.too_many_messages = getTranslation("too-many-messages-notification", "&cYou're sending too many messages at a time.");
-        this.too_many_similar_messages = getTranslation("similar-message-notification", "&cYou're sending too many similar messages at a time.");
-        this.too_many_violations = getTranslation("too-many-violations", "&cYou're blocked from spamming.");
-        this.blocked_unicode = getTranslation("blocked-unicode", "&cYour message includes spammy characters, please change it.");
+        no_permissions = getTranslation("no-permission", "You don't have permission to use this command.");
+        player_notify = getTranslation("player-notify", "Illegal characters were found in your message.");
+        ignore_me = getTranslation("ignore-me", "This player ignores you.");
+        ignore_you = getTranslation("ignore-you", "You are ignoring this player.");
+        not_online = getTranslation("not-online", "This player is not online.");
+        player_only = getTranslation("player-only", "You need to be a player to do ");
+        whisper_from = getTranslation("Whisper.from", "&d%player%&d whispers: %message%");
+        whisper_to = getTranslation("Whisper.to", "&dYou whisper to %player%&d: %message%");
+        ignore_yourself = getTranslation("ignore-yourself", "You can't ignore yourself.");
+        pm_yourself = getTranslation("pm-yourself", "You cannot write private messages to yourself.");
+        ignore = getTranslation("ignore", "&6You ignore a player &3%player%");
+        un_ignore = getTranslation("un-ignore", "&6You are no longer ignoring a player &3%player%");
+        no_one_ignored = getTranslation("no-one-ignored", "You are not ignoring anyone.");
+        page_does_not_exist = getTranslation("page-doesent-exist", "This page doesn't exist.");
+        error = getTranslation("error", "There's been a mistake! Please contact the administrator.");
+        chat_on = getTranslation("chat-on", "You have enabled public chat.");
+        chat_off = getTranslation("chat-off", "You turned off public chat.");
+        pm_on = getTranslation("pm-on", "You have enabled personal messages.");
+        pm_off = getTranslation("pm-off", "You have turned off personal messages.");
+        player_pm_off = getTranslation("player-pm-off", "This player has turned off personal messages.");
+        chat_is_off = getTranslation("chat-is-off", "You have disabled public chat. Use /togglechat to turn it back on.");
+        usage = getTranslation("usage", "Usage:");
+        player_argument = getTranslation("player-argument", "<player>");
+        message_argument = getTranslation("message-argument", "<message>");
+        hover_text = getTranslation("hover-text", "&6Message &3%player%");
+        slowmode_notification = getTranslation("slowmode-notification", "&cYou need to wait a bit before sending another message.");
+        too_many_messages = getTranslation("too-many-messages-notification", "&cYou're sending too many messages at a time.");
+        too_many_similar_messages = getTranslation("similar-message-notification", "&cYou're sending too many similar messages at a time.");
+        too_many_violations = getTranslation("too-many-violations", "&cYou're blocked from spamming.");
+        blocked_unicode = getTranslation("blocked-unicode", "&cYour message includes spammy characters, please change it.");
 
         try {
-            this.lang.save();
+            lang.save();
         } catch (Exception e) {
             plugin.getLogger().severe("Failed to save language file: "+ langYML.getName() +" - " + e.getLocalizedMessage());
         }
     }
 
     public String getTranslation(String path, String defaultTranslation) {
-        this.lang.addDefault(path, defaultTranslation);
-        return ChatColor.translateAlternateColorCodes('&', this.lang.getString(path, defaultTranslation));
+        lang.addDefault(path, defaultTranslation);
+        return ChatColor.translateAlternateColorCodes('&', lang.getString(path, defaultTranslation));
     }
 
     public String getTranslation(String path, String defaultTranslation, String comment) {
-        this.lang.addDefault(path, defaultTranslation, comment);
-        return ChatColor.translateAlternateColorCodes('&', this.lang.getString(path, defaultTranslation));
+        lang.addDefault(path, defaultTranslation, comment);
+        return ChatColor.translateAlternateColorCodes('&', lang.getString(path, defaultTranslation));
     }
 
     public List<String> getListTranslation(String path, List<String> defaultTranslation) {
-        this.lang.addDefault(path, defaultTranslation);
-        return this.lang.getStringList(path)
+        lang.addDefault(path, defaultTranslation);
+        return lang.getStringList(path)
                 .stream()
                 .map(line -> ChatColor.translateAlternateColorCodes('&', line))
                 .collect(Collectors.toList());
     }
 
     public List<String> getListTranslation(String path, List<String> defaultTranslation, String comment) {
-        this.lang.addDefault(path, defaultTranslation, comment);
-        return this.lang.getStringList(path)
+        lang.addDefault(path, defaultTranslation, comment);
+        return lang.getStringList(path)
                 .stream()
                 .map(line -> ChatColor.translateAlternateColorCodes('&', line))
                 .collect(Collectors.toList());
