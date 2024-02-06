@@ -15,6 +15,7 @@ import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
 public class UniqueSender {
+
     private static final Map<CommandSender, UUID> customUUID = new HashMap<>();
     private final CommandSender sender;
 
@@ -24,7 +25,6 @@ public class UniqueSender {
                 return entry.getKey();
             }
         }
-
         return null;
     }
 
@@ -33,7 +33,6 @@ public class UniqueSender {
             return ((Player) sender).getUniqueId();
         } else {
             customUUID.computeIfAbsent(sender, sender2 -> UUID.randomUUID());
-
             return customUUID.get(sender);
         }
     }
@@ -45,15 +44,17 @@ public class UniqueSender {
     public String getDisplayName() {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (NeroChat.getConfiguration().getBoolean("Main.display-nickname-color", true)) {
+            if (NeroChat.getConfiguration().display_nickname_color) {
                 return ChatColor.stripColor(player.getDisplayName());
             } else {
                 return player.getDisplayName();
             }
-        } else if (sender instanceof ConsoleCommandSender) {
-            return ChatColor.translateAlternateColorCodes('&', NeroChat.getConfiguration().getString("Main.console-name", "[console]"));
-        } else {
-            return sender.getName();
         }
+
+        if (sender instanceof ConsoleCommandSender) {
+            return NeroChat.getConfiguration().console_name;
+        }
+
+        return sender.getName();
     }
 }
