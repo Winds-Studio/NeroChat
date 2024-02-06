@@ -1,4 +1,4 @@
-package me.softik.nerochat.modules.spam;
+package me.softik.nerochat.modules.spam.checks;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.config.Config;
@@ -20,10 +20,10 @@ public class BannedWordsCheck implements SpamCheck, Listener {
     protected BannedWordsCheck() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.master().addComment("checks.banned-words.enable", "Configure words list in banned-words.yml!");
-        this.violationIncrement = config.getDouble("checks.banned-words.violations-per-detect", 10.0);
-        this.logIsEnabled = config.getBoolean("checks.banned-words.log-detect", true);
-        this.isCaseSensitive = config.getBoolean("checks.banned-words.case-sensitive", false);
+        config.master().addComment("anti-spam.checks.banned-words.enable", "Configure words list in banned-words.yml!");
+        this.violationIncrement = config.getDouble("anti-spam.checks.banned-words.violations-per-detect", 10.0);
+        this.logIsEnabled = config.getBoolean("anti-spam.checks.banned-words.log-detect", true);
+        this.isCaseSensitive = config.getBoolean("anti-spam.checks.banned-words.case-sensitive", false);
         this.bannedWords = config.getListFile("banned-words.yml", "words-or-phrases",
                 Collections.singletonList("what's 2+2"),
                 "These are checked using a simple String#contains method")
@@ -34,7 +34,7 @@ public class BannedWordsCheck implements SpamCheck, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("checks.banned-words.enable", false);
+        return NeroChat.getConfiguration().getBoolean("anti-spam.checks.banned-words.enable", false);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package me.softik.nerochat.modules.spam;
+package me.softik.nerochat.modules.spam.checks;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.config.Config;
@@ -21,10 +21,10 @@ public class MessageRegexMatchCountCheck implements SpamCheck, Listener {
     protected MessageRegexMatchCountCheck() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        this.maxMatchesPerMessage = config.getInt("checks.regex-match-count.max-matches-per-message", 4);
-        this.violationIncrement = config.getDouble("checks.regex-match-count.violations-on-exceed", 10.0);
-        this.logIsEnabled = config.getBoolean("checks.regex-match-count.log", true);
-        this.bannedRegexes = config.getList("checks.regex-match-count.regex-list", Collections.singletonList("[!@#$%^&*(),.?\":{}|<>]"))
+        this.maxMatchesPerMessage = config.getInt("anti-spam.checks.regex-match-count.max-matches-per-message", 4);
+        this.violationIncrement = config.getDouble("anti-spam.checks.regex-match-count.violations-on-exceed", 10.0);
+        this.logIsEnabled = config.getBoolean("anti-spam.checks.regex-match-count.log", true);
+        this.bannedRegexes = config.getList("anti-spam.checks.regex-match-count.regex-list", Collections.singletonList("[!@#$%^&*(),.?\":{}|<>]"))
                 .stream()
                 .map(regex -> Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
                 .collect(Collectors.toCollection(HashSet::new));
@@ -32,7 +32,7 @@ public class MessageRegexMatchCountCheck implements SpamCheck, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("checks.regex-match-count.enable", true);
+        return NeroChat.getConfiguration().getBoolean("anti-spam.checks.regex-match-count.enable", true);
     }
 
     @Override

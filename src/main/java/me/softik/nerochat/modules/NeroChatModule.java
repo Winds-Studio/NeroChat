@@ -5,7 +5,7 @@ import me.softik.nerochat.modules.filter.ReadableFormatting;
 import me.softik.nerochat.modules.filter.RegexFilterPublic;
 import me.softik.nerochat.modules.filter.RegexFilterWhisper;
 import me.softik.nerochat.modules.spam.AntiSpamModule;
-import me.softik.nerochat.modules.spam.SpamCheck;
+import me.softik.nerochat.modules.spam.checks.SpamCheck;
 
 import java.util.HashSet;
 

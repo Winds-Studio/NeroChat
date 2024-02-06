@@ -9,6 +9,7 @@ import me.softik.nerochat.config.Config;
 import me.softik.nerochat.models.ChatMessageData;
 import me.softik.nerochat.models.ExpiringSet;
 import me.softik.nerochat.modules.NeroChatModule;
+import me.softik.nerochat.modules.spam.checks.SpamCheck;
 import me.softik.nerochat.utils.NeroStringUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

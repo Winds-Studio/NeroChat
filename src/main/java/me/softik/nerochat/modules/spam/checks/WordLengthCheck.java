@@ -1,4 +1,4 @@
-package me.softik.nerochat.modules.spam;
+package me.softik.nerochat.modules.spam.checks;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.config.Config;
@@ -14,14 +14,14 @@ public class WordLengthCheck implements SpamCheck, Listener {
     protected WordLengthCheck() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        this.violationIncrement = config.getDouble("checks.character-limit.per-word.violations-per-detect", 5.0);
-        this.logIsEnabled = config.getBoolean("checks.character-limit.per-word.log", true);
-        this.characterLimit = config.getInt("checks.character-limit.per-word.char-limit", 128);
+        this.violationIncrement = config.getDouble("anti-spam.checks.character-limit.per-word.violations-per-detect", 5.0);
+        this.logIsEnabled = config.getBoolean("anti-spam.checks.character-limit.per-word.log", true);
+        this.characterLimit = config.getInt("anti-spam.checks.character-limit.per-word.char-limit", 128);
     }
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("checks.character-limit.per-word.enable", true);
+        return NeroChat.getConfiguration().getBoolean("anti-spam.checks.character-limit.per-word.enable", true);
     }
 
     @Override

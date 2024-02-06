@@ -1,4 +1,4 @@
-package me.softik.nerochat.modules.spam;
+package me.softik.nerochat.modules.spam.checks;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.config.Config;
@@ -21,11 +21,11 @@ public class URLCheck implements SpamCheck, Listener {
     protected URLCheck() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        this.violationIncrement = config.getDouble("checks.links.violations-per-detect", 5.0);
-        this.logIsEnabled = config.getBoolean("checks.links.log", true);
-        this.preventOnlyAtSpawn = config.getBoolean("checks.links.only-check-players-around-spawn", true);
-        this.radius = config.getInt("checks.links.spawn-radius", 1000);
-        this.linkRegexes = config.getList("checks.links.link-regex-list", Arrays.asList(
+        this.violationIncrement = config.getDouble("anti-spam.checks.links.violations-per-detect", 5.0);
+        this.logIsEnabled = config.getBoolean("anti-spam.checks.links.log", true);
+        this.preventOnlyAtSpawn = config.getBoolean("anti-spam.checks.links.only-check-players-around-spawn", true);
+        this.radius = config.getInt("anti-spam.checks.links.spawn-radius", 1000);
+        this.linkRegexes = config.getList("anti-spam.checks.links.link-regex-list", Arrays.asList(
                 "(https?://(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?://(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,})",
                 "[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z()]{1,6}\\b([-a-zA-Z()@:%_+.~#?&/=]*)"))
                 .stream()
@@ -35,7 +35,7 @@ public class URLCheck implements SpamCheck, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("checks.links.enable", false);
+        return NeroChat.getConfiguration().getBoolean("anti-spam.checks.links.enable", false);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package me.softik.nerochat.modules.spam;
+package me.softik.nerochat.modules.spam.checks;
 
 import com.google.common.collect.Sets;
 import org.bukkit.entity.Player;
