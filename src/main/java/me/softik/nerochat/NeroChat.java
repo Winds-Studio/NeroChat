@@ -10,7 +10,6 @@ import me.softik.nerochat.listener.QuitListener;
 import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.tools.*;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -65,14 +64,12 @@ public final class NeroChat extends JavaPlugin implements Listener {
         logger.info("Loading config");
         reloadConfiguration();
 
-        Server server = getServer();
-
         logger.info("Registering commands");
         NeroChatCommand.reloadCommands();
 
         logger.info("Registering Listeners");
-        server.getPluginManager().registerEvents(new ChatListener(this), this);
-        server.getPluginManager().registerEvents(new QuitListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new QuitListener(this), this);
 
         if (config.bstats_metrics) {
             logger.info("Enabling metrics");
