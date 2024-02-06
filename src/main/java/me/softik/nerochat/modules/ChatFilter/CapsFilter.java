@@ -15,14 +15,14 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class CapsFilter implements NeroChatModule, Listener {
 
-    private final boolean isEnabled;
-    private final int maxCapsPercentage;
+    private final double maxCapsPercentage;
 
     public CapsFilter() {
         shouldEnable();
         ConfigCache config = NeroChat.getConfiguration();
-        this.isEnabled = config.getBoolean("CapsFilter.Enabled", false);
-        this.maxCapsPercentage = config.getInt("CapsFilter.Percentage", 50);
+        config.master().addComment("CapsFilter.Enabled",
+                "Automatic message formatting with a large number of capital letters.");
+        this.maxCapsPercentage = config.getDouble("CapsFilter.Percentage", 50.0);
     }
 
     @Override
@@ -53,7 +53,6 @@ public class CapsFilter implements NeroChatModule, Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        if (!isEnabled) return;
         Player player = event.getPlayer();
         if (player.hasPermission("nerochat.CapsFilterBypass")) return;
 
@@ -63,7 +62,7 @@ public class CapsFilter implements NeroChatModule, Listener {
         int capsPercentage = (int) Math.round((capsCount * 100.0) / messageLength);
 
         if (capsPercentage > maxCapsPercentage) {
-            String newMessage = isEnabled ? formatMessage(message) : message.toLowerCase();
+            String newMessage = formatMessage(message);
             event.setMessage(newMessage);
         }
     }
@@ -71,7 +70,7 @@ public class CapsFilter implements NeroChatModule, Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onWhisper(NeroWhisperEvent event) {
         if (event.getSender() instanceof ConsoleCommandSender) return;
-        if (!isEnabled) return;
+
         Player player = (Player) event.getSender();
         if (player.hasPermission("nerochat.CapsFilterBypass")) return;
 
@@ -81,8 +80,7 @@ public class CapsFilter implements NeroChatModule, Listener {
         int capsPercentage = (int) Math.round((capsCount * 100.0) / messageLength);
 
         if (capsPercentage > maxCapsPercentage) {
-            String newMessage = isEnabled ? formatMessage(message) : message.toLowerCase();
-            event.setMessage(newMessage);
+            event.setMessage(formatMessage(message));
         }
     }
 
@@ -99,18 +97,13 @@ public class CapsFilter implements NeroChatModule, Listener {
 
     private String formatMessage(String message) {
         StringBuilder newMessage = new StringBuilder();
-        boolean lastCharWasCaps = false;
+        boolean lastCharWasCaps;
         for (int i = 0; i < message.length(); i++) {
             char c = message.charAt(i);
             if (Character.isLetter(c)) {
-                if (Character.isUpperCase(c)) {
-                    lastCharWasCaps = true;
-                } else {
-                    lastCharWasCaps = false;
-                }
+                lastCharWasCaps = Character.isUpperCase(c);
                 newMessage.append(lastCharWasCaps ? Character.toLowerCase(c) : c);
             } else {
-                lastCharWasCaps = false;
                 newMessage.append(c);
             }
         }

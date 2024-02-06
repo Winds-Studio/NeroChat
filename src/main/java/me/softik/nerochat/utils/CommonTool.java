@@ -83,7 +83,6 @@ public class CommonTool {
         for (ConfigCache.ColoredPrefix coloredPrefix : NeroChat.getConfiguration().color_prefixes) {
             if (message.toLowerCase().startsWith(coloredPrefix.chat_prefix) && player.hasPermission(coloredPrefix.permission)) {
                 color = coloredPrefix.chat_color;
-                break;
             }
         }
 

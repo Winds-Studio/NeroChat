@@ -1,4 +1,4 @@
-package me.softik.nerochat.modules.ChatFilter;
+package me.softik.nerochat.modules.formatting;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
@@ -19,6 +19,9 @@ public class ReadableFormatting implements NeroChatModule, Listener {
     public ReadableFormatting() {
         shouldEnable();
         ConfigCache config = NeroChat.getConfiguration();
+        config.master().addSection("ReadableFormatting");
+        config.master().addDefault("ReadableFormatting", null,
+                "Automatically puts a period at the end of a sentence and a capital letter at the beginning of a sentence.");
         this.end_Chars = config.getString("ReadableFormatting.End-Sentence-Chars", ".?!",
                 "If there are these characters at the end of the sentence, the plugin will not automatically put a period.");
         this.public_Chat_Auto_Caps = config.getBoolean("ReadableFormatting.PublicChat.Auto-Caps", true);
@@ -53,7 +56,7 @@ public class ReadableFormatting implements NeroChatModule, Listener {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (!public_Chat_Auto_Dot && !public_Chat_Auto_Caps) return;
 
@@ -80,7 +83,7 @@ public class ReadableFormatting implements NeroChatModule, Listener {
         event.setMessage(message);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerWhisper(NeroWhisperEvent event) {
         if (!whisper_Auto_Dot && !whisper_Auto_Caps) return;
 

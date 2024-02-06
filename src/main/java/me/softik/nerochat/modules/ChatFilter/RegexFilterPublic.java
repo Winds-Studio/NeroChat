@@ -1,9 +1,9 @@
 package me.softik.nerochat.modules.ChatFilter;
 
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.config.ConfigCache;
 import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.utils.CommonTool;
-import me.softik.nerochat.config.ConfigCache;
 import me.softik.nerochat.utils.LogUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,39 +15,29 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class RegexFilterPublic implements NeroChatModule, Listener {
 
-    private final boolean logIsEnabled;
-    private final boolean Player_Notify;
-    private final boolean Silent_Mode;
-    private final boolean useCaseInsensitive;
-    private final HashSet<Pattern> bannedRegex = new HashSet<>();
-
-    @Override
-    public void disable() {
-        HandlerList.unregisterAll(this);
-    }
+    private final Set<Pattern> bannedRegex;
+    private final boolean logIsEnabled, notifyPlayer, silent, caseInsensitive;
 
     public RegexFilterPublic() {
         shouldEnable();
         ConfigCache config = NeroChat.getConfiguration();
-        this.logIsEnabled = config.getBoolean("RegexFilter.PublicChat.Logs-Enabled", true);
-        this.Player_Notify = config.getBoolean("RegexFilter.PublicChat.Player-Notify", true);
-        this.Silent_Mode = config.getBoolean("RegexFilter.PublicChat.Silent-Mode", true);
-        this.useCaseInsensitive = config.getBoolean("RegexFilter.PublicChat.Case-Insensitive", true);
-        List<String> uncompiledRegexes = config.getList("RegexFilter.PublicChat.Banned-Regex", Collections.singletonList("^This is a(.*)banned message"), "Prevents any message that starts with \"This is a\" and ends with \"banned message\"");
-        for (String regex : uncompiledRegexes) {
-            if (useCaseInsensitive) {
-                bannedRegex.add(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
-            } else {
-                bannedRegex.add(Pattern.compile(regex));
-            }
-        }
-
+        this.logIsEnabled = config.getBoolean("RegexFilter.PublicChat.Logs-Enabled", false);
+        this.notifyPlayer = config.getBoolean("RegexFilter.PublicChat.Player-Notify", true);
+        this.silent = config.getBoolean("RegexFilter.PublicChat.Silent-Mode", true);
+        this.caseInsensitive = config.getBoolean("RegexFilter.PublicChat.Case-Insensitive", true);
+        this.bannedRegex = config.getList("RegexFilter.PublicChat.Banned-Regex", Collections.singletonList("^This is a(.*)banned message"),
+                        "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
+                .stream()
+                .map(regex -> caseInsensitive ? Pattern.compile(regex, Pattern.CASE_INSENSITIVE) : Pattern.compile(regex))
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
     @Override
@@ -71,44 +61,50 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
         return NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Enabled", false);
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @Override
+    public void disable() {
+        HandlerList.unregisterAll(this);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         if (player.hasPermission("nerochat.RegexFilterBypass")) return;
 
-        String message = event.getMessage();
-        String lowerCaseMessage = message.toLowerCase();
+        final String message = event.getMessage();
 
-        for (Pattern bannedRegex : bannedRegex) {
-            if (bannedRegex.matcher(lowerCaseMessage).find()) {
-                event.setCancelled(true);
-                String displayMessage = message;
-                if (useCaseInsensitive) {
-                    displayMessage = lowerCaseMessage;
-                }
-                if (Player_Notify && !Silent_Mode) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(player).player_notify));
-                }
-                if (Silent_Mode) {
-                    CommonTool.sendChatMessage(player, displayMessage, player);
-                }
-                if (logIsEnabled) {
-                    String[] words = displayMessage.split(" ");
-                    StringBuilder sb = new StringBuilder();
-                    for (String word : words) {
-                        String originalWord = word;
-                        if (bannedRegex.matcher(word.toLowerCase()).find()) {
-                            sb.append(ChatColor.RED).append(originalWord).append(ChatColor.RESET).append(" ");
-                        } else {
-                            sb.append(ChatColor.YELLOW).append(word).append(ChatColor.RESET).append(" ");
-                        }
-                    }
-                    String highlightedMessage = sb.toString().trim();
-                    String logMessage = String.format("Prevented %s from saying: %s", player.getName(), highlightedMessage);
-                    LogUtils.moduleLog(Level.WARNING, name(), logMessage);
-                    LogUtils.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" + (bannedRegex.pattern().length() > 100 ? bannedRegex.pattern().substring(0, 100) + "...(" + (bannedRegex.pattern().length() - 100) + " more characters)" : bannedRegex.pattern()) + "'");                }
-                break;
+        for (final Pattern bannedRegex : bannedRegex) {
+            if (!bannedRegex.matcher(caseInsensitive ? message.toLowerCase(Locale.ROOT) : message).find()) {
+                continue;
             }
+
+            event.setCancelled(true);
+
+            if (notifyPlayer && !silent) {
+                player.sendMessage(NeroChat.getLang(player).player_notify);
+            }
+
+            if (silent) {
+                CommonTool.sendChatMessage(player, message, player);
+            }
+
+            if (logIsEnabled) {
+                StringBuilder sb = new StringBuilder();
+                for (String word : message.split(" ")) {
+                    if (bannedRegex.matcher(caseInsensitive ? word.toLowerCase(Locale.ROOT) : word).find()) {
+                        sb.append(ChatColor.RED).append(word).append(ChatColor.RESET).append(" ");
+                    } else {
+                        sb.append(ChatColor.YELLOW).append(word).append(ChatColor.RESET).append(" ");
+                    }
+                }
+                LogUtils.moduleLog(Level.WARNING, name(), String.format("Prevented %s from saying: %s",
+                        player.getName(), sb.toString().trim()));
+                LogUtils.moduleLog(Level.WARNING, name(), "Regex by which the message was cancelled: '" +
+                        (bannedRegex.pattern().length() > 100 ? bannedRegex.pattern().substring(0, 100) + "...(" +
+                        (bannedRegex.pattern().length() - 100) + " more characters)" : bannedRegex.pattern()) + "'");
+            }
+
+            break;
         }
     }
 }
