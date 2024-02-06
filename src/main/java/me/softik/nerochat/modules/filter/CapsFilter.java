@@ -20,7 +20,7 @@ public class CapsFilter implements NeroChatModule, Listener {
     public CapsFilter() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.master().addComment("CapsFilter.Enabled",
+        config.getMaster().addComment("CapsFilter.Enabled",
                 "Automatic message formatting with a large number of capital letters.");
         this.maxCapsPercentage = config.getDouble("CapsFilter.Percentage", 50.0);
     }

@@ -20,7 +20,7 @@ public class BannedWordsCheck implements SpamCheck, Listener {
     protected BannedWordsCheck() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.master().addComment("anti-spam.checks.banned-words.enable", "Configure words list in banned-words.yml!");
+        config.getMaster().addComment("anti-spam.checks.banned-words.enable", "Configure words list in banned-words.yml!");
         this.violationIncrement = config.getDouble("anti-spam.checks.banned-words.violations-per-detect", 10.0);
         this.logIsEnabled = config.getBoolean("anti-spam.checks.banned-words.log-detect", true);
         this.isCaseSensitive = config.getBoolean("anti-spam.checks.banned-words.case-sensitive", false);

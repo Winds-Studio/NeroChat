@@ -30,13 +30,16 @@ public class Config {
         // Load this.config.yml with ConfigMaster
         this.config = ConfigFile.loadConfig(new File(pluginFolder, "this.config.yml"));
 
-        this.createTitledSection("Language", "Language");
+        // Create sections and headers first so we can force order
+        this.preStructure();
+
+        // Language
         this.default_lang = getString("Language.default-language", "en_us",
                 "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
         this.auto_lang = getBoolean("Language.auto-language", true,
                 "Enable / Disable locale based messages.");
 
-        this.createTitledSection("General", "Main");
+        // General
         this.bstats_metrics = getBoolean("Main.bstats-metrics", true,
                 "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
         this.notify_updates = getBoolean("Main.notify-updates", false,
@@ -51,10 +54,7 @@ public class Config {
         this.ignore_list_size = getInt("Main.ignore-list-size", 9,
                 "The size of the ignore list in pages. It is not recommended to set more than 5.");
 
-        this.createTitledSection("CapsFilter", "CapsFilter");
-        this.createTitledSection("RegexFilter", "RegexFilter");
-
-        this.createTitledSection("Prefixes", "Prefixes");
+        // Prefixes
         this.config.addComment("Prefixes", "To use these you need to add the respective permission.\n" +
                 "EXAMPLE: Prefixes.BLUE -> nerochat.BLUE");
         Map<String, Object> defaults = new HashMap<>();
@@ -71,8 +71,7 @@ public class Config {
                 final Permission permission = new Permission( // Constructing a permission also makes it visible in perm plugins
                         "nerochat.chatcolor." + configuredColor,
                         "Chat prefix '" + chatPrefix + "' will apply chatcolor '" + configuredColor + "' to a players messages.",
-                        PermissionDefault.FALSE
-                );
+                        PermissionDefault.FALSE);
                 this.color_prefixes.add(new ColoredPrefix(chatPrefix, permission, chatColor));
             } catch (NullPointerException e) {
                 this.plugin.getLogger().warning("Cant register color '" + configuredColor + "' because you did not specify a prefix");
@@ -85,10 +84,6 @@ public class Config {
         }
     }
 
-    public ConfigFile master() {
-        return this.config;
-    }
-
     public void saveConfig() {
         try {
             this.config.save();
@@ -97,9 +92,22 @@ public class Config {
         }
     }
 
+    public void preStructure() {
+        this.createTitledSection("Language", "Language");
+        this.createTitledSection("General", "Main");
+        this.createTitledSection("Prefixes", "Prefixes");
+        this.createTitledSection("CapsFilter", "CapsFilter");
+        this.createTitledSection("RegexFilter", "RegexFilter");
+        this.createTitledSection("AntiSpam", "anti-spam");
+    }
+
     public void createTitledSection(String title, String path) {
         this.config.addSection(title);
         this.config.addDefault(path, null);
+    }
+
+    public ConfigFile getMaster() {
+        return this.config;
     }
 
     public boolean getBoolean(String path, boolean def, String comment) {

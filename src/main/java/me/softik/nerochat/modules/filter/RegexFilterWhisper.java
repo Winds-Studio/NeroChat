@@ -30,7 +30,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
     public RegexFilterWhisper() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.master().addComment("RegexFilter.Enabled",
+        config.getMaster().addComment("RegexFilter.Enabled",
                 "Filtering chat messages using regular expressions.\n" +
                 "If you don't know how to create them, you can use ChatGPT");
         this.logIsEnabled = config.getBoolean("RegexFilter.Whisper.Logs-Enabled", false);
