@@ -56,7 +56,7 @@ public class Config {
 
         // Prefixes
         this.config.addComment("Prefixes", "To use these you need to add the respective permission.\n" +
-                "EXAMPLE: Prefixes.BLUE -> nerochat.BLUE");
+                "EXAMPLE: Prefixes.BLUE -> nerochat.chatcolor.BLUE");
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("GREEN", ">");
         defaults.put("BOLD", "**");
