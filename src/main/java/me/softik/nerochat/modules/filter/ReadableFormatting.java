@@ -19,7 +19,6 @@ public class ReadableFormatting implements NeroChatModule, Listener {
     public ReadableFormatting() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.getMaster().addSection("ReadableFormatting");
         config.getMaster().addDefault("audit.auto-format.enable", null,
                 "Automatically puts a period at the end of a sentence and a capital letter at the beginning of a sentence.");
         this.valid_end_chars = config.getString("audit.auto-format.end-sentence-chars", ".?!",

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class RegexFilterWhisper implements NeroChatModule, Listener {
 
-    private final Set<Pattern> bannedRegex;
+    private final Set<Pattern> banned_regex;
     private final boolean do_logging, notify_player, be_silent, case_sensitive;
 
     public RegexFilterWhisper() {
@@ -37,7 +37,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
         this.notify_player = config.getBoolean("audit.regex-filter.whisper.notify-player", true);
         this.be_silent = config.getBoolean("audit.regex-filter.whisper.silent-mode", true);
         this.case_sensitive = config.getBoolean("audit.regex-filter.whisper.case-sensitive", false);
-        this.bannedRegex = config.getList("audit.regex-filter.whisper.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
+        this.banned_regex = config.getList("audit.regex-filter.whisper.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
                 "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
                 .stream()
                 .map(regex -> case_sensitive ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
@@ -73,7 +73,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
         final Player player = (Player) event.getSender();
         final String message = event.getMessage();
 
-        for (final Pattern bannedRegex : bannedRegex) {
+        for (final Pattern bannedRegex : banned_regex) {
             if (!bannedRegex.matcher(case_sensitive ? message : message.toLowerCase(Locale.ROOT)).find()) {
                 continue;
             }

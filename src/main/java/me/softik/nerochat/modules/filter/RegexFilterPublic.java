@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class RegexFilterPublic implements NeroChatModule, Listener {
 
-    private final Set<Pattern> bannedRegex;
+    private final Set<Pattern> banned_regex;
     private final boolean do_logging, notify_player, be_silent, case_sensitive;
 
     public RegexFilterPublic() {
@@ -33,7 +33,7 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
         this.notify_player = config.getBoolean("regex-filter.public-chat.notify-player", true);
         this.be_silent = config.getBoolean("regex-filter.public-chat.silent-mode", true);
         this.case_sensitive = config.getBoolean("regex-filter.public-chat.case-sensitive", false);
-        this.bannedRegex = config.getList("regex-filter.public-chat.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
+        this.banned_regex = config.getList("regex-filter.public-chat.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
                         "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
                 .stream()
                 .map(regex -> case_sensitive ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
@@ -68,7 +68,7 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
 
         final String message = event.getMessage();
 
-        for (final Pattern bannedRegex : bannedRegex) {
+        for (final Pattern bannedRegex : banned_regex) {
             if (!bannedRegex.matcher(case_sensitive ? message : message.toLowerCase(Locale.ROOT)).find()) {
                 continue;
             }
