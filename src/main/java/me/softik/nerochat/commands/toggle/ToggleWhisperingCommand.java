@@ -2,6 +2,7 @@ package me.softik.nerochat.commands.toggle;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
+import me.softik.nerochat.tools.TempDataTool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,6 +10,12 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class ToggleWhisperingCommand implements NeroChatCommand {
+
+    private final TempDataTool tempDataTool;
+
+    public ToggleWhisperingCommand() {
+        this.tempDataTool = NeroChat.getTempDataTool();
+    }
 
     @Override
     public String label() {
@@ -29,11 +36,11 @@ public class ToggleWhisperingCommand implements NeroChatCommand {
 
         final Player player = (Player) sender;
 
-        if (NeroChat.getTempDataTool().isWhisperingEnabled(player)) {
-            NeroChat.getTempDataTool().setWhisperingEnabled(player, false);
+        if (tempDataTool.isWhisperingEnabled(player)) {
+            tempDataTool.setWhisperingEnabled(player, false);
             player.sendMessage(NeroChat.getLang(player).pm_off);
         } else {
-            NeroChat.getTempDataTool().setWhisperingEnabled(player, true);
+            tempDataTool.setWhisperingEnabled(player, true);
             player.sendMessage(NeroChat.getLang(player).pm_on);
         }
 
