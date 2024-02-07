@@ -48,15 +48,13 @@ public class CapsFilter implements NeroChatModule, Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         if (player.hasPermission("nerochat.CapsFilterBypass")) return;
 
-        String message = event.getMessage();
-        int capsCount = countCaps(message);
-        int messageLength = message.replaceAll("\\s+", "").length();
-        int capsPercentage = (int) Math.round((capsCount * 100.0) / messageLength);
+        final String message = event.getMessage();
+        if (message.isEmpty()) return;
 
-        if (capsPercentage > max_caps_percent) {
+        if (Math.round((countCaps(message) * 100.0) / message.replaceAll("\\s+", "").length()) > max_caps_percent) {
             String newMessage = formatMessage(message);
             event.setMessage(newMessage);
         }
@@ -65,16 +63,13 @@ public class CapsFilter implements NeroChatModule, Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onWhisper(NeroWhisperEvent event) {
         if (event.getSender() instanceof ConsoleCommandSender) return;
-
-        Player player = (Player) event.getSender();
+        final Player player = (Player) event.getSender();
         if (player.hasPermission("nerochat.CapsFilterBypass")) return;
 
-        String message = event.getMessage();
-        int capsCount = countCaps(message);
-        int messageLength = message.replaceAll("\\s+", "").length();
-        int capsPercentage = (int) Math.round((capsCount * 100.0) / messageLength);
+        final String message = event.getMessage();
+        if (message.isEmpty()) return;
 
-        if (capsPercentage > max_caps_percent) {
+        if (Math.round((countCaps(message) * 100.0) / message.replaceAll("\\s+", "").length()) > max_caps_percent) {
             event.setMessage(formatMessage(message));
         }
     }
