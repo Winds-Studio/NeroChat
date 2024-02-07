@@ -45,9 +45,9 @@ public class WhisperCommand implements NeroChatCommand {
             return true;
         }
 
-        if (plugin.getIgnoreTool().isIgnored(sender, receiver.get())) {
+        if (NeroChat.getIgnoreTool().isIgnored(sender, receiver.get())) {
             sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
-        } else if (plugin.getIgnoreTool().isIgnored(receiver.get(), sender)) {
+        } else if (NeroChat.getIgnoreTool().isIgnored(receiver.get(), sender)) {
             sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
         } else {
             CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 1), receiver.get());

@@ -59,7 +59,7 @@ public class HardIgnoreCommand implements NeroChatCommand {
             return true;
         }
 
-        ConfigTool.HardReturn type = plugin.getConfigTool().hardIgnorePlayer(player, ignored.get());
+        ConfigTool.HardReturn type = NeroChat.getConfigTool().hardIgnorePlayer(player, ignored.get());
 
         if (type == ConfigTool.HardReturn.IGNORE) {
             player.sendMessage(NeroChat.getLang(sender).ignore

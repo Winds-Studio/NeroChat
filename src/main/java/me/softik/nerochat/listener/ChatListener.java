@@ -29,14 +29,14 @@ public class ChatListener implements Listener {
 
         event.getRecipients().clear();
 
-        if (!plugin.getTempDataTool().isChatEnabled(chatter)) {
+        if (!NeroChat.getTempDataTool().isChatEnabled(chatter)) {
             chatter.sendMessage(NeroChat.getLang(chatter).chat_is_off);
             event.setCancelled(true);
             return;
         }
 
         for (Player receiver : plugin.getServer().getOnlinePlayers()) {
-            if (!plugin.getIgnoreTool().isIgnored(chatter, receiver) && plugin.getTempDataTool().isChatEnabled(receiver)) {
+            if (!NeroChat.getIgnoreTool().isIgnored(chatter, receiver) && NeroChat.getTempDataTool().isChatEnabled(receiver)) {
                 NeroChatReceiveEvent perPlayerEvent = new NeroChatReceiveEvent(chatter, receiver, neroChatEvent.getMessage());
                 if (perPlayerEvent.callEvent()) {
                     CommonTool.sendChatMessage(chatter, perPlayerEvent.getMessage(), receiver);

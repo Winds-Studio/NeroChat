@@ -1,6 +1,5 @@
 package me.softik.nerochat.commands.toggle;
 
-import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import org.bukkit.command.Command;
@@ -9,10 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 public class ToggleChatCommand implements NeroChatCommand {
-
-    private final NeroChat plugin;
 
     @Override
     public String label() {
@@ -33,11 +29,11 @@ public class ToggleChatCommand implements NeroChatCommand {
 
         Player player = (Player) sender;
 
-        if (plugin.getTempDataTool().isChatEnabled(player)) {
-            plugin.getTempDataTool().setChatEnabled(player, false);
+        if (NeroChat.getTempDataTool().isChatEnabled(player)) {
+            NeroChat.getTempDataTool().setChatEnabled(player, false);
             player.sendMessage(NeroChat.getLang(player).chat_off);
         } else {
-            plugin.getTempDataTool().setChatEnabled(player, true);
+            NeroChat.getTempDataTool().setChatEnabled(player, true);
             player.sendMessage(NeroChat.getLang(player).chat_on);
         }
 

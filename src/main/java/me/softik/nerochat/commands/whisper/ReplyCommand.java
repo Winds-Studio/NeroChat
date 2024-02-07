@@ -13,8 +13,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReplyCommand implements NeroChatCommand {
 
-    private final NeroChat plugin;
-
     @Override
     public String label() {
         return "reply";
@@ -32,16 +30,16 @@ public class ReplyCommand implements NeroChatCommand {
             return false;
         }
 
-        Optional<CommandSender> lastMessagedOf = plugin.getCacheTool().getLastMessagedOf(sender);
+        Optional<CommandSender> lastMessagedOf = NeroChat.getCacheTool().getLastMessagedOf(sender);
 
         if (!lastMessagedOf.isPresent()) {
             sender.sendMessage(NeroChat.getLang(sender).not_online);
             return true;
         }
 
-        if (plugin.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {
+        if (NeroChat.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {
             sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
-        } else if (plugin.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
+        } else if (NeroChat.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
             sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
         } else {
             CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 0), lastMessagedOf.get());

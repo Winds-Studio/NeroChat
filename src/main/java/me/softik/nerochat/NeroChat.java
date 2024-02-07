@@ -30,18 +30,17 @@ import java.util.zip.ZipEntry;
 @Getter
 public final class NeroChat extends JavaPlugin implements Listener {
 
-    @Getter
-    private static NeroChat instance;
+    @Getter private static NeroChat instance;
     private static Config config;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
     private static Metrics metrics;
 
-    private final TempDataTool tempDataTool = new TempDataTool(this);
-    private final SoftIgnoreTool softignoreTool = new SoftIgnoreTool(this);
-    private final CacheTool cacheTool = new CacheTool(this);
-    private final IgnoreTool ignoreTool = new IgnoreTool(this);
-    private final ConfigTool configTool = new ConfigTool(this);
+    @Getter private static TempDataTool tempDataTool;
+    @Getter private static SoftIgnoreTool softignoreTool;
+    @Getter private static CacheTool cacheTool;
+    @Getter private static IgnoreTool ignoreTool;
+    @Getter private static ConfigTool configTool;
 
     @Override
     public void onEnable() {
@@ -58,6 +57,14 @@ public final class NeroChat extends JavaPlugin implements Listener {
         logger.info("╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝░╚════╝░░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░");
         logger.info("                                                             ");
 
+        logger.info("Loading toolset");
+        tempDataTool = new TempDataTool(this);
+        softignoreTool = new SoftIgnoreTool(this);
+        cacheTool = new CacheTool(this);
+        ignoreTool = new IgnoreTool();
+        configTool = new ConfigTool(this);
+        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+
         logger.info("Loading translations");
         reloadLang();
 
@@ -66,9 +73,6 @@ public final class NeroChat extends JavaPlugin implements Listener {
 
         logger.info("Registering commands");
         NeroChatCommand.reloadCommands();
-
-        logger.info("Registering listeners");
-        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 
         reloadMetrics();
 

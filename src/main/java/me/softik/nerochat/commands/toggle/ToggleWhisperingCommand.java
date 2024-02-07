@@ -31,13 +31,13 @@ public class ToggleWhisperingCommand implements NeroChatCommand {
             return true;
         }
 
-        Player player = (Player) sender;
+        final Player player = (Player) sender;
 
-        if (plugin.getTempDataTool().isWhisperingEnabled(player)) {
-            plugin.getTempDataTool().setWhisperingEnabled(player, false);
+        if (NeroChat.getTempDataTool().isWhisperingEnabled(player)) {
+            NeroChat.getTempDataTool().setWhisperingEnabled(player, false);
             player.sendMessage(NeroChat.getLang(player).pm_off);
         } else {
-            plugin.getTempDataTool().setWhisperingEnabled(player, true);
+            NeroChat.getTempDataTool().setWhisperingEnabled(player, true);
             player.sendMessage(NeroChat.getLang(player).pm_on);
         }
 

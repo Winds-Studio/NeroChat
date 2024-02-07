@@ -31,14 +31,15 @@ public interface NeroChatCommand extends CommandExecutor, TabCompleter {
         NeroChat plugin = NeroChat.getInstance();
         commands.add(new NeroChatCmd(plugin));
         commands.add(new HardIgnoreCommand(plugin));
-        commands.add(new IgnoreListCommand(plugin));
-        commands.add(new ToggleChatCommand(plugin));
+        commands.add(new IgnoreListCommand());
+        commands.add(new ToggleChatCommand());
         commands.add(new ToggleWhisperingCommand(plugin));
-        commands.add(new LastCommand(plugin));
-        commands.add(new ReplyCommand(plugin));
+        commands.add(new LastCommand());
+        commands.add(new ReplyCommand());
         commands.add(new WhisperCommand(plugin));
 
         CommandMap commandMap = plugin.getServer().getCommandMap();
+
         for (NeroChatCommand command : commands) {
             plugin.getCommand(command.label()).unregister(commandMap);
             plugin.getCommand(command.label()).setExecutor(command);

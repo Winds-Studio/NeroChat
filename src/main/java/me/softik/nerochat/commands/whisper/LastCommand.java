@@ -1,20 +1,15 @@
 package me.softik.nerochat.commands.whisper;
 
-import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.tools.CommonTool;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 public class LastCommand implements NeroChatCommand {
-
-    private final NeroChat plugin;
 
     @Override
     public String label() {
@@ -33,12 +28,12 @@ public class LastCommand implements NeroChatCommand {
             return false;
         }
 
-        Optional<CommandSender> lastSentTo = plugin.getCacheTool().getLastSentTo(sender);
+        Optional<CommandSender> lastSentTo = NeroChat.getCacheTool().getLastSentTo(sender);
 
         if (lastSentTo.isPresent()) {
-            if (plugin.getIgnoreTool().isIgnored(sender, lastSentTo.get())) {
+            if (NeroChat.getIgnoreTool().isIgnored(sender, lastSentTo.get())) {
                 sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
-            } else if (plugin.getIgnoreTool().isIgnored(lastSentTo.get(), sender)) {
+            } else if (NeroChat.getIgnoreTool().isIgnored(lastSentTo.get(), sender)) {
                 sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
             } else {
                 CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 0), lastSentTo.get());
@@ -46,12 +41,12 @@ public class LastCommand implements NeroChatCommand {
             return true;
         }
 
-        Optional<CommandSender> lastMessagedOf = plugin.getCacheTool().getLastMessagedOf(sender);
+        Optional<CommandSender> lastMessagedOf = NeroChat.getCacheTool().getLastMessagedOf(sender);
 
         if (lastMessagedOf.isPresent()) {
-            if (plugin.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {
+            if (NeroChat.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {
                 sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
-            } else if (plugin.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
+            } else if (NeroChat.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
                 sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
             } else {
                 CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 0), lastMessagedOf.get());
@@ -59,7 +54,7 @@ public class LastCommand implements NeroChatCommand {
             return true;
         }
 
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NeroChat.getLang(sender).not_online));
+        sender.sendMessage(NeroChat.getLang(sender).not_online);
         return true;
     }
 }
