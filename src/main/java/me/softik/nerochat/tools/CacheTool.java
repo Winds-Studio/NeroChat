@@ -3,7 +3,6 @@ package me.softik.nerochat.tools;
 import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.models.UniqueSender;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,8 +17,8 @@ public class CacheTool {
     private final NeroChat plugin;
 
     public void cacheLastSenderReceiver(CommandSender sender, CommandSender receiver) {
-        final UUID senderUUID = indexAndGetUUID(sender);
-        final UUID receiverUUID = indexAndGetUUID(receiver);
+        final UUID senderUUID = getUUIDThenIndex(sender);
+        final UUID receiverUUID = getUUIDThenIndex(receiver);
         map.get(senderUUID).sentTo = receiverUUID;
         map.get(receiverUUID).messagedOf = senderUUID;
     }
@@ -31,9 +30,9 @@ public class CacheTool {
      * @return The last person the player sent a message to.
      */
     public Optional<CommandSender> getLastSentTo(CommandSender sender) {
-        UUID sentTo = map.get(indexAndGetUUID(sender)).sentTo;
-        Player nullablePlayer = Bukkit.getPlayer(sentTo);
-
+        final UUID sentTo = map.get(getUUIDThenIndex(sender)).sentTo;
+        if (sentTo == null) return Optional.empty();
+        final Player nullablePlayer = plugin.getServer().getPlayer(sentTo);
         if (nullablePlayer == null) {
             return Optional.ofNullable(UniqueSender.byUUID(sentTo));
         } else {
@@ -48,7 +47,7 @@ public class CacheTool {
      * @return The last person the player was messaged from.
      */
     public Optional<CommandSender> getLastMessagedOf(CommandSender sender) {
-        final UUID messagedOf = map.get(indexAndGetUUID(sender)).messagedOf;
+        final UUID messagedOf = map.get(getUUIDThenIndex(sender)).messagedOf;
         if (messagedOf == null) return Optional.empty();
         final Player nullablePlayer = plugin.getServer().getPlayer(messagedOf);
         if (nullablePlayer == null) {
@@ -58,7 +57,7 @@ public class CacheTool {
         }
     }
 
-    private UUID indexAndGetUUID(CommandSender sender) {
+    private UUID getUUIDThenIndex(CommandSender sender) {
         final UUID uuid = new UniqueSender(sender).getUniqueId();
         if (!map.containsKey(uuid)) {
             map.put(uuid, new PlayerData());
