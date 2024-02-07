@@ -15,7 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,28 +43,23 @@ public class IgnoreListCommand implements NeroChatCommand {
             return true;
         }
 
-        Player player = (Player) sender;
-        List<String> list = new ArrayList<>();
+        final Player player = (Player) sender;
+        final Map<OfflinePlayer, IgnoreTool.IgnoreType> ignored = ignoreTool.getIgnoredPlayers(player);
 
-        for (OfflinePlayer offlinePlayer : ignoreTool.getIgnoredPlayers(player).keySet()) {
-            list.add(offlinePlayer.getName());
-        }
-
-        if (list.isEmpty()) {
+        if (ignored.keySet().isEmpty()) {
             player.sendMessage(NeroChat.getLang(sender).no_one_ignored);
             return true;
         }
 
         if (args.length == 0) {
-            showList(1, player);
+            showList(1, player, ignored);
             return true;
         }
 
         try {
             int page = Integer.parseInt(args[0]);
-
-            if (page < ignoreTool.getIgnoredPlayers(player).size()) {
-                showList(page, player);
+            if (page < ignored.size()) {
+                showList(page, player, ignored);
             } else {
                 player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).page_does_not_exist);
             }
@@ -76,57 +70,57 @@ public class IgnoreListCommand implements NeroChatCommand {
         return true;
     }
 
-    private void showList(int page, Player player) {
-        int maxValue = page * NeroChat.getConfiguration().ignore_list_size;
-        int minValue = maxValue - NeroChat.getConfiguration().ignore_list_size;
-
-        Map<OfflinePlayer, IgnoreTool.IgnoreType> map = ignoreTool.getIgnoredPlayers(player);
-
-        int allPages = IntMath.divide(map.size(), NeroChat.getConfiguration().ignore_list_size, RoundingMode.CEILING);
-
+    private void showList(int page, Player player, Map<OfflinePlayer, IgnoreTool.IgnoreType> ignored) {
         ComponentBuilder navigation = new ComponentBuilder("").color(ChatColor.GOLD);
-        navigation.append("[<]").color(page > 1 ? ChatColor.AQUA : ChatColor.GRAY);
 
+        navigation.append("[<]").color(page > 1 ? ChatColor.AQUA : ChatColor.GRAY);
         if (page > 1) {
-            navigation.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"+label()+" "+ (page - 1)));
-            navigation.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to go to the previous page!").color(ChatColor.GOLD).create()));
+            navigation.event(new ClickEvent(
+                    ClickEvent.Action.RUN_COMMAND,
+                    "/" + label() + " " + (page - 1)
+            ));
+            navigation.event(new HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
+                    new ComponentBuilder("Click to go to the previous page!").color(ChatColor.GOLD).create()
+            ));
         }
 
+        final int allPages = IntMath.divide(ignored.size(), NeroChat.getConfiguration().ignore_list_size, RoundingMode.CEILING);
         navigation.append(" " + page + "/" + allPages + " ").reset().color(ChatColor.GOLD);
 
         navigation.append("[>]").color(allPages > page ? ChatColor.AQUA : ChatColor.GRAY);
-
         if (allPages > page) {
-            navigation.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/"+label()+" " + (page + 1)));
-            navigation.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to go to the next page!").color(ChatColor.GOLD).create()));
+            navigation.event(new ClickEvent(
+                    ClickEvent.Action.RUN_COMMAND,
+                    "/" + label() + " " + (page + 1)
+            ));
+            navigation.event(new HoverEvent(
+                    HoverEvent.Action.SHOW_TEXT,
+                    new ComponentBuilder("Click to go to the next page!").color(ChatColor.GOLD).create()
+            ));
         }
 
         player.spigot().sendMessage(navigation.create());
 
+        int maxValue = page * NeroChat.getConfiguration().ignore_list_size;
+        int minValue = maxValue - NeroChat.getConfiguration().ignore_list_size;
         int i = 0;
 
-        for (Map.Entry<OfflinePlayer, IgnoreTool.IgnoreType> entry : map.entrySet()) {
+        for (Map.Entry<OfflinePlayer, IgnoreTool.IgnoreType> entry : ignored.entrySet()) {
             if (i >= minValue && i < maxValue) {
-                ComponentBuilder playerBuilder = new ComponentBuilder(entry.getKey().getName());
-
-                playerBuilder.append(" ").reset();
-
-                playerBuilder.append("[");
-
-                playerBuilder.color(ChatColor.GRAY);
+                ComponentBuilder ignored_player_formatted = new ComponentBuilder(entry.getKey().getName())
+                        .append(" ").reset().append("[").color(ChatColor.GRAY);
 
                 if (entry.getValue() == IgnoreTool.IgnoreType.HARD) {
-                    playerBuilder.append("Ｘ");
-
-                    playerBuilder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ignore " + ChatColor.stripColor(entry.getKey().getName())));
+                    ignored_player_formatted.append("Ｘ").event(new ClickEvent(
+                            ClickEvent.Action.RUN_COMMAND,
+                            "/ignore " + ChatColor.stripColor(entry.getKey().getName())
+                    ));
                 }
-                playerBuilder.color(ChatColor.RED);
 
-                playerBuilder.append("]").reset();
+                ignored_player_formatted.color(ChatColor.RED).append("]").reset().color(ChatColor.GRAY);
 
-                playerBuilder.color(ChatColor.GRAY);
-
-                player.spigot().sendMessage(playerBuilder.create());
+                player.spigot().sendMessage(ignored_player_formatted.create());
             }
 
             i++;
