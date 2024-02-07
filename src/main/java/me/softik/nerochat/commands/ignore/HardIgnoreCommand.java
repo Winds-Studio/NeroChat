@@ -54,7 +54,12 @@ public class HardIgnoreCommand implements NeroChatCommand {
 
         Optional<Player> ignored = CommonTool.getPlayer(args[0]);
 
-        if (ignored.isPresent() && ignored.get() == sender) {
+        if (!ignored.isPresent()) {
+            sender.sendMessage(NeroChat.getLang(sender).usage + " "+label()+" " + NeroChat.getLang(sender).player_argument);
+            return true;
+        }
+
+        if (ignored.get() == sender) {
             player.sendMessage(NeroChat.getLang(player).ignore_yourself);
             return true;
         }

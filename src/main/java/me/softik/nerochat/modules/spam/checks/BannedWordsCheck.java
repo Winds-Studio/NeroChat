@@ -24,7 +24,7 @@ public class BannedWordsCheck implements SpamCheck, Listener {
         this.violationIncrement = config.getDouble("anti-spam.checks.banned-words.violations-per-detect", 10.0);
         this.logIsEnabled = config.getBoolean("anti-spam.checks.banned-words.log-detect", true);
         this.isCaseSensitive = config.getBoolean("anti-spam.checks.banned-words.case-sensitive", false);
-        this.bannedWords = config.getListFile("banned-words.yml", "words-or-phrases",
+        this.bannedWords = config.getListFile("antispam-words.yml", "words-or-phrases",
                 Collections.singletonList("what's 2+2"),
                 "These are checked using a simple String#contains method")
                 .stream()

@@ -29,11 +29,11 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
     public RegexFilterPublic() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        this.do_logging = config.getBoolean("regex-filter.public-chat.logging", false);
-        this.notify_player = config.getBoolean("regex-filter.public-chat.notify-player", true);
-        this.silent_mode = config.getBoolean("regex-filter.public-chat.silent-mode", true);
-        this.case_sensitive = config.getBoolean("regex-filter.public-chat.case-sensitive", false);
-        this.banned_regex = config.getList("regex-filter.public-chat.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
+        this.do_logging = config.getBoolean("audit.regex-filter.public-chat.logging", false);
+        this.notify_player = config.getBoolean("audit.regex-filter.public-chat.notify-player", true);
+        this.silent_mode = config.getBoolean("audit.regex-filter.public-chat.silent-mode", true);
+        this.case_sensitive = config.getBoolean("audit.regex-filter.public-chat.case-sensitive", false);
+        this.banned_regex = config.getList("audit.regex-filter.public-chat.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
                         "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
                 .stream()
                 .map(regex -> case_sensitive ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
@@ -53,7 +53,7 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("regex-filter.public-chat.enable", false);
+        return NeroChat.getConfiguration().getBoolean("audit.regex-filter.public-chat.enable", false);
     }
 
     @Override

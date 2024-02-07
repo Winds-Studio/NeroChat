@@ -20,10 +20,10 @@ public class RegexCheck implements SpamCheck, Listener {
     protected RegexCheck() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.getMaster().addComment("anti-spam.checks.banned-regex.enable", "Configure regex list in banned-regex.yml!");
+        config.getMaster().addComment("anti-spam.checks.regex.enable", "Configure regex list in banned-regex.yml!");
         this.violationIncrement = config.getDouble("anti-spam.checks.regex.violations-per-detect", 10.0);
         this.logIsEnabled = config.getBoolean("anti-spam.checks.regex.log", true);
-        this.bannedRegex = config.getListFile("spam-regex.yml", "regex-list",
+        this.bannedRegex = config.getListFile("antispam-regex.yml", "regex-list",
                         Collections.singletonList("^This is a(.*)banned message"))
                 .stream()
                 .map(regex -> Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
@@ -32,7 +32,7 @@ public class RegexCheck implements SpamCheck, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("anti-spam.checks.banned-regex.enable", false);
+        return NeroChat.getConfiguration().getBoolean("anti-spam.checks.regex.enable", false);
     }
 
     @Override

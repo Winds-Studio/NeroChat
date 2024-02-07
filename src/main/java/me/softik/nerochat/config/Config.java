@@ -46,7 +46,7 @@ public class Config {
                 "Enable / Disable notification of a new version of the plugin. It is recommended to turn this on.");
         display_nickname_color = getBoolean("general.display-nickname-color", true,
                 "Enable/disable the display of the player's nickname color.");
-        prefix = ChatColor.translateAlternateColorCodes('&', getString("general.prefix", "[&2NeroChat&r] &6"));
+        prefix = ChatColor.translateAlternateColorCodes('&', getString("general.plugin-prefix", "[&2NeroChat&r] &6"));
         console_name = ChatColor.translateAlternateColorCodes('&', getString("general.console-name", "[console]",
                 "Defines the sender's name when sending messages from the server console."));
         chat_format = ChatColor.translateAlternateColorCodes('&', getString("general.chat-format", "<%player%&r>",
@@ -61,7 +61,7 @@ public class Config {
         defaults.put("GREEN", ">");
         defaults.put("BOLD", "**");
         defaults.put("ITALIC", "*");
-        ConfigSection prefix_section = getConfigSection("Prefixes", defaults);
+        ConfigSection prefix_section = getConfigSection("prefixes", defaults);
         final List<String> keys = prefix_section.getKeys(false);
         color_prefixes = new HashSet<>(keys.size());
         for (final String configuredColor : keys) {
