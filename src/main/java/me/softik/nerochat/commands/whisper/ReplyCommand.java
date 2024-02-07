@@ -1,17 +1,22 @@
 package me.softik.nerochat.commands.whisper;
 
-import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.tools.CommonTool;
+import me.softik.nerochat.tools.IgnoreTool;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 public class ReplyCommand implements NeroChatCommand {
+
+    private final IgnoreTool ignoreTool;
+
+    public ReplyCommand() {
+        this.ignoreTool = NeroChat.getIgnoreTool();
+    }
 
     @Override
     public String label() {
@@ -37,9 +42,9 @@ public class ReplyCommand implements NeroChatCommand {
             return true;
         }
 
-        if (NeroChat.getIgnoreTool().isIgnored(sender, lastMessagedOf.get())) {
+        if (ignoreTool.isIgnored(sender, lastMessagedOf.get())) {
             sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_me);
-        } else if (NeroChat.getIgnoreTool().isIgnored(lastMessagedOf.get(), sender)) {
+        } else if (ignoreTool.isIgnored(lastMessagedOf.get(), sender)) {
             sender.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(sender).ignore_you);
         } else {
             CommonTool.sendWhisperTo(sender, CommonTool.mergeArgs(args, 0), lastMessagedOf.get());

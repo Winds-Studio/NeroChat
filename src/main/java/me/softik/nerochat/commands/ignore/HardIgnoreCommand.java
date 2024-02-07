@@ -1,6 +1,5 @@
 package me.softik.nerochat.commands.ignore;
 
-import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.tools.CommonTool;
@@ -14,10 +13,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class HardIgnoreCommand implements NeroChatCommand {
 
     private final NeroChat plugin;
+    private final ConfigTool configTool;
+
+    public HardIgnoreCommand() {
+        this.plugin = NeroChat.getInstance();
+        this.configTool = NeroChat.getConfigTool();
+    }
 
     @Override
     public String label() {
@@ -64,14 +68,15 @@ public class HardIgnoreCommand implements NeroChatCommand {
             return true;
         }
 
-        ConfigTool.HardReturn type = NeroChat.getConfigTool().hardIgnorePlayer(player, ignored.get());
-
-        if (type == ConfigTool.HardReturn.IGNORE) {
-            player.sendMessage(NeroChat.getLang(sender).ignore
-                    .replace("%player%", ChatColor.stripColor(ignored.get().getDisplayName())));
-        } else if (type == ConfigTool.HardReturn.UN_IGNORE) {
-            player.sendMessage(NeroChat.getLang(sender).un_ignore
-                    .replace("%player%", ChatColor.stripColor(ignored.get().getDisplayName())));
+        switch (configTool.hardIgnorePlayer(player, ignored.get())) {
+            case IGNORE:
+                player.sendMessage(NeroChat.getLang(sender).ignore
+                        .replace("%player%", ChatColor.stripColor(ignored.get().getDisplayName())));
+                break;
+            case UN_IGNORE:
+                player.sendMessage(NeroChat.getLang(sender).un_ignore
+                        .replace("%player%", ChatColor.stripColor(ignored.get().getDisplayName())));
+                break;
         }
 
         return true;

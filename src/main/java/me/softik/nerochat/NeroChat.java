@@ -63,7 +63,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
         cacheTool = new CacheTool(this);
         ignoreTool = new IgnoreTool();
         configTool = new ConfigTool(this);
-        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(), this);
 
         logger.info("Loading translations");
         reloadLang();

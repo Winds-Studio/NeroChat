@@ -13,12 +13,10 @@ import java.util.stream.Collectors;
 
 public class NeroChatCmd implements NeroChatCommand {
 
-    private final NeroChat plugin;
     private final List<SubCommand> subCommands;
     private final List<String> tabCompleter;
 
-    public NeroChatCmd(NeroChat plugin) {
-        this.plugin = plugin;
+    public NeroChatCmd() {
         this.subCommands = Arrays.asList(new ReloadSubCmd(), new VersionSubCmd());
         this.tabCompleter = subCommands.stream().map(SubCommand::label).sorted().collect(Collectors.toList());
     }
@@ -55,7 +53,7 @@ public class NeroChatCmd implements NeroChatCommand {
         if (!sender.hasPermission("nerochat.*")) return;
 
         sender.sendMessage(ChatColor.GRAY + "-----------------------------------------------------");
-        sender.sendMessage(ChatColor.GOLD + plugin.getDescription().getName() + " Commands");
+        sender.sendMessage(ChatColor.GOLD + NeroChat.getInstance().getDescription().getName() + " Commands");
         sender.sendMessage(ChatColor.GRAY + "-----------------------------------------------------");
         subCommands.forEach(subCommand -> sender.sendMessage(subCommand.syntax() + " - " + subCommand.description()));
         sender.sendMessage(ChatColor.GRAY + "-----------------------------------------------------");
