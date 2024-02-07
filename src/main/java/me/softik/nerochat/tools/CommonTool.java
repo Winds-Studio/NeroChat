@@ -33,7 +33,7 @@ public class CommonTool {
         }
 
         if (!sender.hasPermission("nerochat.bypass")) {
-            if (!NeroChat.getInstance().getTempDataTool().isWhisperingEnabled(receiver)) {
+            if (!NeroChat.getTempDataTool().isWhisperingEnabled(receiver)) {
                 sender.sendMessage(NeroChat.getLang(sender).player_pm_off);
                 return;
             }
