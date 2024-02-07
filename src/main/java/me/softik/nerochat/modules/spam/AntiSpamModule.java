@@ -3,6 +3,7 @@ package me.softik.nerochat.modules.spam;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.api.NeroChatEvent;
 import me.softik.nerochat.api.NeroChatReceiveEvent;
 import me.softik.nerochat.api.NeroWhisperEvent;
 import me.softik.nerochat.config.Config;
@@ -101,6 +102,29 @@ public class AntiSpamModule implements NeroChatModule, Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private void onChat(NeroChatEvent event) {
+        event.setMessage(stripSpaces ? event.getMessage().trim() : event.getMessage());
+
+        Player sender = event.getPlayer();
+        ChatMessageData chatMessageData = new ChatMessageData(sender.getUniqueId(), event.getMessage());
+
+        Boolean isSpammingCache = detectionCache.getIfPresent(chatMessageData);
+        if (isSpammingCache != null) {
+            // We already checked this message, no need to check again
+            if (isSpammingCache) {
+                event.setCancelled(true);
+            }
+            return;
+        }
+
+        boolean isSpamming = isConsideredSpamming(sender, event.getMessage());
+        detectionCache.put(chatMessageData, isSpamming);
+        if (isSpamming) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onChatReceive(NeroChatReceiveEvent event) {
         event.setMessage(stripSpaces ? event.getMessage().trim() : event.getMessage());
 
@@ -126,7 +150,6 @@ public class AntiSpamModule implements NeroChatModule, Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onCommand(NeroWhisperEvent event) {
         if (!(event.getSender() instanceof Player)) return;
-        if (!(event.getReceiver() instanceof Player)) return;
 
         final Player sender = (Player) event.getSender();
 

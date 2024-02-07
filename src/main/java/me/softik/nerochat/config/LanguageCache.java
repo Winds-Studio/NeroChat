@@ -35,14 +35,14 @@ public class LanguageCache {
         ignore_you = getTranslation("ignore-you", "You are ignoring this player.");
         not_online = getTranslation("not-online", "This player is not online.");
         player_only = getTranslation("player-only", "You need to be a player to do ");
-        whisper_from = getTranslation("Whisper.from", "&d%player%&d whispers: %message%");
-        whisper_to = getTranslation("Whisper.to", "&dYou whisper to %player%&d: %message%");
+        whisper_from = getTranslation("whisper.from", "&d%player%&d whispers: %message%");
+        whisper_to = getTranslation("whisper.to", "&dYou whisper to %player%&d: %message%");
         ignore_yourself = getTranslation("ignore-yourself", "You can't ignore yourself.");
         pm_yourself = getTranslation("pm-yourself", "You cannot write private messages to yourself.");
         ignore = getTranslation("ignore", "&6You ignore a player &3%player%");
         un_ignore = getTranslation("un-ignore", "&6You are no longer ignoring a player &3%player%");
         no_one_ignored = getTranslation("no-one-ignored", "You are not ignoring anyone.");
-        page_does_not_exist = getTranslation("page-doesent-exist", "This page doesn't exist.");
+        page_does_not_exist = getTranslation("page-does-not-exist", "This page doesn't exist.");
         error = getTranslation("error", "There's been a mistake! Please contact the administrator.");
         chat_on = getTranslation("chat-on", "You have enabled public chat.");
         chat_off = getTranslation("chat-off", "You turned off public chat.");

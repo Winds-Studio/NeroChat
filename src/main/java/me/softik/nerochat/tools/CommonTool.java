@@ -75,7 +75,7 @@ public class CommonTool {
     }
 
     public static String getPrefix() {
-        return NeroChat.getConfiguration().prefix;
+        return NeroChat.getConfiguration().plugin_prefix;
     }
 
     public static ChatColor getChatColorFor(String message, Player player) {

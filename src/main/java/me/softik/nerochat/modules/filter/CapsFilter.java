@@ -55,8 +55,7 @@ public class CapsFilter implements NeroChatModule, Listener {
         if (message.isEmpty()) return;
 
         if (Math.round((countCaps(message) * 100.0) / message.replaceAll("\\s+", "").length()) > max_caps_percent) {
-            String newMessage = formatMessage(message);
-            event.setMessage(newMessage);
+            event.setMessage(formatMessage(message));
         }
     }
 

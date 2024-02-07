@@ -17,9 +17,9 @@ public class Config {
     private final ConfigFile config;
 
     public final Set<ColoredPrefix> color_prefixes;
-    public final String default_lang, chat_format, console_name, prefix;
+    public final String default_lang, chat_format, console_name, plugin_prefix;
     public final int ignore_list_size;
-    public final boolean auto_lang, bstats_metrics, notify_updates, display_nickname_color;
+    public final boolean auto_lang, bstats_metrics, display_nickname_color;
 
     public Config() throws Exception {
         plugin = NeroChat.getInstance();
@@ -42,11 +42,9 @@ public class Config {
         // General
         bstats_metrics = getBoolean("general.bstats-metrics", true,
                 "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
-        notify_updates = getBoolean("general.notify-updates", false,
-                "Enable / Disable notification of a new version of the plugin. It is recommended to turn this on.");
         display_nickname_color = getBoolean("general.display-nickname-color", true,
                 "Enable/disable the display of the player's nickname color.");
-        prefix = ChatColor.translateAlternateColorCodes('&', getString("general.plugin-prefix", "[&2NeroChat&r] &6"));
+        plugin_prefix = ChatColor.translateAlternateColorCodes('&', getString("general.plugin-prefix", "[&2NeroChat&r] &6"));
         console_name = ChatColor.translateAlternateColorCodes('&', getString("general.console-name", "[console]",
                 "Defines the sender's name when sending messages from the server console."));
         chat_format = ChatColor.translateAlternateColorCodes('&', getString("general.chat-format", "<%player%&r>",
