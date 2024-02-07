@@ -35,6 +35,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
     private static Config config;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
+    private static Metrics metrics;
 
     private final TempDataTool tempDataTool = new TempDataTool(this);
     private final SoftIgnoreTool softignoreTool = new SoftIgnoreTool(this);
@@ -69,12 +70,7 @@ public final class NeroChat extends JavaPlugin implements Listener {
         logger.info("Registering listeners");
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
 
-        if (config.bstats_metrics) {
-            logger.info("Enabling metrics");
-            new Metrics(this, 18215);
-        } else {
-            logger.info("Not enabling metrics");
-        }
+        reloadMetrics();
 
         logger.info("Ready!");
     }
@@ -83,6 +79,22 @@ public final class NeroChat extends JavaPlugin implements Listener {
         reloadLang();
         reloadConfiguration();
         NeroChatCommand.reloadCommands();
+        reloadMetrics();
+    }
+
+    public void reloadMetrics() {
+        if (metrics == null) {
+            if (config.bstats_metrics) {
+                logger.info("Enabling metrics");
+                metrics = new Metrics(this, 18215);
+            }
+        } else {
+            if (!config.bstats_metrics) {
+                logger.info("Disabling metrics");
+                metrics.shutdown();
+                metrics = null;
+            }
+        }
     }
 
     public void reloadConfiguration() {
