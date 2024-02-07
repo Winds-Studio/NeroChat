@@ -21,6 +21,12 @@ import java.util.Map;
 
 public class IgnoreListCommand implements NeroChatCommand {
 
+    private final IgnoreTool ignoreTool;
+
+    public IgnoreListCommand() {
+        this.ignoreTool = NeroChat.getIgnoreTool();
+    }
+
     @Override
     public String label() {
         return "ignorelist";
@@ -41,7 +47,7 @@ public class IgnoreListCommand implements NeroChatCommand {
         Player player = (Player) sender;
         List<String> list = new ArrayList<>();
 
-        for (OfflinePlayer offlinePlayer : NeroChat.getIgnoreTool().getIgnoredPlayers(player).keySet()) {
+        for (OfflinePlayer offlinePlayer : ignoreTool.getIgnoredPlayers(player).keySet()) {
             list.add(offlinePlayer.getName());
         }
 
@@ -58,7 +64,7 @@ public class IgnoreListCommand implements NeroChatCommand {
         try {
             int page = Integer.parseInt(args[0]);
 
-            if (page < NeroChat.getIgnoreTool().getIgnoredPlayers(player).size()) {
+            if (page < ignoreTool.getIgnoredPlayers(player).size()) {
                 showList(page, player);
             } else {
                 player.sendMessage(CommonTool.getPrefix() + NeroChat.getLang(player).page_does_not_exist);
@@ -74,7 +80,7 @@ public class IgnoreListCommand implements NeroChatCommand {
         int maxValue = page * NeroChat.getConfiguration().ignore_list_size;
         int minValue = maxValue - NeroChat.getConfiguration().ignore_list_size;
 
-        Map<OfflinePlayer, IgnoreTool.IgnoreType> map = NeroChat.getIgnoreTool().getIgnoredPlayers(player);
+        Map<OfflinePlayer, IgnoreTool.IgnoreType> map = ignoreTool.getIgnoredPlayers(player);
 
         int allPages = IntMath.divide(map.size(), NeroChat.getConfiguration().ignore_list_size, RoundingMode.CEILING);
 
