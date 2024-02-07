@@ -49,8 +49,8 @@ public class CacheTool {
      */
     public Optional<CommandSender> getLastMessagedOf(CommandSender sender) {
         final UUID messagedOf = map.get(indexAndGetUUID(sender)).messagedOf;
+        if (messagedOf == null) return Optional.empty();
         final Player nullablePlayer = plugin.getServer().getPlayer(messagedOf);
-
         if (nullablePlayer == null) {
             return Optional.ofNullable(UniqueSender.byUUID(messagedOf));
         } else {

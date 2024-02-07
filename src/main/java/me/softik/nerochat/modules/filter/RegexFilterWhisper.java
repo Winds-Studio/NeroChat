@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class RegexFilterWhisper implements NeroChatModule, Listener {
 
     private final Set<Pattern> banned_regex;
-    private final boolean do_logging, notify_player, be_silent, case_sensitive;
+    private final boolean do_logging, notify_player, silent_mode, case_sensitive;
 
     public RegexFilterWhisper() {
         shouldEnable();
@@ -35,7 +35,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
                 "If you don't know how to create them, you can use ChatGPT");
         this.do_logging = config.getBoolean("audit.regex-filter.whisper.logging", false);
         this.notify_player = config.getBoolean("audit.regex-filter.whisper.notify-player", true);
-        this.be_silent = config.getBoolean("audit.regex-filter.whisper.silent-mode", true);
+        this.silent_mode = config.getBoolean("audit.regex-filter.whisper.silent-mode", true);
         this.case_sensitive = config.getBoolean("audit.regex-filter.whisper.case-sensitive", false);
         this.banned_regex = config.getList("audit.regex-filter.whisper.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
                 "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
@@ -80,13 +80,13 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
 
             event.setCancelled(true);
 
-            if (!be_silent && notify_player) {
+            if (!silent_mode && notify_player) {
                 player.sendMessage(NeroChat.getLang(player).player_notify);
             }
 
             final CommandSender receiver = event.getReceiver();
 
-            if (be_silent) {
+            if (silent_mode) {
                 CommonTool.sendSender(player, message, receiver);
             }
 

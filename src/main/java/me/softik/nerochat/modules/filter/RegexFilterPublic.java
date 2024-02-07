@@ -24,14 +24,14 @@ import java.util.stream.Collectors;
 public class RegexFilterPublic implements NeroChatModule, Listener {
 
     private final Set<Pattern> banned_regex;
-    private final boolean do_logging, notify_player, be_silent, case_sensitive;
+    private final boolean do_logging, notify_player, silent_mode, case_sensitive;
 
     public RegexFilterPublic() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
         this.do_logging = config.getBoolean("regex-filter.public-chat.logging", false);
         this.notify_player = config.getBoolean("regex-filter.public-chat.notify-player", true);
-        this.be_silent = config.getBoolean("regex-filter.public-chat.silent-mode", true);
+        this.silent_mode = config.getBoolean("regex-filter.public-chat.silent-mode", true);
         this.case_sensitive = config.getBoolean("regex-filter.public-chat.case-sensitive", false);
         this.banned_regex = config.getList("regex-filter.public-chat.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
                         "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
@@ -75,11 +75,11 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
 
             event.setCancelled(true);
 
-            if (notify_player && !be_silent) {
+            if (notify_player && !silent_mode) {
                 player.sendMessage(NeroChat.getLang(player).player_notify);
             }
 
-            if (be_silent) {
+            if (silent_mode) {
                 CommonTool.sendChatMessage(player, message, player);
             }
 
