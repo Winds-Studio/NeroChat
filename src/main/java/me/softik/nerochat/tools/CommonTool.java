@@ -51,7 +51,7 @@ public class CommonTool {
         sendSender(sender, message, receiver);
         sendReceiver(sender, message, receiver);
 
-        NeroChat.getInstance().getCacheTool().cacheLastSenderReceiver(sender, receiver);
+        NeroChat.getCacheTool().cacheLastSenderReceiver(sender, receiver);
     }
 
     public static void sendSender(CommandSender sender, String message, CommandSender receiver) {

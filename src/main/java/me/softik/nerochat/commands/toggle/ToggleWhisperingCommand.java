@@ -1,6 +1,5 @@
 package me.softik.nerochat.commands.toggle;
 
-import lombok.RequiredArgsConstructor;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import org.bukkit.command.Command;
@@ -9,10 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 public class ToggleWhisperingCommand implements NeroChatCommand {
-
-    private final NeroChat plugin;
 
     @Override
     public String label() {

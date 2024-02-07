@@ -27,13 +27,17 @@ public interface NeroChatCommand extends CommandExecutor, TabCompleter {
 
     static void reloadCommands() {
         commands.clear();
-
         NeroChat plugin = NeroChat.getInstance();
+
+        // nerochat
         commands.add(new NeroChatCmd(plugin));
+        // ignore
         commands.add(new HardIgnoreCommand(plugin));
         commands.add(new IgnoreListCommand());
+        // toggle
         commands.add(new ToggleChatCommand());
-        commands.add(new ToggleWhisperingCommand(plugin));
+        commands.add(new ToggleWhisperingCommand());
+        // whisper
         commands.add(new LastCommand());
         commands.add(new ReplyCommand());
         commands.add(new WhisperCommand(plugin));
