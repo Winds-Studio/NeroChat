@@ -34,28 +34,28 @@ public class Config {
         preStructure();
 
         // Language
-        default_lang = getString("Language.default-language", "en_us",
+        default_lang = getString("language.default-language", "en_us",
                 "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
-        auto_lang = getBoolean("Language.auto-language", true,
+        auto_lang = getBoolean("language.auto-language", true,
                 "Enable / Disable locale based messages.");
 
         // General
-        bstats_metrics = getBoolean("Main.bstats-metrics", true,
+        bstats_metrics = getBoolean("general.bstats-metrics", true,
                 "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
-        notify_updates = getBoolean("Main.notify-updates", false,
+        notify_updates = getBoolean("general.notify-updates", false,
                 "Enable / Disable notification of a new version of the plugin. It is recommended to turn this on.");
-        display_nickname_color = getBoolean("Main.display-nickname-color", true,
+        display_nickname_color = getBoolean("general.display-nickname-color", true,
                 "Enable/disable the display of the player's nickname color.");
-        prefix = ChatColor.translateAlternateColorCodes('&', getString("Main.prefix", "[&2NeroChat&r] &6"));
-        console_name = ChatColor.translateAlternateColorCodes('&', getString("Main.console-name", "[console]",
+        prefix = ChatColor.translateAlternateColorCodes('&', getString("general.prefix", "[&2NeroChat&r] &6"));
+        console_name = ChatColor.translateAlternateColorCodes('&', getString("general.console-name", "[console]",
                 "Defines the sender's name when sending messages from the server console."));
-        chat_format = ChatColor.translateAlternateColorCodes('&', getString("Main.chat-format", "<%player%&r>",
+        chat_format = ChatColor.translateAlternateColorCodes('&', getString("general.chat-format", "<%player%&r>",
                 "Change the format of messages in public chat."));
-        ignore_list_size = getInt("Main.ignore-list-size", 9,
+        ignore_list_size = getInt("general.ignore-list-size", 9,
                 "The size of the ignore list in pages. It is not recommended to set more than 5.");
 
         // Prefixes
-        config.addComment("Prefixes", "To use these you need to add the respective permission.\n" +
+        config.addComment("prefixes", "To use these you need to add the respective permission.\n" +
                 "EXAMPLE: Prefixes.BLUE -> nerochat.chatcolor.BLUE");
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("GREEN", ">");
@@ -93,11 +93,10 @@ public class Config {
     }
 
     public void preStructure() {
-        createTitledSection("Language", "Language");
-        createTitledSection("General", "Main");
-        createTitledSection("Prefixes", "Prefixes");
-        createTitledSection("CapsFilter", "CapsFilter");
-        createTitledSection("RegexFilter", "RegexFilter");
+        createTitledSection("Language", "language");
+        createTitledSection("General", "general");
+        createTitledSection("Prefixes", "prefixes");
+        createTitledSection("Audit", "audit");
         createTitledSection("AntiSpam", "anti-spam");
     }
 

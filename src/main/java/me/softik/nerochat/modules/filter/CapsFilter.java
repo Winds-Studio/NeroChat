@@ -15,14 +15,14 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class CapsFilter implements NeroChatModule, Listener {
 
-    private final double maxCapsPercentage;
+    private final double max_caps_percent;
 
     public CapsFilter() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.getMaster().addComment("CapsFilter.Enabled",
+        config.getMaster().addComment("audit.caps-filter.enable",
                 "Automatic message formatting with a large number of capital letters.");
-        this.maxCapsPercentage = config.getDouble("CapsFilter.Percentage", 50.0);
+        this.max_caps_percent = config.getDouble("audit.caps-filter.percentage", 50.0);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CapsFilter implements NeroChatModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("CapsFilter.Enabled", false);
+        return NeroChat.getConfiguration().getBoolean("audit.caps-filter.enable", false);
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -56,7 +56,7 @@ public class CapsFilter implements NeroChatModule, Listener {
         int messageLength = message.replaceAll("\\s+", "").length();
         int capsPercentage = (int) Math.round((capsCount * 100.0) / messageLength);
 
-        if (capsPercentage > maxCapsPercentage) {
+        if (capsPercentage > max_caps_percent) {
             String newMessage = formatMessage(message);
             event.setMessage(newMessage);
         }
@@ -74,7 +74,7 @@ public class CapsFilter implements NeroChatModule, Listener {
         int messageLength = message.replaceAll("\\s+", "").length();
         int capsPercentage = (int) Math.round((capsCount * 100.0) / messageLength);
 
-        if (capsPercentage > maxCapsPercentage) {
+        if (capsPercentage > max_caps_percent) {
             event.setMessage(formatMessage(message));
         }
     }

@@ -1,6 +1,6 @@
 name: NeroChat
 version: '${project.version}'
-api-version: '1.12'
+api-version: '1.13'
 main: me.softik.nerochat.NeroChat
 authors: [ _Soft1k_, xGinko ]
 description: An advanced chat plugin for survival/anarchy servers.

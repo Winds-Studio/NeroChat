@@ -24,19 +24,19 @@ import java.util.stream.Collectors;
 public class RegexFilterPublic implements NeroChatModule, Listener {
 
     private final Set<Pattern> bannedRegex;
-    private final boolean logIsEnabled, notifyPlayer, silent, caseInsensitive;
+    private final boolean do_logging, notify_player, be_silent, case_sensitive;
 
     public RegexFilterPublic() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        this.logIsEnabled = config.getBoolean("RegexFilter.PublicChat.Logs-Enabled", false);
-        this.notifyPlayer = config.getBoolean("RegexFilter.PublicChat.Player-Notify", true);
-        this.silent = config.getBoolean("RegexFilter.PublicChat.Silent-Mode", true);
-        this.caseInsensitive = config.getBoolean("RegexFilter.PublicChat.Case-Insensitive", true);
-        this.bannedRegex = config.getList("RegexFilter.PublicChat.Banned-Regex", Collections.singletonList("^This is a(.*)banned message"),
+        this.do_logging = config.getBoolean("regex-filter.public-chat.logging", false);
+        this.notify_player = config.getBoolean("regex-filter.public-chat.notify-player", true);
+        this.be_silent = config.getBoolean("regex-filter.public-chat.silent-mode", true);
+        this.case_sensitive = config.getBoolean("regex-filter.public-chat.case-sensitive", false);
+        this.bannedRegex = config.getList("regex-filter.public-chat.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
                         "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
                 .stream()
-                .map(regex -> caseInsensitive ? Pattern.compile(regex, Pattern.CASE_INSENSITIVE) : Pattern.compile(regex))
+                .map(regex -> case_sensitive ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
@@ -53,7 +53,7 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Enabled", false);
+        return NeroChat.getConfiguration().getBoolean("regex-filter.public-chat.enable", false);
     }
 
     @Override
@@ -69,24 +69,24 @@ public class RegexFilterPublic implements NeroChatModule, Listener {
         final String message = event.getMessage();
 
         for (final Pattern bannedRegex : bannedRegex) {
-            if (!bannedRegex.matcher(caseInsensitive ? message.toLowerCase(Locale.ROOT) : message).find()) {
+            if (!bannedRegex.matcher(case_sensitive ? message : message.toLowerCase(Locale.ROOT)).find()) {
                 continue;
             }
 
             event.setCancelled(true);
 
-            if (notifyPlayer && !silent) {
+            if (notify_player && !be_silent) {
                 player.sendMessage(NeroChat.getLang(player).player_notify);
             }
 
-            if (silent) {
+            if (be_silent) {
                 CommonTool.sendChatMessage(player, message, player);
             }
 
-            if (logIsEnabled) {
+            if (do_logging) {
                 StringBuilder sb = new StringBuilder();
                 for (String word : message.split(" ")) {
-                    if (bannedRegex.matcher(caseInsensitive ? word.toLowerCase(Locale.ROOT) : word).find()) {
+                    if (bannedRegex.matcher(case_sensitive ? word : word.toLowerCase(Locale.ROOT)).find()) {
                         sb.append(ChatColor.RED).append(word).append(ChatColor.RESET).append(" ");
                     } else {
                         sb.append(ChatColor.YELLOW).append(word).append(ChatColor.RESET).append(" ");

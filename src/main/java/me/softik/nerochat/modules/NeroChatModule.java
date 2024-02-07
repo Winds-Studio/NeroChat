@@ -27,8 +27,8 @@ public interface NeroChatModule {
         modules.add(new ReadableFormatting());
         modules.add(new CapsFilter());
 
-        SpamCheck.reloadChecks();
         modules.add(new AntiSpamModule());
+        SpamCheck.reloadChecks();
 
         for (NeroChatModule module : modules) {
             if (module.shouldEnable()) module.enable();

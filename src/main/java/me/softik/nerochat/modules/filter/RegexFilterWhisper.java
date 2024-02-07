@@ -25,22 +25,22 @@ import java.util.stream.Collectors;
 public class RegexFilterWhisper implements NeroChatModule, Listener {
 
     private final Set<Pattern> bannedRegex;
-    private final boolean logIsEnabled, notifyPlayer, silent, caseInsensitive;
+    private final boolean do_logging, notify_player, be_silent, case_sensitive;
 
     public RegexFilterWhisper() {
         shouldEnable();
         Config config = NeroChat.getConfiguration();
-        config.getMaster().addComment("RegexFilter.Enabled",
+        config.getMaster().addComment("audit.regex-filter.enable",
                 "Filtering chat messages using regular expressions.\n" +
                 "If you don't know how to create them, you can use ChatGPT");
-        this.logIsEnabled = config.getBoolean("RegexFilter.Whisper.Logs-Enabled", false);
-        this.notifyPlayer = config.getBoolean("RegexFilter.Whisper.Player-Notify", true);
-        this.silent = config.getBoolean("RegexFilter.Whisper.Silent-Mode", true);
-        this.caseInsensitive = config.getBoolean("RegexFilter.Whisper.Case-Insensitive", true);
-        this.bannedRegex = config.getList("RegexFilter.Whisper.Banned-Regex", Collections.singletonList("^This is a(.*)banned message"),
+        this.do_logging = config.getBoolean("audit.regex-filter.whisper.logging", false);
+        this.notify_player = config.getBoolean("audit.regex-filter.whisper.notify-player", true);
+        this.be_silent = config.getBoolean("audit.regex-filter.whisper.silent-mode", true);
+        this.case_sensitive = config.getBoolean("audit.regex-filter.whisper.case-sensitive", false);
+        this.bannedRegex = config.getList("audit.regex-filter.whisper.banned-regex", Collections.singletonList("^This is a(.*)banned message"),
                 "Prevents any message that starts with \"This is a\" and ends with \"banned message\"")
                 .stream()
-                .map(regex -> caseInsensitive ? Pattern.compile(regex, Pattern.CASE_INSENSITIVE) : Pattern.compile(regex))
+                .map(regex -> case_sensitive ? Pattern.compile(regex) : Pattern.compile(regex, Pattern.CASE_INSENSITIVE))
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
@@ -57,7 +57,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
 
     @Override
     public boolean shouldEnable() {
-        return NeroChat.getConfiguration().getBoolean("RegexFilter.PublicChat.Enabled", false);
+        return NeroChat.getConfiguration().getBoolean("audit.regex-filter.whisper.enable", false);
     }
 
     @Override
@@ -74,26 +74,26 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
         final String message = event.getMessage();
 
         for (final Pattern bannedRegex : bannedRegex) {
-            if (!bannedRegex.matcher(caseInsensitive ? message.toLowerCase(Locale.ROOT) : message).find()) {
+            if (!bannedRegex.matcher(case_sensitive ? message : message.toLowerCase(Locale.ROOT)).find()) {
                 continue;
             }
 
             event.setCancelled(true);
 
-            if (notifyPlayer && !silent) {
+            if (!be_silent && notify_player) {
                 player.sendMessage(NeroChat.getLang(player).player_notify);
             }
 
             final CommandSender receiver = event.getReceiver();
 
-            if (silent) {
+            if (be_silent) {
                 CommonTool.sendSender(player, message, receiver);
             }
 
-            if (logIsEnabled) {
+            if (do_logging) {
                 StringBuilder sb = new StringBuilder();
                 for (String word : message.split(" ")) {
-                    if (bannedRegex.matcher(caseInsensitive ? word.toLowerCase(Locale.ROOT) : word).find()) {
+                    if (bannedRegex.matcher(case_sensitive ? word : word.toLowerCase(Locale.ROOT)).find()) {
                         sb.append(ChatColor.RED).append(word).append(ChatColor.RESET).append(" ");
                     } else {
                         sb.append(ChatColor.YELLOW).append(word).append(ChatColor.RESET).append(" ");
