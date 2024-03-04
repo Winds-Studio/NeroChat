@@ -25,7 +25,7 @@ public class LanguageCache {
             NeroChat.getLog().severe("Unable to create lang directory.");
         // Check if the file already exists and save the one from the plugins resources folder if it does not
         if (!langYML.exists())
-            plugin.saveResource("lang" + File.separator + locale + ".yml", false);
+            plugin.saveResource("lang/" + locale + ".yml", false);
         // Finally, load the lang file with configmaster
         lang = ConfigFile.loadConfig(langYML);
 
