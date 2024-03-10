@@ -50,7 +50,7 @@ public class ReadableFormatting implements NeroChatModule, Listener {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (!public_auto_dot && !public_auto_caps) return;
 
@@ -77,7 +77,7 @@ public class ReadableFormatting implements NeroChatModule, Listener {
         event.setMessage(message);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerWhisper(NeroWhisperEvent event) {
         if (!whisper_auto_dot && !whisper_auto_caps) return;
 

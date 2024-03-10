@@ -101,7 +101,7 @@ public class AntiSpamModule implements NeroChatModule, Listener {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onChat(NeroChatEvent event) {
         event.setMessage(stripSpaces ? event.getMessage().trim() : event.getMessage());
 
@@ -124,7 +124,7 @@ public class AntiSpamModule implements NeroChatModule, Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onChatReceive(NeroChatReceiveEvent event) {
         event.setMessage(stripSpaces ? event.getMessage().trim() : event.getMessage());
 
@@ -147,7 +147,7 @@ public class AntiSpamModule implements NeroChatModule, Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onCommand(NeroWhisperEvent event) {
         if (!(event.getSender() instanceof Player)) return;
 

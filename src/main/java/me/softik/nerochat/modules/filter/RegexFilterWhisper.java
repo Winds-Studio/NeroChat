@@ -65,7 +65,7 @@ public class RegexFilterWhisper implements NeroChatModule, Listener {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onWhisper(NeroWhisperEvent event) {
         if (event.getSender().hasPermission("nerochat.RegexFilterBypass")) return;
         if (!(event.getSender() instanceof Player)) return;
