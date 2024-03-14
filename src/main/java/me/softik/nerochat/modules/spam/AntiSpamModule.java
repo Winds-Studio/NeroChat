@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,33 +103,10 @@ public class AntiSpamModule implements NeroChatModule, Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    private void onChat(NeroChatEvent event) {
+    private void onChat(AsyncPlayerChatEvent event) {
         event.setMessage(stripSpaces ? event.getMessage().trim() : event.getMessage());
 
         Player sender = event.getPlayer();
-        ChatMessageData chatMessageData = new ChatMessageData(sender.getUniqueId(), event.getMessage());
-
-        Boolean isSpammingCache = detectionCache.getIfPresent(chatMessageData);
-        if (isSpammingCache != null) {
-            // We already checked this message, no need to check again
-            if (isSpammingCache) {
-                event.setCancelled(true);
-            }
-            return;
-        }
-
-        boolean isSpamming = isConsideredSpamming(sender, event.getMessage());
-        detectionCache.put(chatMessageData, isSpamming);
-        if (isSpamming) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    private void onChatReceive(NeroChatReceiveEvent event) {
-        event.setMessage(stripSpaces ? event.getMessage().trim() : event.getMessage());
-
-        Player sender = event.getSender();
         ChatMessageData chatMessageData = new ChatMessageData(sender.getUniqueId(), event.getMessage());
 
         Boolean isSpammingCache = detectionCache.getIfPresent(chatMessageData);
