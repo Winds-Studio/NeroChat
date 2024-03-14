@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroChatEvent;
-import me.softik.nerochat.api.NeroChatReceiveEvent;
 import me.softik.nerochat.api.NeroWhisperEvent;
 import me.softik.nerochat.config.Config;
 import me.softik.nerochat.models.ChatMessageData;
@@ -17,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -103,7 +101,7 @@ public class AntiSpamModule implements NeroChatModule, Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    private void onChat(AsyncPlayerChatEvent event) {
+    private void onChat(NeroChatEvent event) {
         event.setMessage(stripSpaces ? event.getMessage().trim() : event.getMessage());
 
         Player sender = event.getPlayer();
