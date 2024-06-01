@@ -2,6 +2,7 @@ package me.softik.nerochat.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.softik.nerochat.NeroChat;
+import me.softik.nerochat.utils.KyoriUtil;
 import org.bukkit.ChatColor;
 
 import java.io.File;
@@ -69,19 +70,19 @@ public class LanguageCache {
 
     public String getTranslation(String path, String defaultTranslation) {
         lang.addDefault(path, defaultTranslation);
-        return ChatColor.translateAlternateColorCodes('&', lang.getString(path, defaultTranslation));
+        return ChatColor.translateAlternateColorCodes('&', KyoriUtil.parseMiniMessageToLegacy(lang.getString(path, defaultTranslation)));
     }
 
     public String getTranslation(String path, String defaultTranslation, String comment) {
         lang.addDefault(path, defaultTranslation, comment);
-        return ChatColor.translateAlternateColorCodes('&', lang.getString(path, defaultTranslation));
+        return ChatColor.translateAlternateColorCodes('&', KyoriUtil.parseMiniMessageToLegacy(lang.getString(path, defaultTranslation)));
     }
 
     public List<String> getListTranslation(String path, List<String> defaultTranslation) {
         lang.addDefault(path, defaultTranslation);
         return lang.getStringList(path)
                 .stream()
-                .map(line -> ChatColor.translateAlternateColorCodes('&', line))
+                .map(line -> ChatColor.translateAlternateColorCodes('&', KyoriUtil.parseMiniMessageToLegacy(line)))
                 .collect(Collectors.toList());
     }
 
