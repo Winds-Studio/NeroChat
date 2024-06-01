@@ -24,9 +24,10 @@ Original code: https://github.com/AlexProgrammerDE/PistonChat
 * Auto Complete when you click on a players name just like on the server 2b2t.org
 * Ignore Commands
 * Lots of features that 2b2t's chat plugin has.
-* Regex Filter + silent-mode
+* Regex Filter + Silent Mode
 * Auto Format
 * Caps Filter
+* AntiSpam
 * Configure that does not reset with plugin updates and multi-language support (credits: https://github.com/xGinko/BetterWorldStats)
   
 This project is in active development, so if you have any feature requests or issues please submit them here on GitHub. PRs are welcome, too. :octocat:
