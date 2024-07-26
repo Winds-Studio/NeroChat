@@ -1,10 +1,10 @@
 name: NeroChat
-version: '${project.version}'
+version: ${version}
 api-version: '1.13'
 main: me.softik.nerochat.NeroChat
 authors: [ _Soft1k_, xGinko ]
-description: An advanced chat plugin for survival/anarchy servers.
-website: '${project.url}'
+description: ${description}
+website: ${url}
 softdepend: [ "PlaceholderAPI" ]
 folia-supported: true
 
