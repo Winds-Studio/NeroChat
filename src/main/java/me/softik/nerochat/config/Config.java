@@ -49,7 +49,7 @@ public class Config {
         bstats_metrics = getBoolean("general.bstats-metrics", true,
                 "Enable / Disable bstats metrics. Please don't turn it off, if it is not difficult.");
         display_nickname_color = getBoolean("general.display-nickname-color", true,
-                "Enable/disable the display of the player's nickname color.");
+                "Enable / disable the display of the player's nickname color.");
         plugin_prefix = ChatColor.translateAlternateColorCodes('&', getString("general.plugin-prefix", "[&2NeroChat&r] &6"));
         console_name = ChatColor.translateAlternateColorCodes('&', getString("general.console-name", "[console]",
                 "Defines the sender's name when sending messages from the server console."));

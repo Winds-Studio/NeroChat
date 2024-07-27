@@ -68,6 +68,9 @@ permissions:
     children:
       nerochat.playernamereply: true
       nerochat.togglewhispering: true
+  nerochat.whisper.self:
+    description: Permission for /whisper to yourself!
+    default: op
   nerochat.playernamereply:
     description: Make player names clickable!
   nerochat.ignorelist:

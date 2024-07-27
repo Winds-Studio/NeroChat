@@ -27,7 +27,7 @@ public class CommonTool {
     }
 
     public static void sendWhisperTo(CommandSender sender, String message, CommandSender receiver) {
-        if (sender == receiver) {
+        if (sender == receiver && !sender.hasPermission("nerochat.whisper.self")) {
             sender.sendMessage(NeroChat.getLang(sender).pm_yourself);
             return;
         }
