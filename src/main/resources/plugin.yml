@@ -19,8 +19,6 @@ commands:
     permission-message: You have no permission to do that!
     aliases:
       - tell
-      - w
-      - pm
       - msg
   reply:
     description: Reply to the last message someone sent to you!
