@@ -1,0 +1,33 @@
+no-permission: "&c您没有权限使用此命令。"
+player-notify: "&c您的消息中含有不被允许的字符。"
+ignore-me: "&6此玩家屏蔽了您。"
+ignore-you: "&6您已屏蔽此玩家。"
+not-online: "&6此玩家不在线。"
+player-only: "&c您必须在游戏内使用此命令。"
+whisper:
+  # Displaying incoming messages.
+  from: '&d%player%&d悄悄地对你说: %message%'
+  # Displaying outgoing messages.
+  to: '&d你悄悄地对%player%&d说: %message%'
+ignore-yourself: "&c您不能屏蔽自己。."
+pm-yourself: "&c您不能私聊自己。"
+ignore: "&6您已屏蔽 &3%player%"
+un-ignore: "&6您不再屏蔽 &3%player%"
+no-one-ignored: "&6您没有屏蔽任何玩家。"
+page-does-not-exist: "&6无法找到此页。"
+error: "&c发送了一个错误，请联系服务器管理组。"
+chat-on: "&6取消隐藏聊天消息。"
+chat-off: "&6隐藏聊天消息。"
+pm-on: "&6取消隐藏私聊消息。"
+pm-off: "&6隐藏私聊消息。"
+player-pm-off: "&c此玩家已关闭私聊消息。"
+chat-is-off: "&6您关闭了聊天。"
+ignored-players: "&6屏蔽玩家"
+usage: "&c用法:"
+player-argument: "<玩家名>"
+message-argument: "<消息>"
+hover-text: "&6点击私聊 &3%player%"
+slowmode-notification: "&c请稍等片刻后再发送消息。"
+too-many-messages-notification: "&c你在短时间内发送了太多消息。"
+similar-message-notification: "&c你在短时间内发送了太多相似的消息。"
+too-many-violations: "&c您因刷屏而被暂时屏蔽。"
