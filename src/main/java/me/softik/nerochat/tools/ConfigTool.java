@@ -11,10 +11,9 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ConfigTool {
@@ -56,11 +55,18 @@ public class ConfigTool {
     }
 
     protected List<OfflinePlayer> getHardIgnoredPlayers(Player player) {
-        return dataConfig.getStringList(player.getUniqueId().toString())
-                .stream()
-                .map(uuid -> plugin.getServer().getOfflinePlayer(UUID.fromString(uuid)))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<OfflinePlayer> players = new ArrayList<>();
+        List<String> rawIgnorePlayers = dataConfig.getStringList(player.getUniqueId().toString());
+
+        for (String uuid : rawIgnorePlayers) {
+            OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
+
+            if (offlinePlayer != null) {
+                players.add(offlinePlayer);
+            }
+        }
+
+        return players;
     }
 
     private void loadData() {

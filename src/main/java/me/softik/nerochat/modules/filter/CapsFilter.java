@@ -2,8 +2,8 @@ package me.softik.nerochat.modules.filter;
 
 import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
-import me.softik.nerochat.modules.NeroChatModule;
 import me.softik.nerochat.config.Config;
+import me.softik.nerochat.modules.NeroChatModule;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;

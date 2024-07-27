@@ -6,8 +6,8 @@ import me.softik.nerochat.utils.KyoriUtil;
 import org.bukkit.ChatColor;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LanguageCache {
 
@@ -79,18 +79,28 @@ public class LanguageCache {
     }
 
     public List<String> getListTranslation(String path, List<String> defaultTranslation) {
+        List<String> langList = new ArrayList<String>();
+
         lang.addDefault(path, defaultTranslation);
-        return lang.getStringList(path)
-                .stream()
-                .map(line -> ChatColor.translateAlternateColorCodes('&', KyoriUtil.parseMiniMessageToLegacy(line)))
-                .collect(Collectors.toList());
+
+        for (String line : lang.getStringList(path)) {
+            line = ChatColor.translateAlternateColorCodes('&', KyoriUtil.parseMiniMessageToLegacy(line));
+            langList.add(line);
+        }
+
+        return langList;
     }
 
     public List<String> getListTranslation(String path, List<String> defaultTranslation, String comment) {
+        List<String> langList = new ArrayList<String>();
+
         lang.addDefault(path, defaultTranslation, comment);
-        return lang.getStringList(path)
-                .stream()
-                .map(line -> ChatColor.translateAlternateColorCodes('&', line))
-                .collect(Collectors.toList());
+
+        for (String line : lang.getStringList(path)) {
+            line = ChatColor.translateAlternateColorCodes('&', line);
+            langList.add(line);
+        }
+
+        return langList;
     }
 }

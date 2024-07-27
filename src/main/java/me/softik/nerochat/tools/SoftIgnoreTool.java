@@ -7,8 +7,12 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class SoftIgnoreTool {
@@ -36,11 +40,18 @@ public class SoftIgnoreTool {
     }
 
     protected List<OfflinePlayer> getSoftIgnoredPlayers(Player player) {
-        return map.getOrDefault(player.getUniqueId(), Collections.emptyList())
-                .stream()
-                .map(uuid -> plugin.getServer().getOfflinePlayer(uuid))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<OfflinePlayer> players = new ArrayList<>();
+        List<UUID> rawIgnorePlayers = map.getOrDefault(player.getUniqueId(), Collections.emptyList());
+
+        for (UUID uuid : rawIgnorePlayers) {
+            OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(uuid);
+
+            if (offlinePlayer != null) {
+                players.add(offlinePlayer);
+            }
+        }
+
+        return players;
     }
 
     public enum SoftReturn {
