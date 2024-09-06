@@ -5,6 +5,7 @@ import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.api.NeroWhisperEvent;
 import me.softik.nerochat.models.ColoredPrefix;
 import me.softik.nerochat.models.UniqueSender;
+import me.softik.nerochat.utils.KyoriUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -59,7 +60,7 @@ public class CommonTool {
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(receiver).getDisplayName()))
                 .replace("%message%", message);
 
-        sender.spigot().sendMessage(new TextComponent(TextComponent.fromLegacyText(senderString)));
+        KyoriUtil.sendMessage(sender, new TextComponent(TextComponent.fromLegacyText(senderString)));
     }
 
     private static void sendReceiver(CommandSender sender, String message, CommandSender receiver) {
@@ -67,7 +68,7 @@ public class CommonTool {
                 .replace("%player%", ChatColor.stripColor(new UniqueSender(sender).getDisplayName()))
                 .replace("%message%", message);
 
-        receiver.spigot().sendMessage(new TextComponent(TextComponent.fromLegacyText(receiverString)));
+        KyoriUtil.sendMessage(receiver, new TextComponent(TextComponent.fromLegacyText(receiverString)));
     }
 
     public static String mergeArgs(String[] args, int start) {
@@ -123,7 +124,7 @@ public class CommonTool {
 
         builder.color(CommonTool.getChatColorFor(message, chatter));
 
-        receiver.spigot().sendMessage(builder.create());
+        KyoriUtil.sendMessage(receiver, builder.create());
     }
 
     private static String getName(CommandSender sender) {

@@ -5,6 +5,7 @@ import me.softik.nerochat.NeroChat;
 import me.softik.nerochat.commands.NeroChatCommand;
 import me.softik.nerochat.tools.CommonTool;
 import me.softik.nerochat.tools.IgnoreTool;
+import me.softik.nerochat.utils.KyoriUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -100,7 +101,7 @@ public class IgnoreListCommand implements NeroChatCommand {
             ));
         }
 
-        player.spigot().sendMessage(navigation.create());
+        KyoriUtil.sendMessage(player, navigation.create());
 
         int maxValue = page * NeroChat.getConfiguration().ignore_list_size;
         int minValue = maxValue - NeroChat.getConfiguration().ignore_list_size;
@@ -120,7 +121,7 @@ public class IgnoreListCommand implements NeroChatCommand {
 
                 ignored_player_formatted.color(ChatColor.RED).append("]").reset().color(ChatColor.GRAY);
 
-                player.spigot().sendMessage(ignored_player_formatted.create());
+                KyoriUtil.sendMessage(player, ignored_player_formatted.create());
             }
 
             i++;
